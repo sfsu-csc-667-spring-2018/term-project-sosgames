@@ -9,6 +9,7 @@
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.idea/*
 
 # Sensitive or high-churn files:
 .idea/**/dataSources/
@@ -130,3 +131,6 @@ typings/
 
 # End of https://www.gitignore.io/api/node,jetbrains
 
+/package.json
+package.json
+package-lock.json
