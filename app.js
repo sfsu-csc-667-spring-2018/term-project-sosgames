@@ -11,7 +11,9 @@ app.set('view engine', 'ejs');
 
 app.get('/', routes.home);
 
-// app.get('/signIn', routes.signIn);
+app.get('/register', routes.register);
+
+app.get('/login', routes.login);
 
 app.get('*', routes.notFound);
 
