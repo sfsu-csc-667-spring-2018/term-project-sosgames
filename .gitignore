@@ -130,7 +130,3 @@ typings/
 
 
 # End of https://www.gitignore.io/api/node,jetbrains
-
-/package.json
-package.json
-package-lock.json

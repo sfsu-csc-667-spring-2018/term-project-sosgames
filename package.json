@@ -3,22 +3,34 @@
   "version": "1.0.0",
   "description": "term-project-sosgames created by GitHub Classroom",
   "main": "app.js",
+  "dependencies": {
+    "body-parser": "~1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "express": "~4.15.5",
+    "express-ejs-layouts": "^2.3.1",
+    "express-layout": "^0.1.0",
+    "morgan": "~1.9.0",
+    "npm": "^5.7.1",
+    "octicons": "^7.1.0",
+    "serve-favicon": "~2.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
+  },
   "scripts": {
+    "start": "node ./bin/www/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames.git"
   },
-  "author": "jondo",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames/issues"
   },
-  "homepage": "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames#readme",
-  "dependencies": {
-    "bootstrap": "^4.0.0",
-    "ejs": "^2.5.7",
-    "express": "^4.16.2"
-  }
+  "homepage": "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames#readme"
 }
