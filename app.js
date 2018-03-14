@@ -6,6 +6,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
 
+// Make use of environment variables defined in .env
+if( process.env.NODE_ENV === 'development' ) {
+  require( "dotenv" ).config();
+}
+
 // Routes?
 const index = require('./routes/index'); 
 const users = require('./routes/users');
