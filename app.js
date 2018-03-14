@@ -14,6 +14,7 @@ if( process.env.NODE_ENV === 'development' ) {
 // Routes?
 const index = require('./routes/index'); 
 const users = require('./routes/users');
+const tests = require('./routes/tests');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use( expressLayouts );
 // Are these routes ? ( DC )
 app.use('/', index);
 app.use('/users', users);
+app.use('/tests', tests);
 
 
 // catch 404 and forward to error handler
