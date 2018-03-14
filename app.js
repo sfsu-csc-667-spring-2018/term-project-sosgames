@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const routes = require('./routes');
 
 // Make use of environment variables defined in .env
-if( process.env.NODE_ENV === 'development' ) {
+if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
   require( "dotenv" ).config();
 }
 
