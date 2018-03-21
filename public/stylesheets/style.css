@@ -109,3 +109,11 @@ a {
   font-size: 12px;
   color: #777;
 }
+
+
+/*endGamePage*/
+.avatar-card{
+  max-height: 200px;
+  max-width: 200px;
+}
+/*endGamePage*/
