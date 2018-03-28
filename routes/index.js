@@ -9,4 +9,8 @@ router.get('/', function(req, res, next) {
 router.get('/signup', function( req, res, next ) {
   res.render('signup', { title: 'UNO - Sign Up' });
 });
+
+router.get('/creategame', function( req, res, next ) {
+    res.render('creategame', { title: 'UNO - Sign Up' });
+});
 module.exports = router;
