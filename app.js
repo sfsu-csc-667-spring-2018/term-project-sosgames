@@ -6,10 +6,15 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
 
+// Make use of environment variables defined in .env
+if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
+  require( "dotenv" ).config();
+}
+
 // Routes?
 const index = require('./routes/index'); 
 const users = require('./routes/users');
-
+const tests = require('./routes/tests');
 const app = express();
 
 // view engine setup
@@ -32,6 +37,7 @@ app.use( expressLayouts );
 // Are these routes ? ( DC )
 app.use('/', index);
 app.use('/users', users);
+app.use('/tests', tests);
 
 
 // catch 404 and forward to error handler
