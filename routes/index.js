@@ -10,4 +10,12 @@ router.get('/signup', function( req, res, next ) {
   res.render('signup', { title: 'UNO - Sign Up' });
 });
 
+router.get('/creategame', function( req, res, next ) {
+    res.render('creategame', { title: 'UNO - Sign Up' });
+});
+
+router.get('/endgamepage', function( req, res, next ) {
+  res.render('endgamepage', { title: 'UNO - End Game' });
+});
+
 module.exports = router;
