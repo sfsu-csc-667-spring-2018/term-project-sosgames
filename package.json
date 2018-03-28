@@ -24,8 +24,8 @@
     "nodemon": "^1.17.2"
   },
   "scripts": {
-    "start:dev" : "DEBUG=APP_NAME:* NODE_ENV=development nodemon ./bin/www" ,
-    "start" : "NODE_ENV=production nodemon ./bin/www",
+    "start:dev": "DEBUG=APP_NAME:* NODE_ENV=development nodemon ./bin/www",
+    "start": "NODE_ENV=production nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
