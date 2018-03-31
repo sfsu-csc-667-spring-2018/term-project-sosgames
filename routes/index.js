@@ -11,7 +11,7 @@ router.get('/signup', function( req, res, next ) {
 });
 
 router.get('/creategame', function( req, res, next ) {
-    res.render('creategame', { title: 'UNO - Sign Up' });
+    res.render('creategame', { title: 'UNO - Create Game' });
 });
 
 router.get('/endgamepage', function( req, res, next ) {
