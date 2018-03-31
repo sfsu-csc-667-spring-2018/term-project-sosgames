@@ -1,71 +1,61 @@
 </br>
-<div class="container absolute-centered">
-    <h3>Scores</h3>
-    <div style='border:1px solid #000000'>
-    <div style="height:100px;overflow:auto;">
-        <table style="width:100%">
-            <tr>
-              <th>Player</th>
-              <th>Score</th>
-            </tr>
-            <tr>
-              <td>Jill</td>
-              <td>50</td>
-            </tr>
-            <tr>
-              <td>Eve</td> 
-              <td>24</td>
-            </tr>
-
-          </table> 
-    </div>
-    </div>
-
+<div>
+    <div class="lobby">
     <h3>Current Games</h3>
-    <div style='border:1px solid #000000'>
-    <div style="height:100px;overflow:auto;">
-        <table style="width:100%">
-            <tr>
-              <th>Firstname</th>
-              <th>Lastname</th>
-              <th>Age</th>
-            </tr>
-            <tr>
-              <td>Jill</td>
-              <td>Smith</td>
-              <td>50</td>
-            </tr>
-            <tr>
-              <td>Eve</td> 
-              <td>Jackson</td>
-              <td>94</td>
-            </tr>
-              <tr>
-                <td>Jill</td>
-                <td>Smith</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Eve</td>
-                <td>Jackson</td>
-                <td>94</td>
-              </tr>
-              <tr>
-                <td>Jill</td>
-                <td>Smith</td>
-                <td>50</td>
-              </tr>
-              <tr>
-                <td>Eve</td>
-                <td>Jackson</td>
-                <td>94</td>
-              </tr>
-          </table> 
+
+
+
+    <div class="table-responsive">
+      <table style="width:100%">
+        <tr>
+            <th>Lobby</th>
+            <th>Number of Players</th>
+        </tr>
+        <%var lobbies = ["lobby1", "noScopeOnly", "noobs"];%>
+        <%var gamePlayerNum = ["2","5","1"];%>
+        <% for(var i=0; i<lobbies.length; i++) {%>
+        <tr>
+            <td><%= lobbies[i] %></td> 
+            <td><%= gamePlayerNum[i] %></td>
+            <td><button type="submit" class="btn btn-success">Join</button></td>
+            <td><button type="submit" class="btn btn-warning">Spectate</button></td>
+        </tr>
+        <% } %>
+        
+        <tr>
+            <td><%= lobbies[i-1] %></td> 
+            <td><%= gamePlayerNum[i-1] %></td>
+            <td><button type="submit" class="btn btn-success disabled">Join(disabled)</button></td>
+            <td><button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button></td>           
+        </tr>
+      </table>
+    </div>
+
+   
+    <h3>Scores</h3>
+
+    <div class="table-responsive">
+      <table style="width:100%">
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+        <%var namesInGame = ["Jon", "Robert", "CZAR"];%>
+        <%var scores = ["100","36","6969"];%>
+        <% for(var i=0; i<namesInGame.length; i++) {%>
+        <tr>
+            <td><%= namesInGame[i] %></td> 
+            <td><%= scores[i] %></td>
+        <% } %>
+        </tr>
+      </table>
     </div>
     </div>
 </div>
+
+
     <!-- chat section -->
-    <element class="chatWindow">
+<div class="chat" style="float: right">
     <object align="right">
 
 
@@ -85,4 +75,4 @@
         </form>
         
     </object>
-</element>
+</div>

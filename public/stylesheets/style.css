@@ -113,3 +113,26 @@ a {
 #chatbox{
   background-color: grey;
 }
+
+.table-responsive{
+  background-color: darkseagreen;
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0; 
+  line-height: 1.5;
+  color: #495057; */
+  border: 1px solid transparent;
+  border-radius: .25rem; 
+  transition: all .1s ease-in-out;
+}
+
+.chat{
+  float: left;
+}
+
+.lobby{
+  float: left;
+}
