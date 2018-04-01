@@ -14,7 +14,7 @@
         <% for(var i=0; i<gameNames.length; i++) {%>
         <tr>
             <td><%= gameNames[i] %></td> 
-            <td><%= gamePlayerNum[i] %></td>
+            <td><%= gamePlayerNum[i] %>/8</td>
             <td><button type="submit" class="btn btn-success">Join</button></td>
             <td><button type="submit" class="btn btn-warning">Spectate</button></td>
         </tr>
@@ -22,7 +22,7 @@
         
         <tr>
             <td><%= gameNames[i-1] %></td> 
-            <td><%= gamePlayerNum[i-1] %></td>
+            <td><%= gamePlayerNum[i-1] %>/8</td>
             <td><button type="submit" class="btn btn-success disabled">Join(disabled)</button></td>
             <td><button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button></td>           
         </tr>
@@ -38,8 +38,8 @@
             <th>Name</th>
             <th>Score</th>
         </tr>
-        <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
-        <%var scores = ["100","36","6969","100","36","6969"];%>
+        <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
+        <%var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"];%>
         <% for(var i=0; i<namesInGame.length; i++) {%>
         <tr>
             <td><%= namesInGame[i] %></td> 

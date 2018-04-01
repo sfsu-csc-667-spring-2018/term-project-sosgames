@@ -124,6 +124,8 @@ a {
   margin-bottom: 0; 
   line-height: 1.5;
   color: #495057; */
+  height: 150px;
+  overflow: auto;
   width: 100%;
   border: 1px solid transparent;
   border-radius: .25rem; 
