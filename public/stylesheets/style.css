@@ -116,14 +116,6 @@ a {
 
 .table-responsive{
   background-color: darkseagreen;
-  /* position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  
-  margin-bottom: 0; 
-  line-height: 1.5;
-  color: #495057; */
   height: 150px;
   overflow: auto;
   width: 100%;
