@@ -2,20 +2,18 @@
 <div>
     <div class="lobby">
     <h3>Current Games</h3>
-
-
-
     <div class="table-responsive">
       <table style="width:100%">
         <tr>
-            <th>Lobby</th>
-            <th>Number of Players</th>
+            <th>Owner</th>
+            <th>Game Name</th>
+            <th>Total Players</th>
         </tr>
-        <%var lobbies = ["lobby1", "noScopeOnly", "noobs"];%>
-        <%var gamePlayerNum = ["2","5","1"];%>
-        <% for(var i=0; i<lobbies.length; i++) {%>
+        <%var gameNames = ["lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs"];%>
+        <%var gamePlayerNum = ["2","5","1","2","5","1","2","5","1"];%>
+        <% for(var i=0; i<gameNames.length; i++) {%>
         <tr>
-            <td><%= lobbies[i] %></td> 
+            <td><%= gameNames[i] %></td> 
             <td><%= gamePlayerNum[i] %></td>
             <td><button type="submit" class="btn btn-success">Join</button></td>
             <td><button type="submit" class="btn btn-warning">Spectate</button></td>
@@ -23,7 +21,7 @@
         <% } %>
         
         <tr>
-            <td><%= lobbies[i-1] %></td> 
+            <td><%= gameNames[i-1] %></td> 
             <td><%= gamePlayerNum[i-1] %></td>
             <td><button type="submit" class="btn btn-success disabled">Join(disabled)</button></td>
             <td><button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button></td>           
@@ -40,8 +38,8 @@
             <th>Name</th>
             <th>Score</th>
         </tr>
-        <%var namesInGame = ["Jon", "Robert", "CZAR"];%>
-        <%var scores = ["100","36","6969"];%>
+        <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
+        <%var scores = ["100","36","6969","100","36","6969"];%>
         <% for(var i=0; i<namesInGame.length; i++) {%>
         <tr>
             <td><%= namesInGame[i] %></td> 
@@ -50,6 +48,13 @@
         </tr>
       </table>
     </div>
+
+        <div class="form-signin">
+        <a href="#" >
+        <button class="btn btn-lg btn-success btn-block" type="submit">Create Game</button>
+        </a>
+        <p class="mt-5 mb-3 text-muted text-center">&copy; SOS Games - 2018</p>
+        </div>
     </div>
 </div>
 
