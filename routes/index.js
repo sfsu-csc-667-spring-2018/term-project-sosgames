@@ -14,4 +14,12 @@ router.get('/lobby', function( req, res, next ) {
   res.render('lobby', { title: 'UNO - Lobby' });
 });
 
+router.get('/creategame', function( req, res, next ) {
+    res.render('creategame', { title: 'UNO - Create Game' });
+});
+
+router.get('/endgamepage', function( req, res, next ) {
+  res.render('endgamepage', { title: 'UNO - End Game' });
+});
+
 module.exports = router;
