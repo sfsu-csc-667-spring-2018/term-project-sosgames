@@ -1,6 +1,6 @@
 /* GENERAL */
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 html,
@@ -166,7 +166,7 @@ a {
   display: table;
   box-sizing: border-box;
   padding: 5px;
-  font-size: 100px;
+  font-size: 6rem;
   text-shadow:
      1px  1px 0 #000000,
     -1px -1px 0 #000000,
@@ -182,31 +182,37 @@ a {
   position: relative;
 }
 
-.uno-card .inner{
+.uno-card .inner {
   display: table-cell;
-  vertical-align: middle;
+  /* vertical-align: middle; */
   border-radius: 5px;
   overflow: hidden;
 }
 
 /* Inner Oval */
-.uno-card .mark{
+.uno-card .mark {
   display: inline-block;
   vertical-align: middle;
-  /* background: #ffffff; */
+  background: #ffffff;
   margin: auto;
   padding: 0 26px;
-  border-radius: 3.2em 2em / 4em 2em; /* generates titled oval shape, '/' is not division */
+  border-radius: 3.2em 2em / 4em 2em; /* generates tilted oval shape, '/' is not division */
   line-height: 1.4;
+}
+
+.uno-card.black .mark {
+  background: #ff4d4d;
+  font-size: 2rem;
+  padding: 1.4em 1.3rem;
 }
 
 /* The small number on top left and bottom right corners */
 .uno-card:before,
-.uno-card:after{
+.uno-card:after {
   display: inline-block;
   position: absolute;
   line-height: 0;
-  font-size: 20px;
+  font-size: 1.5rem;
   color: #ffffff;
   text-shadow:
      1px  1px 0 #000000,
@@ -221,15 +227,15 @@ a {
 }
 
 /* The small number on top left corner */
-.uno-card:before{
-  top: 15px;
-  left: 10px;
+.uno-card:before {
+  top: 0.9em;
+  left: 0.5em;
 }
 
 /* The small number on bottom right corner, 180 degree rotated */
-.uno-card:after{
-  bottom: 15px;
-  right: 10px;
+.uno-card:after {
+  bottom: 0.9em;
+  right: 0.5em;
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg); /* Safari */
   -ms-transform: rotate(180deg); /* IE 9 */
@@ -238,16 +244,29 @@ a {
 /* TODO: MAKE THIS DYNAMIC -- maybe using the data-* attribute */
 /* The value of the small number on top left and bottom right corners */
 .uno-card.num-4:before,
-.uno-card.num-4:after{
+.uno-card.num-4:after {
   content: "4";
 }
 
 /* Color of the big number in middle */
-.uno-card.blue{
+.uno-card.blue {
   color: #0063B3;
 }
 
+.uno-card.black {
+  /* font-size: 1.2rem; */
+  color: #fff200;
+}
+
 /* Background color of card */
-.uno-card.blue .inner{
+.uno-card.blue .inner {
   background: #0063B3;
+}
+
+.uno-card.black .inner {
+  background: #000;
+}
+
+.card-in-draw button {
+  padding: 0;
 }

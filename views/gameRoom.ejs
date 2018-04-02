@@ -1,7 +1,9 @@
 <!-- ROUND NUMBER -->
 <div class="row">
   <div class="col text-center">
-    <h1><span class="badge badge-primary">Round 1</span></h1>
+    <h1>
+      <span class="badge badge-primary">Round 1</span>
+    </h1>
   </div>
 </div>
 <!-- ROUND NUMBER ENDS -->
@@ -31,7 +33,7 @@
         </div>
       </div>
       <!-- PLAYERS LIST ENDS -->
-  
+
       <!-- CARD DECKS -->
       <div class="row card game-card-decks flex-row">
         <div class="col card-in-play">
@@ -41,10 +43,15 @@
             </span>
           </div>
         </div>
-        <div class="col card-in-draw">
-          <div class="centered uno-card">
-            <button type="button" class="btn btn-outline-primary">Draw Card</button>
-          </div>
+        <div class="col card-in-draw text-center">
+          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
+          <!-- <button type="button" class="btn" disabled> -->
+          <button type="button" class="btn">
+            <div class="centered uno-card black">
+              <span class="inner">
+                <span class="mark">UNO</span>
+              </span>
+          </button>
         </div>
       </div>
       <!-- CARD DECKS ENDS -->
