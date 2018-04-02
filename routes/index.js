@@ -10,6 +10,10 @@ router.get('/signup', function( req, res, next ) {
   res.render('signup', { title: 'UNO - Sign Up' });
 });
 
+router.get('/lobby', function( req, res, next ) {
+  res.render('lobby', { title: 'UNO - Lobby' });
+});
+
 router.get('/creategame', function( req, res, next ) {
     res.render('creategame', { title: 'UNO - Create Game' });
 });
