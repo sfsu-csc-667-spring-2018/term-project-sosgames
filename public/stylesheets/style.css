@@ -270,3 +270,7 @@ a {
 .card-in-draw button {
   padding: 0;
 }
+
+.play-btn button {
+  width: 50%;
+}
