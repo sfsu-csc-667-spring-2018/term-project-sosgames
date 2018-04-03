@@ -1,23 +1,80 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">S.O.S Games</a>
-    </div>
-    <ul class="nav navbar-nav text-center">
-      <li class="active"><img id="centerNavLogo" src="./images/unoLogo.png"></a></li>
+<!-- <nav class="navbar navbar-expand-md navbar-dark bg-dark rounded">
+  <!-- Left Portion of NavBar 
+  <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link">S.O.S Games</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames">
+          GitHub
+          <i class="fa fab fa-github-alt"></i>
+        </a>
+      </li>
+      <!-- This is where EJS will add elements after login
     </ul>
-    <ul class="nav navbar-nav navbar-right">
+  </div>
+
+  <!-- Center Portion of NavBar 
+  <div class="mx-auto order-0">
+    <ul class="nav navbar-nav text-center">
       <li class="active">
-        <button class="btn btn-default" id="octoButton">
-          <a href="https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames">
-          <img id="octocatLogo" src="./images/GitHub-Mark-Light-64px.png">
+        <img id="centerNavLogo" src="./images/unoLogo.png">
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right Portion of NavBar 
+  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <ul class="navbar-nav ml-auto">
+      <!-- On Login, the LogIn and Sign Up items disappear 
+      <li class="nav-item">
+        <a class="nav-link" href="/">Log In</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/signup">Sign Up</a>
+      </li>
+    </ul>
+  </div>
+</nav> -->
+
+<!-- example 2 - using auto margins -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark rounded">
+  <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link">S.O.S Games</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames">
+            GitHub
+            <i class="fa fab fa-github-alt"></i>
           </a>
-        </button>
+        </li>
+    </ul>
+  </div>
+  <div class="mx-auto order-0 text-center">
+    <img id="centerNavLogo" class="navbar-brand mx-auto" src="./images/unoLogo.png">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <ul class="navbar-nav ml-auto">
+      <!-- Login and Sign Up only shown when user isn't authenticated -->
+      <li class="nav-item">
+        <a class="nav-link" href="/">Login
+          <i class="fa fas fa-sign-in-alt"></i>
+        </a>
       </li>
-      <!-- This Button should only appear if logged in as valid user -->
-      <li class="active">
-        <button class="btn btn-light" id="logoutButton">Log Out</button>
+      <li class="nav-item">
+        <a class="nav-link" href="/signup">Sign Up</a>
       </li>
+      <!-- Only shown when logged in -->
+      <li class="nav-item">
+          <a class="nav-link" href="#">Log Out</a>
+        </li>
     </ul>
   </div>
 </nav>
