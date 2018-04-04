@@ -156,9 +156,11 @@ body {
   height: 150px;
   overflow: auto;
   width: 100%;
-  border: 1px solid transparent;
+  border: 2px solid blue;
   border-radius: .25rem; 
   transition: all .1s ease-in-out;
+  padding: 10px;
+  margin: 35px;
 }
 
 .chat{

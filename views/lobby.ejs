@@ -71,7 +71,22 @@
         </div>
             
         <div id="chatbox">  
-            This is chat text from read db
+            <div class="table-responsive">
+                <table style="width:100%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                    <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
+                    <%var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"];%>
+                    <% for(var i=0; i<namesInGame.length; i++) {%>
+                    <tr>
+                        <td><%= namesInGame[i] %></td> 
+                        <td><%= scores[i] %></td>
+                    <% } %>
+                    </tr>
+                </table>
+            </div>
         </div>
             
         <form name="message" action="">
