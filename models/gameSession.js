@@ -5,11 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     number_of_players: DataTypes.INTEGER,
     round_number: DataTypes.INTEGER
   }, {});
-  GameSession.associate = function(models) {
-    // associations can be defined here
+
+  GameSession.associate = function (models) {
     GameSession.belongsToMany(models.User, {
       foreignKey: 'id'
     });
   };
+
   return GameSession;
 };
