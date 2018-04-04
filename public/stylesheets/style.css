@@ -11,6 +11,13 @@ body {
 a {
   color: #00B7FF;
 }
+body {
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
 
 /* GENERAL LAYOUT */
 .flex-row  {
@@ -23,7 +30,7 @@ a {
 
 /* HOME PAGE */
 #centerNavLogo{
-  width: 12%;
+  width: 25%;
 }
 
 #octocatLogo{
@@ -46,13 +53,6 @@ a {
 
 .no-underline {
   text-decoration: none;
-}
-
-.absolute-centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate( -50%, -50% );
 }
 
 :root {
