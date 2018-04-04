@@ -10,11 +10,15 @@ router.get('/signup', function( req, res, next ) {
   res.render('signup', { title: 'UNO - Sign Up' });
 });
 
-router.get('/creategame', function( req, res, next ) {
+router.get('/lobby', function( req, res, next ) {
+  res.render('lobby', { title: 'UNO - Lobby' });
+});
+
+router.get('/create-game', function( req, res, next ) {
     res.render('creategame', { title: 'UNO - Create Game' });
 });
 
-router.get('/endgamepage', function( req, res, next ) {
+router.get('/end-game-page', function( req, res, next ) {
   res.render('endgamepage', { title: 'UNO - End Game' });
 });
 

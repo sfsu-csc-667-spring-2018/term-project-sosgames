@@ -1,42 +1,36 @@
-<br/>
-<div class="container absolute-centered">
+<div class="container">
   <form class="form-signin">
     <div class="text-center mb-4">
-      <img src="./images/unoLoginLogo.png"  width="60%">
+      <img src="./images/unoLoginLogo.png" width="60%">
       <h1>Create Game</h1>
       <hr>
     </div>
-
     <div class="form-label-group">
-      <input type="username" id="inputGameName" class="form-control" placeholder="Game Name" required autofocus>
-      <label for="gameName">Game Name</label>
+      <input type="text" id="inputGameName" class="form-control" placeholder="Game Name" required autofocus>
+      <label for="inputGameName">Game Name</label>
     </div>
 
     <div class="form-label-group">
-        <input type="password" id="inputNumPlayers" class="form-control" placeholder="Number of Players" required>
-        <label for="numPlayers">Number of Players</label>
+      <input type="text" id="inputNumberOfPlayers" class="form-control" placeholder="Number of Players" required autofocus>
+      <label for="inputNumberOfPlayers">Number of Players</label>
     </div>
-    
-    <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <label for="inputPassword">Password</label>
-    </div>
-  
-    <div class="form-label-group">
-        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required>
-        <label for="inputPassword">Confirm Password</label>
-      </div>
-      <hr>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Create Game</button>
-    </form>
-    
-    
 
-  <div class="form-signin closer">
-    <a href="/" >
-      <button class="btn btn-lg btn-danger btn-block" type="submit">Cancel</button>
+    <div class="form-label-group">
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      <label for="inputPassword">Password</label>
+    </div>
+
+    <div class="form-label-group">
+      <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm Password" required>
+      <label for="confirmPassword">Confirm Password</label>
+    </div>
+    <hr>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Create Game</button>
+
+    <a href="#" class="btn btn-lg btn-danger btn-block" role="button">
+      Cancel
     </a>
-    <p class="mt-5 mb-3 text-muted text-center">&copy; SOS Games - 2018</p>
-  </div>
-  
+    <hr>
+
+  </form>
 </div>

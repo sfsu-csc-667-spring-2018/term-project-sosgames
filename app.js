@@ -15,6 +15,7 @@ if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 const index = require('./routes/index'); 
 const users = require('./routes/users');
 const tests = require('./routes/tests');
+const game = require('./routes/game');
 const app = express();
 
 // view engine setup
@@ -38,7 +39,7 @@ app.use( expressLayouts );
 app.use('/', index);
 app.use('/users', users);
 app.use('/tests', tests);
-
+app.use('/game', game);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
