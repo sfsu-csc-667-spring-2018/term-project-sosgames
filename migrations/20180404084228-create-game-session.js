@@ -15,6 +15,9 @@ module.exports = {
           key: 'id',
         }
       },
+      winner: {
+        type: Sequelize.INTEGER
+      },
       number_of_players: {
         type: Sequelize.INTEGER
       },

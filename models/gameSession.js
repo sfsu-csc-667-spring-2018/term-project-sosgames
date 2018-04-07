@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const GameSession = sequelize.define('GameSession', {
     user_id: DataTypes.INTEGER,
     number_of_players: DataTypes.INTEGER,
-    round_number: DataTypes.INTEGER
+    round_number: DataTypes.INTEGER,
+    winner: DataTypes.INTEGER
   }, {});
 
   GameSession.associate = function (models) {

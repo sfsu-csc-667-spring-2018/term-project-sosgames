@@ -17,9 +17,6 @@ module.exports = {
       current_score: {
         type: Sequelize.INTEGER
       },
-      winner: {
-        type: Sequelize.BOOLEAN
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
