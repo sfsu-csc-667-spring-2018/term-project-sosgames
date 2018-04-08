@@ -22,6 +22,5 @@ module.exports = (sequelize, DataTypes) => {
       through: UserGame 
     });
   };
-
   return User;
 };
