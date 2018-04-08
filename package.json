@@ -29,7 +29,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
 
     "db:create:model:deck": "sequelize model:create --name Deck --attributes description:string,color:string,point_value:integer,image:string",
-    "db:create:model:user": "sequelize model:create --name User --attributes username:string,password:string,profile_picture:string,total_score:integer,email:string",
+    "db:create:model:user": "sequelize model:create --name User --attributes username:string,password:string,profile_picture:blob,total_score:integer,email:string",
     "db:create:model:gameSession": "sequelize model:create --name GameSession --attributes user_id:integer,number_of_players:integer,round_number:integer,winner:string",
     "db:create:model:userGameSession": "sequelize model:create --name UserGameSession --attributes user_id:integer,game_session_id:integer,current_score:integer",
     "db:create:model:userInGame": "sequelize model:create --name UserInGame --attributes user_id:integer,game_session_id:integer,user_game_session_id:integer",
