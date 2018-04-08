@@ -16,6 +16,7 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 const tests = require('./routes/tests');
 const game = require('./routes/game');
+const signup = require('./routes/signup');
 const app = express();
 
 // view engine setup
@@ -40,6 +41,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tests', tests);
 app.use('/game', game);
+app.use('/signup', signup );
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
