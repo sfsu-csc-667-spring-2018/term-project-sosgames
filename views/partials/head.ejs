@@ -10,5 +10,5 @@
     <!-- Local CSS -->
     <link rel="stylesheet" href="./stylesheets/style.css">
     <!-- I don't know why typeof takes the error away -->
-    <title><%= title %></title>
+    <title><%= (typeof title != "undefined" ? title : "") %></title>
 </head>
