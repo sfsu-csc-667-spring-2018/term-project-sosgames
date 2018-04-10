@@ -4,24 +4,27 @@
   "description": "term-project-sosgames created by GitHub Classroom",
   "main": "app.js",
   "dependencies": {
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "^2.5.8",
     "express": "~4.15.5",
-    "express-ejs-layouts": "^2.3.1",
+    "express-ejs-layouts": "^2.4.0",
     "express-layout": "^0.1.0",
+    "express-validator": "^5.1.2",
     "morgan": "~1.9.0",
-    "npm": "^5.7.1",
-    "octicons": "^7.1.0",
-    "pg-promise": "^8.2.2",
-    "sequelize": "^4.36.1",
+    "npm": "^5.8.0",
+    "octicons": "^7.2.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg-promise": "^8.2.3",
+    "sequelize": "^4.37.6",
     "sequelize-cli": "^4.0.0",
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.17.3"
   },
   "scripts": {
     "start:dev": "NODE_ENV=development DEBUG=APP_NAME:* nodemon ./bin/www",
