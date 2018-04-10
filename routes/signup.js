@@ -21,7 +21,6 @@ router.post('/', function (request, response) {
   request.checkBody('confirmpassword', 'Passwords do not match').equals(password);
 
   const errors = request.validationErrors();
-  console.log(errors);
 
   if (errors) {
     console.log('Errors!');
@@ -30,9 +29,8 @@ router.post('/', function (request, response) {
         errors: errors
     });
   } else {
-    response.render('signup', {
-      title: 'UNO - Sign Up',
-    });
+    request.flash('success_msg', "You are registered and can now login");
+    response.redirect('/users/login');
   }
 });
 

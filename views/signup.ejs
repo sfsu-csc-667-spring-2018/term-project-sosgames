@@ -7,13 +7,14 @@
     </div>
 
     <!-- Errors go here  -->
-    <%= if( errors ) { %>
+    <%if( (typeof errors != "undefined" ? errors : false) ) { %>
       <% errors.forEach(function( error ) { %>
         <div class="notice error">
           <div class="alert alert-danger"><%= error.msg %></div>
         </div>
       <% }); %>
     <% } %>
+
     <div class="form-label-group">
       <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
       <label for="username">Username</label>
@@ -35,7 +36,7 @@
     </div>
     <hr>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Create Account</button>
-    <a href="/" class="btn btn-lg btn-danger btn-block" role="button">
+    <a href="/" class="btn btn-lg btn-success btn-block" role="button">
       Have An Account ?
     </a>
     <hr>
