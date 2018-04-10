@@ -29,8 +29,10 @@ router.post('/', function (request, response) {
         errors: errors
     });
   } else {
+    // This needs to change to be consistent with how I'm displaying errors
     request.flash('success_msg', "You are registered and can now login");
-    response.redirect('/users/login');
+    response.redirect('/');
+
   }
 });
 
