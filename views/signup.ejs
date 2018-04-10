@@ -6,14 +6,7 @@
       <hr>
     </div>
 
-    <!-- Errors go here  -->
-    <%if( (typeof errors != "undefined" ? errors : false) ) { %>
-      <% errors.forEach(function( error ) { %>
-        <div class="notice error">
-          <div class="alert alert-danger"><%= error.msg %></div>
-        </div>
-      <% }); %>
-    <% } %>
+    <% include error.ejs %>
 
     <div class="form-label-group">
       <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>

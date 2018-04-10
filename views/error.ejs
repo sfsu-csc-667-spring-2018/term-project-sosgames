@@ -1,3 +1,20 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<div class="row">
+  <div class="col-lg-12">
+    <%if( (typeof success_msg != "undefined" ? success_msg : false) ) { %>
+      <% success_msg.forEach(function( success_msg ) { %>
+        <div class="notice error">
+          <div class="alert alert-success"><%= success_msg %></div>
+        </div>
+      <% }); %>
+    <% } %>
+    <!-- Errors go here  -->
+    <%if( (typeof errors != "undefined" ? errors : false) ) { %>
+      <% errors.forEach(function( error ) { %>
+        <div class="notice error">
+          <div class="alert alert-danger"><%= error.msg %></div>
+        </div>
+      <% }); %>
+    <% } %>
+  </div>
+
+</div>
