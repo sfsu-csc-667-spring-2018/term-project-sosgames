@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
     username: DataTypes.STRING,
     password: DataTypes.STRING,
-    profile_picture: DataTypes.BLOB,
+    profile_picture: DataTypes.STRING,
     total_score: DataTypes.INTEGER,
     email: DataTypes.STRING
   }, {});
