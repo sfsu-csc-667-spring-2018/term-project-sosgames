@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  let UserGame = sequelize.define('UserGame', {
+  const UserGame = sequelize.define('user_game', {
     user_id: DataTypes.INTEGER,
     game_id: DataTypes.INTEGER,
     current_score: DataTypes.INTEGER,

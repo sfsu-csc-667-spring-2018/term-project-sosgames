@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  let Game = sequelize.define('Game', {
+  const Game = sequelize.define('game', {
     round_number: DataTypes.INTEGER,
     is_reversed: DataTypes.BOOLEAN,
     winner_id: DataTypes.INTEGER

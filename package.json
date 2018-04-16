@@ -28,11 +28,11 @@
     "start": "NODE_ENV=production nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
 
-    "db:create:model:card": "sequelize model:create --name Card --attributes value:string,color:string,point_value:integer,image_path:string",
-    "db:create:model:user": "sequelize model:create --name User --attributes username:string,password:string,profile_picture_path:string,total_score:integer,email:string",
-    "db:create:model:game": "sequelize model:create --name Game --attributes round_number:integer,is_reversed:boolean,winner_id:integer",
-    "db:create:model:gameCard": "sequelize model:create --name GameCard --attributes game_id:integer,card_id:integer,user_id:integer,in_hand:boolean,in_deck:boolean,on_top:boolean",
-    "db:create:model:userGame": "sequelize model:create --name UserGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
+    "db:create:model:card": "sequelize model:create --name card --attributes value:string,color:string,point_value:integer,image_path:string",
+    "db:create:model:user": "sequelize model:create --name user --attributes username:string,password:string,profile_picture_path:string,total_score:integer,email:string",
+    "db:create:model:game": "sequelize model:create --name game --attributes round_number:integer,is_reversed:boolean,winner_id:integer",
+    "db:create:model:gameCard": "sequelize model:create --name gameCard --attributes game_id:integer,card_id:integer,user_id:integer,in_hand:boolean,in_deck:boolean,on_top:boolean",
+    "db:create:model:userGame": "sequelize model:create --name userGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
     
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
