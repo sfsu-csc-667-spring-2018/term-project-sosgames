@@ -33,11 +33,15 @@
     "db:create:model:game": "sequelize model:create --name game --attributes round_number:integer,is_reversed:boolean,winner_id:integer",
     "db:create:model:gameCard": "sequelize model:create --name gameCard --attributes game_id:integer,card_id:integer,user_id:integer,in_hand:boolean,in_deck:boolean,on_top:boolean",
     "db:create:model:userGame": "sequelize model:create --name userGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
-    
+
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
     "db:rollback": "sequelize db:migrate:undo",
-    "postinstall": "sequelize db:migrate"
+
+    "db:seed:card": "sequelize seed:create --name cards",
+
+    "db:seed:all": "sequelize db:seed:all",
+    "db:seed:rollback": "sequelize db:seed:undo:all"
   },
   "repository": {
     "type": "git",
