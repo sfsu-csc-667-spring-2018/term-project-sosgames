@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       profile_picture: {
-        type: Sequelize.BLOB
+        type: Sequelize.STRING
       },
       total_score: {
         type: Sequelize.INTEGER
