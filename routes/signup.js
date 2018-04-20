@@ -4,7 +4,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 // User Model
-const User = require('../models/user');
+const { User } = require('../database');
 
 router.get('/', function (request, response, next) {
   response.render('signup', {
@@ -36,10 +36,7 @@ router.post('/', function (request, response) {
   } else {
     // Get the Path
     // Create a User object
-    const newUser = new User({
-
-    });
-
+    User.createUser( username, password, '/', 0, email, Date.now(), Date.now() );
     // This needs to change to be consistent with how I'm displaying errors
     request.flash('success_msg', "You are registered and can now login");
     response.redirect('/');
