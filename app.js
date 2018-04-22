@@ -15,15 +15,12 @@ if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 const index = require('./routes/index'); 
 const users = require('./routes/users');
 const tests = require('./routes/tests');
-const app = express();
+
+const app = require('express')();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-// // Routes - JonDo defined (DC)
-// app.get( '/', routes.index ); // Login Page (DC)
-// app.get( '/register', routes.register ); // Register New User Page (DC)
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));

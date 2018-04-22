@@ -109,10 +109,7 @@ a {
   font-size: 12px;
   color: #777; 
 }
-
-#chatbox{
-  background-color: grey;
-}
+/* lobby */
 
 .table-responsive{
   background-color: darkseagreen;
@@ -123,15 +120,16 @@ a {
   border-radius: .25rem; 
   transition: all .1s ease-in-out;
   padding: 10px;
-  margin: 35px;
+  margin: 10px;
 }
 
 .chat{
-  float: left;
+  /* margin-left: px;  */
+  /* float: right; */
 }
 
 .lobby{
-  float: left;
+  /* float: left; */
 }
 
 /*endGamePage*/
