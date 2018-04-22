@@ -9,8 +9,8 @@ const CREATEUSER = `INSERT INTO users ( username, password, profile_picture_path
 
 module.exports = {
   all: () => db.any( ALL ),
-  isEmailInUse:  ( email ) => db.oneOrNone( GETEMAIL, [ email ] ),
-  isUsernameInUse: ( username ) => db.oneOrNone( GETUSERNAME, [ username ] ),
+  isEmailInUse:  ( email ) => db.one( GETEMAIL, [ email ] ),
+  isUsernameInUse: ( username ) => db.one( GETUSERNAME, [ username ] ),
   // Unsure about how long this is
   createUser: ( username, password, profile_picture_path, total_score, email ) => 
               db.one( CREATEUSER, [ username, password, profile_picture_path, total_score, email ] )

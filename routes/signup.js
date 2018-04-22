@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-
-// User Model
-const {
-  User
-} = require('../database');
+const { User } = require('../database');
 
 router.get('/', function (request, response, next) {
   response.render('signup', {
@@ -15,61 +12,62 @@ router.get('/', function (request, response, next) {
 });
 
 router.post('/', function (request, response, next) {
-  let errors = [];
-  errors = formValidation(request);
+  let formErrors = formValidation(request);
 
-  if (!errors) {
-    errors = []; // @robert: we have to reset this to empty?
+  if (formErrors) {
+    renderErrors(response, formErrors);
+  } else {
+    let errors = []; // @robert: we have to reset this to empty?
     // Just trying to get the email value from the DB and save it
     User.isEmailInUse(request.body.email)
       .then((data) => {
         // Email is NOT unique, check username next
-        if(data) {
-          errors.push({msg: "Email address is already in use."});
-        }
-        return errors;
+        errors.push({
+          msg: "Email address is already in use."
+        });
 
       })
       .then((data) => {
 
         User.isUsernameInUse(request.body.username)
-        .then((data) => {
-          // Username is also not unique
-          if(data) {
-            errors.push({ msg: "Username is already in use."});
-          }
-          renderErrors( response, errors );
+          .then((data) => {
+            // Username is also not unique
+            errors.push({
+              msg: "Username is already in use."
+            });
 
-        })
-        .catch((error) => {
-          renderErrors( response, errors );
+            renderErrors(response, errors);
 
-        });
+          })
+          .catch((error) => {
+            renderErrors(response, errors);
+
+          });
       })
       .catch(error => {
         // Email is unique, check if username is also unique
         User.isUsernameInUse(request.body.username)
-        .then((data) => {
-          // Username is also not unique
-          if(data) {
-            errors.push({ msg: "Username is already in use."});
-          }
-          renderErrors( response, errors );
+          .then((data) => {
+            // Username is also not unique
+            errors.push({
+              msg: "Username is already in use."
+            });
+            renderErrors(response, errors);
 
-        })
-        .catch((error) => {
-          // Email and username are both unique
-          User.createUser(request.body.username, request.body.password, '/', 0, request.body.email)
-          .then(users => {
-            request.flash('success_msg', "You are registered and can now login");
-            response.redirect('/');
+          })
+          .catch((error) => {
+            // Email and username are both unique
+            bcrypt.hash(request.body.password, 10).then( hash => {
+              User.createUser(request.body.username, hash, '/', 0, request.body.email)
+                .then(users => {
+                  request.flash('success_msg', "You are registered and can now login");
+                  response.redirect('/');
+                });
+            });
           });
-        });
 
       });
-  } else {
-    renderErrors( response, errors );
-  } 
+  }
 });
 
 // Validate User
@@ -87,11 +85,11 @@ let formValidation = ((request) => {
   return request.validationErrors();
 });
 
-let renderErrors = ( ( response, errors ) => {
+let renderErrors = ((response, errors) => {
   response.render('signup', {
     title: 'UNO - Sign Up',
     errors: errors
   });
-}); 
+});
 
 module.exports = router;
