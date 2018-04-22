@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const promise = require('bluebird');
-
 
 // User Model
 const {
@@ -20,91 +18,90 @@ router.post('/', function (request, response, next) {
   let errors = [];
   errors = formValidation(request);
 
-  if (!errors) {  
-    errors = [];  
-
-
-
-
-    // uniqueEmailAddress(request.body.email)
-    // if (User.isEmailInUse(request.body.email)) {
-    //   errors.push({
-    //     param: request.body.email,
-    //     msg: "Email address is already in use.",
-    //     value: request.body.email
-    //   });
-    // }
-
-
+  if (!errors) {
+    errors = []; // @robert: we have to reset this to empty?
     // Just trying to get the email value from the DB and save it
-    let test = User.isEmailInUse( request.body.email )
-        .then( data => {
-          JSON.stringify(data);
-          console.log("From within PGPROMISE " + data.email);
-          return data.email;
-        });
-    console.log("OUTSIDE " + test);
-  }
+    User.isEmailInUse(request.body.email)
+      .then((data) => {
+        // Email is NOT unique, check username next
+        if(data) {
+          errors.push({
+            msg: "Email address is already in use.",
+          });
+        }
 
-  if (errors) {
+        return errors;
+      })
+      .then((data) => {
+        User.isUsernameInUse(request.body.username)
+        .then((data) => {
+          // Username is also not unique
+          if(data) {
+            errors.push({
+              msg: "Username is already in use.",
+            });
+          }
+
+          response.render('signup', {
+            title: 'UNO - Sign Up',
+            errors: errors
+          });
+        })
+        .catch((error) => {
+          response.render('signup', {
+            title: 'UNO - Sign Up',
+            errors: errors
+          });
+        })
+      })
+      .catch(error => {
+        // Email is unique, check if username is also unique
+        User.isUsernameInUse(request.body.username)
+        .then((data) => {
+          // Username is also not unique
+          if(data) {
+            errors.push({
+              msg: "Username is already in use.",
+            });
+          }
+
+          // Render the error(s)
+          response.render('signup', {
+            title: 'UNO - Sign Up',
+            errors: errors
+          });
+        })
+        .catch((error) => {
+          // Email and username are both unique
+          User.createUser(request.body.username, request.body.password, '/', 0, request.body.email)
+          .then(users => {
+            request.flash('success_msg', "You are registered and can now login");
+            response.redirect('/');
+          });
+        });
+
+      });
+  } else {
     response.render('signup', {
       title: 'UNO - Sign Up',
       errors: errors
     });
-  } else {
-    User.createUser(request.body.username, request.body.password, '/', 0, request.body.email)
-      .then(users => {
-        request.flash('success_msg', "You are registered and can now login");
-        response.redirect('/');
-      });
-  }
+  } 
 });
 
 // Validate User
 let formValidation = ((request) => {
   request.checkBody('username', 'Username field cannot be empty.').notEmpty();
-  request.checkBody('username', 'Username must be between 4-15 characters long.').len(4, 15);
+  request.checkBody('username', 'Username must be between 4-20 characters long.').len(4, 20);
+  request.checkBody('email', 'Email field cannot be empty.').notEmpty();
   request.checkBody('email', 'Email is not valid.').isEmail();
   request.checkBody('email', 'Email address must be between 4-100 characters long.').len(4, 100);
+  request.checkBody('password', 'Password field cannot be empty.').notEmpty();
   request.checkBody('password', 'Password must be 8-100 characters long.').len(8, 100);
+  request.checkBody('confirmpassword', 'Confirm Password field cannot be empty.').notEmpty();
   request.checkBody('confirmpassword', 'Password must be 8-100 characters long.').len(8, 100);
   request.checkBody('confirmpassword', 'Passwords do not match').equals(request.body.password);
   return request.validationErrors();
-});
-
-
-let uniqueEmailAddress = (email => {
-  let test = User.getOneByEmail(email)
-    .then(data => {
-      if (data == null) {
-        console.log('UNIQUE USERNAME');
-        return true;
-      } else {
-        console.log('NONUNIQUE EMAIL');
-        return false;
-      }
-    }).catch(error => {
-      console.log(error);
-    });
-});
-
-let uniqueUsername = (username => {
-  return User.getOneByUsername(username)
-    .then(data => {
-      if (data == null) {
-        console.log('UNIQUE USERNAME');
-        console.log(data);
-
-        return true;
-      } else {
-        console.log('NONUNIQUE USERNAME');
-        console.log(data);
-
-        return false;
-      }
-    }).catch(error => {
-      console.log(error);
-    });
 });
 
 module.exports = router;
