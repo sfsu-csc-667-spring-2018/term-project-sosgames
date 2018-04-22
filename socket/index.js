@@ -6,7 +6,7 @@ const init = ( app, server ) => {
 
   app.set( 'io', io )
 
-  io.on( 'connection', socket => {
+  io.on( 'connection', function(socket){
     console.log( 'client connected' )
 
     socket.on( 'disconnect', data => {

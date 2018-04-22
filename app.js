@@ -16,7 +16,7 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 const tests = require('./routes/tests');
 
-const app = require('express')();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
