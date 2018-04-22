@@ -3,43 +3,77 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     
-    const cards = [];
-    const colors = ["blue", "red", "yellow", "green", "wild"];
-    const value = [1, 2, 3, 4, 5, 6, 7, 8, 8, 9];
+    let cards = [];
+    let colors = ["red", "yellow", "green", "blue"];
+    let actions = ["skip", "reverse", "draw-two"];
+    let wild_cards = ["wild", "wild-draw-four"];
 
-    // return queryInterface.bulkInsert('cards', [
-    //   {
-    //     value : '1',
-    //     color : 'blue',
-    //     point_value : 1,
-    //     image_path : '../public/images/spritesheet_uno_large.png',
-    //     createdAt : new Date(),
-    //     updatedAt : new Date()
-    //   },
-    //   {
-    //     value : '2',
-    //     color : 'blue',
-    //     point_value : 2,
-    //     image_path : '../public/images/spritesheet_uno_large.png',
-    //     createdAt : new Date(),
-    //     updatedAt : new Date()
-    //   },
-    //   {
-    //     value : '3',
-    //     color : 'blue',
-    //     point_value : 3,
-    //     image_path : '../public/images/spritesheet_uno_large.png',
-    //     createdAt : new Date(),
-    //     updatedAt : new Date()
-    //   },
-    // ],
-    // {});
+    cards.push(createColoredCards(createNumeredArray(0, 9), colors));
+    cards.push(createColoredCards(createNumeredArray(1, 9), colors));
+
+    cards.push(createColoredCards(actions, colors, 20));
+    cards.push(createColoredCards(actions, colors, 20));
+
+    cards.push(createWildCards(wild_cards, 4));
+
+    cards = [].concat(...cards);
+    return queryInterface.bulkInsert('cards', cards, {});
   },
 
   down: (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('cards', [{
-      value :'1',
-      color: 'blue'
-    }])
+    queryInterface.bulkDelete('cards', null, {});
   }
 };
+
+
+function createNumeredArray(start, end) {
+  let arr = [];
+  let number = start;
+  for (let index = 0; index <= end - start; index++) {
+    arr[index] = '' + number;
+    number++;
+  }
+  return arr;
+}
+
+function createColoredCards(values, colors, point) {
+  let cards = [];
+
+  for (let value of values) {
+    for (let color of colors) {
+      let card = {
+        value : value,
+        color : color,
+        point_value : point || +value,
+        image_path : '../public/images/spritesheet_uno_large.png',
+        createdAt : new Date(),
+        updatedAt : new Date()
+      }
+
+      cards.push(card);
+    }
+  }
+
+  return cards;
+}
+
+function createWildCards(values, count) {
+  let cards = [];
+
+  for (let value of values) {
+    for (let index = 0; index < count; index++) {
+      let card = {
+        value : value,
+        color : value,
+        point_value : 50,
+        image_path : '../public/images/spritesheet_uno_large.png',
+        createdAt : new Date(),
+        updatedAt : new Date()
+      }
+
+      cards.push(card);
+    }
+  }
+
+  return cards;
+}
