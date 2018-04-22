@@ -25,34 +25,26 @@ router.post('/', function (request, response, next) {
       .then((data) => {
         // Email is NOT unique, check username next
         if(data) {
-          errors.push({
-            msg: "Email address is already in use.",
-          });
+          errors.push({msg: "Email address is already in use."});
         }
-
         return errors;
+
       })
       .then((data) => {
+
         User.isUsernameInUse(request.body.username)
         .then((data) => {
           // Username is also not unique
           if(data) {
-            errors.push({
-              msg: "Username is already in use.",
-            });
+            errors.push({ msg: "Username is already in use."});
           }
+          renderErrors( response, errors );
 
-          response.render('signup', {
-            title: 'UNO - Sign Up',
-            errors: errors
-          });
         })
         .catch((error) => {
-          response.render('signup', {
-            title: 'UNO - Sign Up',
-            errors: errors
-          });
-        })
+          renderErrors( response, errors );
+
+        });
       })
       .catch(error => {
         // Email is unique, check if username is also unique
@@ -60,16 +52,10 @@ router.post('/', function (request, response, next) {
         .then((data) => {
           // Username is also not unique
           if(data) {
-            errors.push({
-              msg: "Username is already in use.",
-            });
+            errors.push({ msg: "Username is already in use."});
           }
+          renderErrors( response, errors );
 
-          // Render the error(s)
-          response.render('signup', {
-            title: 'UNO - Sign Up',
-            errors: errors
-          });
         })
         .catch((error) => {
           // Email and username are both unique
@@ -82,10 +68,7 @@ router.post('/', function (request, response, next) {
 
       });
   } else {
-    response.render('signup', {
-      title: 'UNO - Sign Up',
-      errors: errors
-    });
+    renderErrors( response, errors );
   } 
 });
 
@@ -103,5 +86,12 @@ let formValidation = ((request) => {
   request.checkBody('confirmpassword', 'Passwords do not match').equals(request.body.password);
   return request.validationErrors();
 });
+
+let renderErrors = ( ( response, errors ) => {
+  response.render('signup', {
+    title: 'UNO - Sign Up',
+    errors: errors
+  });
+}); 
 
 module.exports = router;
