@@ -22,22 +22,28 @@ router.post('/', function (request, response, next) {
 
   if (!errors) {  
     errors = [];  
-    
-    if (uniqueEmailAddress(request.body.email)) {
-      errors.push({
-        param: request.body.email,
-        msg: "Email address is already in use.",
-        value: request.body.email
-      });
-    }
 
-    if (uniqueUsername(request.body.username)) {
-      errors.push({
-        param: request.body.username,
-        msg: "Username is already in use.",
-        value: request.body.username
-      });
-    }
+
+
+
+    // uniqueEmailAddress(request.body.email)
+    // if (User.isEmailInUse(request.body.email)) {
+    //   errors.push({
+    //     param: request.body.email,
+    //     msg: "Email address is already in use.",
+    //     value: request.body.email
+    //   });
+    // }
+
+
+    // Just trying to get the email value from the DB and save it
+    let test = User.isEmailInUse( request.body.email )
+        .then( data => {
+          JSON.stringify(data);
+          console.log("From within PGPROMISE " + data.email);
+          return data.email;
+        });
+    console.log("OUTSIDE " + test);
   }
 
   if (errors) {
