@@ -40,7 +40,9 @@
     "db:rollback:all": "sequelize db:migrate:undo:all",
 
     "db:seed:card": "sequelize seed:create --name cards",
+    "db:seed:user": "sequelize seed:create --name users",
 
+    "db:seed": "sequelize db:seed --seed",
     "db:seed:all": "sequelize db:seed:all",
     "db:seed:rollback": "sequelize db:seed:undo:all"
   },
