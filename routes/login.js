@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 const {
   User
 } = require('../database');
@@ -26,25 +27,23 @@ router.post('/login', function (request, response, next) {
         bcrypt.compare(request.body.password, data.password)
           .then((result) => {
 
-            try {
-              if (result) {
-                const isSecure = request.app.get('env') != 'development';
-                response.cookie('user_id', data.id, {
-                  httpOnly: true,
-                  signed: true,
-                  secure: isSecure
-                });
-  
-                response.redirect('/lobby');
-              } else {
-                errors.push({
-                  msg: "Invalid password."
-                });
-                renderErrors(response, errors);
-              }
-            } catch ( e ) {
-              console.log(e);
+
+            if (result) {
+              const isSecure = request.app.get('env') != 'development';
+              response.cookie(
+                'user_id', data.id, {
+                httpOnly: true,
+                signed: true,
+                secure: isSecure
+              });
+              response.redirect('/lobby');
+            } else {
+              errors.push({
+                msg: "Invalid password."
+              });
+              renderErrors(response, errors);
             }
+
           }).catch(error => {
             console.log(error);
 
@@ -77,13 +76,20 @@ let renderErrors = ((response, errors) => {
   });
 });
 
+router.get('/logout', (request, response ) => {
+  response.clearCookie('user_id');
+  response.redirect('/');
+});
 
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-
-
-
-
-
+passport.deserializeUser((username, done) => {
+  User.getUserId( username ).then((user) => {
+    done(null, user.id);
+  });
+});
 
 
 router.get('/lobby', function (request, response, next) {

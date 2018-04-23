@@ -18,6 +18,7 @@ if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 
 // Routes?
 const login = require('./routes/login'); 
+const logout = require('./routes/logout');
 const users = require('./routes/users');
 const tests = require('./routes/tests');
 const game = require('./routes/game');
