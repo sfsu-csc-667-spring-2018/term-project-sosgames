@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-const { User } = require('../database');
+const User = require('../database');
 
 router.get('/', function (request, response, next) {
   response.render('signup', {
@@ -17,7 +17,7 @@ router.post('/', function (request, response, next) {
   if (formErrors) {
     renderErrors(response, formErrors);
   } else {
-    let errors = []; // @robert: we have to reset this to empty?
+    let errors = []; 
     // Just trying to get the email value from the DB and save it
     User.isEmailInUse(request.body.email)
       .then((data) => {
