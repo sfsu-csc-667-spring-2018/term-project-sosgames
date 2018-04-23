@@ -76,9 +76,12 @@ let renderErrors = ((response, errors) => {
   });
 });
 
-router.get('/logout', (request, response ) => {
-  response.clearCookie('user_id');
-  response.redirect('/');
+// This doesn't work as intended. Clears cookie but I feel like it needs work
+router.get('/logout', (request, response, next ) => {
+  if( request.cookies ) {
+    response.clearCookie('user_id');
+    response.redirect('/');
+  }
 });
 
 passport.serializeUser((user, done) => {
