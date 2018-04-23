@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../database');
+const { User } = require('../database');
 
 router.get('/', function (request, response, next) {
   response.render('signup', {
@@ -29,7 +29,7 @@ router.post('/', function (request, response, next) {
       })
       .then((data) => {
 
-        User.isUsernameInUse(request.body.username)
+        User.isUserNameInUse(request.body.username)
           .then((data) => {
             // Username is also not unique
             errors.push({
@@ -46,7 +46,7 @@ router.post('/', function (request, response, next) {
       })
       .catch(error => {
         // Email is unique, check if username is also unique
-        User.isUsernameInUse(request.body.username)
+        User.isUserNameInUse(request.body.username)
           .then((data) => {
             // Username is also not unique
             errors.push({
