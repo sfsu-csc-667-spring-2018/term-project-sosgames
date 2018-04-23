@@ -37,6 +37,7 @@
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
     "db:rollback": "sequelize db:migrate:undo",
+    "db:rollback:all": "sequelize db:migrate:undo:all",
 
     "db:seed:card": "sequelize seed:create --name cards",
 
