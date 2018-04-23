@@ -9,13 +9,25 @@ const init = ( app, server ) => {
   io.on( 'connection', function(socket){
     console.log( 'client connected' )
 
-    socket.on( 'disconnect', data => {
+    socket.on( 'disconnect', function(socket){
       console.log( 'client disconnected' )
     })
 
-    socket.on( USER_JOINED, data => io.emit( USER_JOINED, data ))
-    socket.on( MESSAGE_SEND, data => io.emit( MESSAGE_SEND, data ))
+    io.on('connection', function(socket){
+      socket.on('chat message', function(msg){
+        console.log('message: ' + msg);
+      });
+    });
+    
+    // //idea for how to manage gamestate updates
+    // socket.on('game_state_update', ({GAME_ID, GAME_STATE})=>{
+    //   socket.emit('game_state_update',{GAME_STATE})
+    // })
   })
+}
+
+function sendMessage(data){
+  socket.emit('new_chat_message', data)
 }
 
 module.exports = { init }

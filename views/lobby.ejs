@@ -62,9 +62,7 @@
     </div> 
     </div>
     
-      
-
-
+    
         <!-- chat section -->
         <div class="col">
             <div class="chat" style="float: right">
@@ -73,15 +71,24 @@
                         <h3>Chat</h3>
                     <div style="clear:both">
 
+    <ul id="message_list"></ul>
+
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
-    <!-- <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
+
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+    $(function () {
         var socket = io();
+        $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+        });
+    });
     </script>
 
             </div>
