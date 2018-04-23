@@ -72,8 +72,6 @@
                     <div style="clear:both">
 
     <ul id="message_list"></ul>
-
-    <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
@@ -87,6 +85,10 @@
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
+        });
+
+        socket.on('chat message', function(msg){
+            $('#message_list').append($('<li>').text(msg));
         });
     });
     </script>
