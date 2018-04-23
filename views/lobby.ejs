@@ -70,8 +70,11 @@
                         <p class="welcome">Welcome, <b>insert current username</b></p>
                         <h3>Chat</h3>
                     <div style="clear:both">
-
-    <ul id="message_list"></ul>
+    <div class="table-responsive">
+        <table id="message_list" style="width:100%">
+            
+        </table>
+    </div>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
@@ -88,7 +91,8 @@
         });
 
         socket.on('chat message', function(msg){
-            $('#message_list').append($('<li>').text(msg));
+            $('#message_list').append($('<tr>').text(msg));
+            $('#message_list').append($('</tr>').text(msg));
         });
     });
     </script>
