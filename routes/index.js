@@ -1,24 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'UNO' });
 });
 
-router.get('/signup', function( req, res, next ) {
-  res.render('signup', { title: 'UNO - Sign Up' });
-});
-
 router.get('/lobby', function( req, res, next ) {
   res.render('lobby', { title: 'UNO - Lobby' });
 });
 
-router.get('/creategame', function( req, res, next ) {
+router.get('/create-game', function( req, res, next ) {
     res.render('creategame', { title: 'UNO - Create Game' });
 });
 
-router.get('/endgamepage', function( req, res, next ) {
+router.get('/end-game-page', function( req, res, next ) {
   res.render('endgamepage', { title: 'UNO - End Game' });
 });
 

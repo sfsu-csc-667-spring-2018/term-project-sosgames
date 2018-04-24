@@ -1,5 +1,6 @@
+/* GENERAL */
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 html,
@@ -10,9 +11,26 @@ body {
 a {
   color: #00B7FF;
 }
+body {
+  padding-bottom: 20px;
+}
 
+.navbar {
+  margin-bottom: 20px;
+}
+
+/* GENERAL LAYOUT */
+.flex-row  {
+  flex-direction: row;
+}
+
+.centered {
+  margin: 0 auto;
+}
+
+/* HOME PAGE */
 #centerNavLogo{
-  width: 12%;
+  width: 25%;
 }
 
 #octocatLogo{
@@ -23,6 +41,7 @@ a {
   background: #343a40;
 }
 
+/* SIGN IN/LOG OUT */
 #logoutButton{
   margin-top: 7px;
 }
@@ -36,12 +55,6 @@ a {
   text-decoration: none;
 }
 
-.absolute-centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate( -50%, -50% );
-}
 :root {
   --input-padding-x: .75rem;
   --input-padding-y: .75rem;
@@ -110,6 +123,33 @@ a {
   color: #777; 
 }
 /* lobby */
+/* GAME ROOM */
+.game-room .row {
+  margin-bottom: 1rem;
+}
+
+.player-avatar {
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+
+.player-avatar img {
+  width: 50%;
+  height: auto;
+}
+
+.player-active {
+  border: #00B7FF 1px solid;
+  border-radius: 0.25em;
+}
+
+.game-card-decks div.col,
+.game-card-hand div.col {
+  padding: 1rem;
+}
+#chatbox{
+  background-color: grey;
+}
 
 .table-responsive{
   background-color: darkseagreen;
@@ -138,3 +178,123 @@ a {
   max-width: 200px;
 }
 /*endGamePage*/
+
+/* COMPONENTS */
+
+/* COMPONENT/UNO-CARD */
+.uno-card {
+  width: 116px;
+  height: 178px;
+  background: #fff;
+  border-radius: 5px;
+  display: table;
+  box-sizing: border-box;
+  padding: 5px;
+  font-size: 6rem;
+  text-shadow:
+     1px  1px 0 #000000,
+    -1px -1px 0 #000000,
+    -1px  1px 0 #000000,
+     1px -1px 0 #000000,
+     1px  0   0 #000000,
+    -1px  0   0 #000000,
+     0   -1px 0 #000000,
+     0    1px 0 #000000,
+     4px  4px 0 #000000;
+  box-shadow: 0 0 10px #aaaaaa;
+  text-align: center;
+  position: relative;
+}
+
+.uno-card .inner {
+  display: table-cell;
+  /* vertical-align: middle; */
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Inner Oval */
+.uno-card .mark {
+  display: inline-block;
+  vertical-align: middle;
+  background: #ffffff;
+  margin: auto;
+  padding: 0 26px;
+  border-radius: 3.2em 2em / 4em 2em; /* generates tilted oval shape, '/' is not division */
+  line-height: 1.4;
+}
+
+.uno-card.black .mark {
+  background: #ff4d4d;
+  font-size: 2rem;
+  padding: 1.4em 1.3rem;
+}
+
+/* The small number on top left and bottom right corners */
+.uno-card:before,
+.uno-card:after {
+  display: inline-block;
+  position: absolute;
+  line-height: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-shadow:
+     1px  1px 0 #000000,
+    -1px -1px 0 #000000,
+    -1px  1px 0 #000000,
+     1px -1px 0 #000000,
+     1px  0   0 #000000,
+    -1px  0   0 #000000,
+     0   -1px 0 #000000,
+     0    1px 0 #000000,
+     2px  2px 0 #000000;
+}
+
+/* The small number on top left corner */
+.uno-card:before {
+  top: 0.9em;
+  left: 0.5em;
+}
+
+/* The small number on bottom right corner, 180 degree rotated */
+.uno-card:after {
+  bottom: 0.9em;
+  right: 0.5em;
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg); /* Safari */
+  -ms-transform: rotate(180deg); /* IE 9 */
+}
+
+/* TODO: MAKE THIS DYNAMIC -- maybe using the data-* attribute */
+/* The value of the small number on top left and bottom right corners */
+.uno-card.num-4:before,
+.uno-card.num-4:after {
+  content: "4";
+}
+
+/* Color of the big number in middle */
+.uno-card.blue {
+  color: #0063B3;
+}
+
+.uno-card.black {
+  /* font-size: 1.2rem; */
+  color: #fff200;
+}
+
+/* Background color of card */
+.uno-card.blue .inner {
+  background: #0063B3;
+}
+
+.uno-card.black .inner {
+  background: #000;
+}
+
+.card-in-draw button {
+  padding: 0;
+}
+
+.play-btn button {
+  width: 50%;
+}
