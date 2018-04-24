@@ -54,7 +54,7 @@ module.exports = {
                       return errors;
 
                     } else {
-                      bcrypt.hash(password, 10).then(hash => {
+                      bcrypt.hash(password, (Math.floor(Math.random() * 10) + 1)).then(hash => {
                         return createUser( username, hash, photo_path, 0, email);
                       });
                     }

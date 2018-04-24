@@ -21,7 +21,6 @@ router.post('/', (request, response, next) => {
 
     User.create(username, email, password, photo_path)
         .then(errors => {
-          console.log(errors);
           if (errors) {
             renderErrors(response, errors);
           } else {
