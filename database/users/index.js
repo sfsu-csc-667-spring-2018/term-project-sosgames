@@ -21,34 +21,40 @@ const CREATEUSER = `INSERT INTO users ( username, password, profile_picture_path
 //   createUser: ( username, password, profile_picture_path, total_score, email ) => 
 //               db.one( CREATEUSER, [ username, password, profile_picture_path, total_score, email ] )
 // };
+let isEmailInUse = ( email ) => {
+  return db.oneOrNone( GETEMAIL, [ email ] );
+};
+
+let isUserNameInUse = ( username ) => {
+  return db.oneOrNone( GETUSERNAME, [ username ] );
+};
+
+let createUser = ( username, password, profile_picture_path, total_score, email ) => {
+  db.one( CREATEUSER, [ username, password, profile_picture_path, 0, email ] );
+};
 
 module.exports = {
-  isEmailInUse:  ( email ) => db.one( GETEMAIL, [ email ] ),
-  isUserNameInUse: ( username ) => db.one( GETUSERNAME, [ username ] ),
   getUserData: ( username ) => db.one( GETUSERDATA, [ username ] ),
   getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
-  // Error created - when a post request is made, "ReferenceError: isUserNameInUse is not defined
-  //  at Object.create" is shown
   create: ( username, email, password, photo_path ) =>
-          Promise.all( [ isEmailInUse( email ), isUserNameInUse( username )] 
+          Promise.all( [ isEmailInUse( email ), isUserNameInUse( username )] )
                  .then( ([ emailUsed, usernameUsed ]) => {
-                    console.log('a');
                     let errors = [];
-                    if (emailInUse || userNameInUse) {
-                      if (emailInUse) {
+
+                    if (emailUsed || usernameUsed) {
+                      if (emailUsed) {
                         errors.push({msg: "Email address is already in use."});
                       }
-                      if (userNameInUse) {
+                      if (usernameUsed) {
                         errors.push({msg: "Username is already in use."});
                       }
-                      Promise.reject( errors );
+                      return errors;
+
                     } else {
                       bcrypt.hash(password, 10).then(hash => {
-                        Promise.resolve(User.createUser( username, hash, photo_path, 0, email));
+                        createUser( username, hash, photo_path, 0, email);
+                        Promise.resolve();
                       });
                     }
-                 })),
-
-  createUser: ( username, password, profile_picture_path, total_score, email ) => 
-              db.one( CREATEUSER, [ username, password, profile_picture_path, 0, email ] )
+                 })
 };

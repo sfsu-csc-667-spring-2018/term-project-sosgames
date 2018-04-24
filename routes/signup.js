@@ -18,26 +18,27 @@ router.post('/', (request, response, next) => {
   if (formErrors) {
     renderErrors(response, formErrors);
   } else {
-    const { username, email, password } = request.body;
+    const {
+      username,
+      email,
+      password
+    } = request.body;
     const photo_path = '/'; // DEBUG This will be updated
 
     // This is test code, the bottom commented out code works as intended
-    try {
-      User.create( username, email, password, photo_path )
-        .then( errors => {
-          renderErrors(response, errors);
+    User.create(username, email, password, photo_path)
+      .then(errors => {
+        renderErrors(response, errors);
 
-        }).catch( error => {
-          request.flash('success_msg', "You are registered and can now login");
-          response.redirect('/');
-
-        });
-    } catch ( e ) { console.log(e);}
-    next();
+      }).catch(error => {
+        console.log(error);
+        request.flash('success_msg', "You are registered and can now login");
+        response.redirect('/');
+      });
     // Promise.all([
     //   User.isEmailInUse(email),
     //   User.isUserNameInUse(username)
-      
+
     // ]).then(([emailInUse, userNameInUse]) => {
     //   let errors = [];
     //   if (emailInUse || userNameInUse) {
@@ -58,7 +59,7 @@ router.post('/', (request, response, next) => {
     //       });
     //   });
 
-   // });
+    // });
   }
 });
 
