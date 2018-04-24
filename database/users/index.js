@@ -52,8 +52,7 @@ module.exports = {
 
                     } else {
                       bcrypt.hash(password, 10).then(hash => {
-                        createUser( username, hash, photo_path, 0, email);
-                        Promise.resolve();
+                        return createUser( username, hash, photo_path, 0, email);
                       });
                     }
                  })
