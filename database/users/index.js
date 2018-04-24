@@ -33,9 +33,12 @@ let createUser = ( username, password, profile_picture_path, total_score, email 
   db.one( CREATEUSER, [ username, password, profile_picture_path, 0, email ] );
 };
 
+let getUserData = ( username ) => {
+  return db.one( GETUSERDATA, [ username ] );
+};
+
 module.exports = {
-  getUserData: ( username ) => db.one( GETUSERDATA, [ username ] ),
-  getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
+  //getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
   create: ( username, email, password, photo_path ) =>
           Promise.all( [ isEmailInUse( email ), isUserNameInUse( username )] )
                  .then( ([ emailUsed, usernameUsed ]) => {
@@ -55,5 +58,29 @@ module.exports = {
                         return createUser( username, hash, photo_path, 0, email);
                       });
                     }
-                 })
+                 }),
+  // This works but I don't want it like this
+  getUserData: ( username ) => db.one( GETUSERDATA, [ username ] )
+  // WIP code for login
+  // login: ( username, password ) =>
+  //        Promise.all( [ getUserData( username ) ] )
+  //               .then( ([ user ]) => {
+  //                 let errors = [];
+  //                 if( user ) {
+  //                   console.log('there is a user');
+  //                   console.log(user.password);
+  //                   bcrypt.compare( password, user.password )
+  //                         .then( result => {
+  //                             return result;
+  //                         });
+
+  //                   errors.push( { msg: "Invalid password."} );
+  //                 } else {
+  //                   console.log('no user');
+  //                   errors.push({ msg: "Invalid username."});
+  //                 }
+  //                 console.log('1');
+  //                 return errors;
+  //               })
+
 };

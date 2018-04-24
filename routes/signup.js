@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../database');
+const { User } = require('../database');
 
 router.get('/', (request, response, next) => {
   response.render('signup', {
@@ -20,14 +20,15 @@ router.post('/', (request, response, next) => {
     const photo_path = '/'; // DEBUG This will be updated
 
     User.create(username, email, password, photo_path)
-      .then(errors => {
-        if (errors) {
-          renderErrors(response, errors);
-        } else {
-          request.flash('success_msg', "You are registered and can now login");
-          response.redirect('/');
-        }
-      });
+        .then(errors => {
+          console.log(errors);
+          if (errors) {
+            renderErrors(response, errors);
+          } else {
+            request.flash('success_msg', "You are registered and can now login");
+            response.redirect('/');
+          }
+        });
   }
 });
 

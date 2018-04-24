@@ -13,18 +13,41 @@ router.get('/', function (request, response, next) {
   });
 });
 
-router.post('/login', function (request, response, next) {
+// DEBUG Still Gotta fix this
+router.post('/login', (request, response, next) => {
   let formErrors = formValidation(request);
 
   if (formErrors) {
     renderErrors(response, formErrors);
   } else {
-    let errors = [];
+    const{ username, password } = request.body;
 
-    User.getUserData(request.body.username)
+    // WIP code
+    // try {
+    //   User.login( username, password )
+    //   .then( errors => {
+    //     if( errors ) {
+    //       renderErrors( response, errors );
+    //     } else {
+    //       const isSecure = request.app.get('env') != 'development';
+    //         response.cookie(
+    //           'user_id', data.id, {
+    //           httpOnly: true,
+    //           signed: true,
+    //           secure: isSecure
+    //         });
+    //         response.redirect('/lobby');
+    //     }
+    //   });
+    // } catch ( e ) { console.log(e);}
+
+
+    // This works but - it's not what I want
+    let errors = [];
+    User.getUserData(username)
       .then((data) => {
         // Username exists
-        bcrypt.compare(request.body.password, data.password)
+        bcrypt.compare(password, data.password)
           .then((result) => {
 
 
@@ -57,7 +80,6 @@ router.post('/login', function (request, response, next) {
         renderErrors(response, errors);
       });
   }
-
 });
 
 // Validate User
