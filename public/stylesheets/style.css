@@ -122,7 +122,7 @@ body {
   font-size: 12px;
   color: #777; 
 }
-
+/* lobby */
 /* GAME ROOM */
 .game-room .row {
   margin-bottom: 1rem;
@@ -160,15 +160,16 @@ body {
   border-radius: .25rem; 
   transition: all .1s ease-in-out;
   padding: 10px;
-  margin: 35px;
+  margin: 10px;
 }
 
 .chat{
-  float: left;
+  /* margin-left: px;  */
+  /* float: right; */
 }
 
 .lobby{
-  float: left;
+  /* float: left; */
 }
 
 /*endGamePage*/
