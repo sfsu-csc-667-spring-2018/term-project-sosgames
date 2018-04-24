@@ -4,9 +4,11 @@
   "description": "term-project-sosgames created by GitHub Classroom",
   "main": "app.js",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",
     "ejs": "^2.5.8",

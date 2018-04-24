@@ -9,7 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash'); // Might delete
 const LocalStrategy = require('passport-local').Strategy;
-const routes = require('./routes');
+// const routes = require('./routes'); - Was giving me a bug
 
 // Make use of environment variables defined in .env
 if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
@@ -17,7 +17,7 @@ if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 }
 
 // Routes?
-const index = require('./routes/index'); 
+const login = require('./routes/login'); 
 const users = require('./routes/users');
 const tests = require('./routes/tests');
 const game = require('./routes/game');
@@ -34,7 +34,7 @@ app.use(logger('dev'));
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); 
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
 app.use( expressLayouts );
 
@@ -82,7 +82,7 @@ app.use(function (request, response, next) {
 
 
 // Middleware for routes 
-app.use('/', index);
+app.use('/', login);
 app.use('/users', users);
 app.use('/tests', tests);
 app.use('/game', game);

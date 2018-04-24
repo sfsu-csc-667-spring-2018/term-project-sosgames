@@ -2,50 +2,54 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const { User } = require('../database');
 
-// User Model
-const User = require('../models/user');
-
-router.get('/', function (request, response, next) {
+router.get('/', (request, response, next) => {
   response.render('signup', {
     title: 'UNO - Sign Up'
   });
 });
 
-router.post('/', function (request, response) {
+router.post('/', (request, response, next) => {
+  let formErrors = formValidation(request);
 
-  // This is for debugging
-  console.log(request.body);
-
-  const username = request.body.username;
-  const email = request.body.email;
-  const password = request.body.password;
-  const confirmpassword = request.body.confirmpassword;
-
-  // Validation
-  request.checkBody('email', 'Email is not valid').isEmail();
-  request.checkBody('confirmpassword', 'Passwords do not match').equals(password);
-
-  const errors = request.validationErrors();
-
-  if (errors) {
-    response.render('signup', {
-      title: 'UNO - Sign Up',
-        errors: errors
-    });
+  if (formErrors) {
+    renderErrors(response, formErrors);
   } else {
-    // Get the Path
-    // Create a User object
-    const newUser = new User({
+    const { username, email, password } = request.body;
+    const photo_path = '/'; // DEBUG This will be updated
 
-    });
-
-    // This needs to change to be consistent with how I'm displaying errors
-    request.flash('success_msg', "You are registered and can now login");
-    response.redirect('/');
-
+    User.create(username, email, password, photo_path)
+        .then(errors => {
+          if (errors) {
+            renderErrors(response, errors);
+          } else {
+            request.flash('success_msg', "You are registered and can now login");
+            response.redirect('/');
+          }
+        });
   }
 });
 
+let formValidation = ((request) => {
+  request.checkBody('username', 'Username field cannot be empty.').notEmpty();
+  request.checkBody('username', 'Username must be between 4-20 characters long.').len(4, 20);
+  request.checkBody('email', 'Email field cannot be empty.').notEmpty();
+  request.checkBody('email', 'Email is not valid.').isEmail();
+  request.checkBody('email', 'Email address must be between 4-100 characters long.').len(4, 100);
+  request.checkBody('password', 'Password field cannot be empty.').notEmpty();
+  request.checkBody('password', 'Password must be 8-100 characters long.').len(8, 100);
+  request.checkBody('confirmpassword', 'Confirm Password field cannot be empty.').notEmpty();
+  request.checkBody('confirmpassword', 'Password must be 8-100 characters long.').len(8, 100);
+  request.checkBody('confirmpassword', 'Passwords do not match').equals(request.body.password);
+  return request.validationErrors();
+});
+
+let renderErrors = ((response, errors) => {
+  response.render('signup', {
+    title: 'UNO - Sign Up',
+    errors: errors
+  });
+});
 
 module.exports = router;
