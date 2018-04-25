@@ -27,7 +27,7 @@ router.post('/', (request, response) => {
 
   // function return array takes in request object to check data
   if(request.body.numberOfPlayers < 2 || request.body.numberOfPlayers > 12){
-    errors.push({ msg: '2-12 Number of Players required' });
+    errors.push({ msg: '2-12 Players required' });
   }
 
   if(request.body.password != request.body.confirmPassword){
@@ -42,14 +42,8 @@ router.post('/', (request, response) => {
       gameName: request.body.gameName,
     });
   }else {
-    // nothing wrong with information then creating game.
-    console.log('passed');
-
-    Games.createGame( 1, true, 5 );
-
-    console.log('passed also');
-
-    response.render('gameRoom', { title: 'UNO - Create Game' });
+    Games.createGame( gameName, numberOfPlayers );
+    response.render('gameRoom', { title: 'UNO - Game Room' });
   }
 });
 
