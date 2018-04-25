@@ -22,7 +22,8 @@ router.get('/end', function( req, res, next ) {
 });
 
 router.post('/', (request, response) => {
-  console.log(request.body);
+  // console.log(request.body);
+  console.log(request);
   let errors = [];
 
   // function return array takes in request object to check data
@@ -30,9 +31,10 @@ router.post('/', (request, response) => {
     errors.push({ msg: '2-12 Players required' });
   }
 
-  if(request.body.password != request.body.confirmPassword){
-    errors.push({ msg: 'Passwords do not match' });
-  }
+  // possible feature if we have time
+  // if(request.body.password != request.body.confirmPassword){
+  //   errors.push({ msg: 'Passwords do not match' });
+  // }
 
   // checks errors array that comes back 
   if(errors.length > 0){
@@ -42,7 +44,7 @@ router.post('/', (request, response) => {
       gameName: request.body.gameName,
     });
   }else {
-    Games.createGame( gameName, numberOfPlayers );
+    Games.createGame( request.body.gameName, request.body.numberOfPlayers );
     response.render('gameRoom', { title: 'UNO - Game Room' });
   }
 });

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const database = require('../connection');
 
 const CREATEGAME = `INSERT INTO games (round_number, is_reversed, winner_id) VALUES ($1, $2, $3) RETURNING *` ;
@@ -18,3 +19,8 @@ module.exports={
 =======
 >>>>>>> changed creategame parameters
 }
+=======
+module.exports = {
+  CreateGame: require('./createGame')
+};
+>>>>>>> cleaned up database crud function routes
