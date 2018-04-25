@@ -42,6 +42,7 @@
     "db:create:model:userGame": "sequelize model:create --name userGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
+    "postinstall": "sequelize db:migrate && sequelize db:seed:all",
     "db:rollback": "sequelize db:migrate:undo",
     "db:rollback:all": "sequelize db:migrate:undo:all",
 
