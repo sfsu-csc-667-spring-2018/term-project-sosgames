@@ -22,8 +22,8 @@ router.get('/end', function( req, res, next ) {
 });
 
 router.post('/', (request, response) => {
-  // console.log(request.body);
-  console.log(request);
+  console.log(request.body);
+  // console.log(request);
   let errors = [];
 
   // function return array takes in request object to check data
@@ -43,7 +43,9 @@ router.post('/', (request, response) => {
       gameName: request.body.gameName,
     });
   }else {
-    Games.createGame( request.body.gameName, request.body.numberOfPlayers );
+    // Games.createGame( request.body.gameName, request.body.numberOfPlayers );
+    console.log("here");
+    Games.CreateGame.createGame( request.body.gameName, request.body.numberOfPlayers );    console.log("here also");
     response.render('gameRoom', { title: 'UNO - Game Room' });
   }
 });
