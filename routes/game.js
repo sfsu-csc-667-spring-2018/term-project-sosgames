@@ -24,6 +24,7 @@ router.get('/end', function( req, res, next ) {
 router.post('/', (request, response) => {
   // console.log(request.body);
   console.log(request);
+
   let errors = [];
 
   // function return array takes in request object to check data
@@ -35,7 +36,6 @@ router.post('/', (request, response) => {
   // if(request.body.password != request.body.confirmPassword){
   //   errors.push({ msg: 'Passwords do not match' });
   // }
-
   // checks errors array that comes back 
   if(errors.length > 0){
     response.render('creategame', { 
