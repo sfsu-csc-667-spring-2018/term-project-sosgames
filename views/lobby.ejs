@@ -73,7 +73,7 @@
     <div class="table-responsive">
         <table id="message_list" style="width:100%"></table>
     </div>
-    <form action="">
+    <form class="chat-form"action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
 
@@ -81,15 +81,16 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
     $(function () {
-        var socket = io();
+        var socket = io('/lobby');
         $('form').submit(function(){
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
         });
-
+// client send through ajax, listen through sockets
         socket.on('chat message', function(msg){
             $('#message_list').append($('<tr>').text(msg));
+            // $('#message_list').appen d(${user.id}.text(msg));
             $('#message_list').append($('</tr>').text(msg));
         });
     });
