@@ -8,32 +8,40 @@ const init = ( app, server ) => {
 
   // LOBBY CHAT 
   var nsp_lobby = io.of('/lobby');
-  nsp_lobby.on('connection', function(socket){
+  nsp_lobby.on('connection', function(nsp_lobby){
     console.log('lobby user connected');
 
-    nsp_lobby.on('disconnect' , function(socket){
+    nsp_lobby.on('disconnect' , function(nsp_lobby){
       console.log('lobby user disconnected')
     })
 
-    nsp_lobby.on('chat message', function(msg){
+    nsp_lobby.on('chat_message', function(msg){
       console.log(' lobby message: ' + msg);
-      nsp.emit('chat message', 'everyone');
+      // CWD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      //    current problem: lobbies not emitting to the full channel, just themselves.
+      nsp_lobby.emit('chat_message', msg);
+      // above is the current code that worked previously, below is my best guess
+      // nsp_lobby.to('/lobby').emit('chat_message', msg);
     });
+// below is a sanity check to see if the windows accept the emit method
+    // nsp_lobby.emit('chat_message', 'welcome!');
   });
 
   // GAME ROOM CHAT
   var nsp_game_room = io.of('/game');
-  nsp_game_room.on('connection', function(socket){
+  nsp_game_room.on('connection', function(nsp_game_room){
     console.log('game user connected');
 
-    nsp_game_room.on('disconnect' , function(socket){
+    nsp_game_room.on('disconnect' , function(nsp_game_room){
       console.log('game user disconnected')
     })
 
-    nsp_game_room.on('chat message', function(msg){
-      console.log(' lobby message: ' + msg);
-      nsp.emit('chat message', 'everyone');
+    nsp_game_room.on('chat_message', function(msg){
+      console.log(' game message: ' + msg);
+      nsp_game_room.emit('chat_message', msg);
     });
+
+    nsp_game_room.emit('chat_message', 'welcome!');
   });
 
 
