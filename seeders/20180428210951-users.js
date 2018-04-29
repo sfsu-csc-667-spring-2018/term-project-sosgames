@@ -2,10 +2,9 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    let users = [];
     let usernames = ["khanh", "nick", "robert", "jon"];
-    users = createUsers(usernames);
-   return queryInterface.bulkInsert('users', users, {});
+    let users = createUsers(usernames);
+    return queryInterface.bulkInsert('users', users, {});
   },
 
   down: (queryInterface, Sequelize) => {
