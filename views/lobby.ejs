@@ -1,101 +1,122 @@
 </br>
 
 <div class="row">
-    <!-- Test tables -->
-    <div class="col">
-       <div>
-        <div class="lobby">
+  <!-- Test tables -->
+  <div class="col">
+    <div>
+      <div class="lobby">
         <h3>Current Games</h3>
         <div class="table-responsive">
-        <table style="width:100%">
+          <table style="width:100%">
             <tr>
-                <th>Owner</th>
-                <th>Game Name</th>
-                <th>Total Players</th>
+              <th>Owner</th>
+              <th>Game Name</th>
+              <th>Total Players</th>
             </tr>
             <%var gameNames = ["lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs"];%>
-            <%var gamePlayerNum = ["2","5","1","2","5","1","2","5","1"];%>
-            <% for(var i=0; i<gameNames.length; i++) {%>
-            <tr>
-                <td><%= gameNames[i] %></td> 
-                <td><%= gamePlayerNum[i] %>/8</td>
-                <td><button type="submit" class="btn btn-success">Join</button></td>
-                <td><button type="submit" class="btn btn-warning">Spectate</button></td>
-            </tr>
-            <% } %>
-            
-            <tr>
-                <td><%= gameNames[i-1] %></td> 
-                <td><%= gamePlayerNum[i-1] %>/8</td>
-                <td><button type="submit" class="btn btn-success disabled">Join(disabled)</button></td>
-                <td><button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button></td>           
-            </tr>
-        </table>
+              <%var gamePlayerNum = ["2","5","1","2","5","1","2","5","1"];%>
+                <% for(var i=0; i<gameNames.length; i++) {%>
+                  <tr>
+                    <td>
+                      <%= gameNames[i] %>
+                    </td>
+                    <td>
+                      <%= gamePlayerNum[i] %>/8</td>
+                    <td>
+                      <button type="submit" class="btn btn-success">Join</button>
+                    </td>
+                    <td>
+                      <button type="submit" class="btn btn-warning">Spectate</button>
+                    </td>
+                  </tr>
+                  <% } %>
+
+                    <tr>
+                      <td>
+                        <%= gameNames[i-1] %>
+                      </td>
+                      <td>
+                        <%= gamePlayerNum[i-1] %>/8</td>
+                      <td>
+                        <button type="submit" class="btn btn-success disabled">Join(disabled)</button>
+                      </td>
+                      <td>
+                        <button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button>
+                      </td>
+                    </tr>
+          </table>
         </div>
 
-    
+
         <h3>Scores</h3>
 
         <div class="table-responsive">
-        <table style="width:100%">
+          <table style="width:100%">
             <tr>
-                <th>Name</th>
-                <th>Score</th>
+              <th>Name</th>
+              <th>Score</th>
             </tr>
             <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
-            <%var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"];%>
-            <% for(var i=0; i<namesInGame.length; i++) {%>
-            <tr>
-                <td><%= namesInGame[i] %></td> 
-                <td><%= scores[i] %></td>
-            <% } %>
-            </tr>
-        </table>
+              <%var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"];%>
+                <% for(var i=0; i<namesInGame.length; i++) {%>
+                  <tr>
+                    <td>
+                      <%= namesInGame[i] %>
+                    </td>
+                    <td>
+                      <%= scores[i] %>
+                    </td>
+                    <% } %>
+                  </tr>
+          </table>
         </div>
 
-            <div class="form-signin">
-            <a href="#" >
+        <div class="form-signin">
+          <a href="#">
             <button class="btn btn-lg btn-success btn-block" type="submit">Create Game</button>
-            </a>
-            </div>
+          </a>
         </div>
-    </div> 
+      </div>
     </div>
-    
-    
-        <!-- chat section -->
-        <div class="col">
-            <div class="chat" style="float: right">
-                    <div id="menu">
-                        <p class="welcome">Welcome, <b>insert current username</b></p>
-                        <h3>Chat</h3>
-                    <div style="clear:both">
-    <div class="table-responsive">
-        <table id="message_list" style="width:100%"></table>
-    </div>
-    <form class="chat-form"action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+  </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-    $(function () {
-        var socket = io('/lobby');
-        $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-        });
-// client send through ajax, listen through sockets
-        socket.on('chat message', function(msg){
-            $('#message_list').append($('<tr>').text(msg));
-            // $('#message_list').appen d(${user.id}.text(msg));
-            $('#message_list').append($('</tr>').text(msg));
-        });
-    });
-    </script>
 
-            </div>
+  <!-- chat section -->
+  <div class="col">
+    <div class="chat" style="float: right">
+      <div id="menu">
+        <p class="welcome">Welcome,
+          <b>insert current username</b>
+        </p>
+        <h3>Chat</h3>
+        <div style="clear:both">
+          <div class="table-responsive">
+            <table id="message_list" style="width:100%"></table>
+          </div>
+          <form action="">
+            <input id="m" autocomplete="off" />
+            <button>Send</button>
+          </form>
+
+          <script src="/socket.io/socket.io.js"></script>
+          <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+          <script>
+            $(function () {
+              var socket = io('/lobby');
+              $('form').submit(function () {
+                console.log('sending message');
+                socket.emit('chat_message', $('#m').val());
+                $('#m').val('');
+                return false;
+              });
+              // client send through ajax, listen through sockets
+              socket.on('chat_message', function (msg) {
+                $('#message_list').append($('<tr>').text(msg));
+                $('#message_list').append($('</tr>').text(msg));
+              });
+            });
+          </script>
+
         </div>
-</div>
+      </div>
+    </div>
