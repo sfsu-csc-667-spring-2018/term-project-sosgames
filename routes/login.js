@@ -116,23 +116,4 @@ passport.deserializeUser((username, done) => {
   });
 });
 
-
-router.get('/lobby', function (request, response, next) {
-  response.render('lobby', {
-    title: 'UNO - Lobby'
-  });
-});
-
-router.get('/create-game', function (request, response, next) {
-  response.render('creategame', {
-    title: 'UNO - Create Game'
-  });
-});
-
-router.get('/end-game-page', function (request, response, next) {
-  response.render('endgamepage', {
-    title: 'UNO - End Game'
-  });
-});
-
 module.exports = router;

@@ -17,11 +17,12 @@ if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'producti
 }
 
 // Routes?
-const login = require('./routes/login'); 
-const users = require('./routes/users');
-const tests = require('./routes/tests');
-const game = require('./routes/game');
+const login = require('./routes/login');
 const signup = require('./routes/signup');
+const lobby = require('./routes/lobby');
+const users = require('./routes/users'); // TODO: rm?
+const tests = require('./routes/tests'); // TODO: rm?
+const game = require('./routes/game');
 const app = express();
 
 // view engine setup
@@ -80,13 +81,13 @@ app.use(function (request, response, next) {
   next();
 });
 
-
 // Middleware for routes 
 app.use('/', login);
-app.use('/users', users);
-app.use('/tests', tests);
-app.use('/game', game);
 app.use('/signup', signup );
+app.use('/lobby', lobby );
+app.use('/users', users); // TODO: rm?
+app.use('/tests', tests); // TODO: rm?
+app.use('/game', game);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
