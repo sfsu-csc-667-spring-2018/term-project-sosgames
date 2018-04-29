@@ -9,19 +9,21 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash'); // Might delete
 const LocalStrategy = require('passport-local').Strategy;
-// const routes = require('./routes'); - Was giving me a bug
 
 // Make use of environment variables defined in .env
 if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
   require( "dotenv" ).config();
 }
 
-// Routes?
-const login = require('./routes/login'); 
-const users = require('./routes/users');
-const tests = require('./routes/tests');
-const game = require('./routes/game');
+// Routers
+const index = require('./routes/index');
+const users = require('./routes/users'); // TODO: rm? or use this to include login, logout, signup?
+const login = require('./routes/login');
+const logout = require('./routes/logout');
 const signup = require('./routes/signup');
+const lobby = require('./routes/lobby');
+const game = require('./routes/game');
+const tests = require('./routes/tests'); // TODO: rm?
 const app = express();
 
 // view engine setup
@@ -29,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -80,13 +82,15 @@ app.use(function (request, response, next) {
   next();
 });
 
-
 // Middleware for routes 
-app.use('/', login);
-app.use('/users', users);
-app.use('/tests', tests);
-app.use('/game', game);
+app.use('/', index);
+app.use('/users', users); // TODO: rm? or use this to include login, logout, signup?
+app.use('/login', login);
+app.use('/logout', logout);
 app.use('/signup', signup );
+app.use('/lobby', lobby );
+app.use('/game', game);
+app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

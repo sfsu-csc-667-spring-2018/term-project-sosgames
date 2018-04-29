@@ -6,15 +6,14 @@ const {
   User
 } = require('../database');
 
-/* GET home page. */
 router.get('/', function (request, response, next) {
-  response.render('index', {
+  response.render('login', {
     title: 'UNO'
   });
 });
 
 // DEBUG Still Gotta fix this
-router.post('/login', (request, response, next) => {
+router.post('/', (request, response, next) => {
   let formErrors = formValidation(request);
 
   if (formErrors) {
@@ -92,19 +91,19 @@ let formValidation = ((request) => {
 });
 
 let renderErrors = ((response, errors) => {
-  response.render('index', {
+  response.render('login', {
     title: 'UNO',
     errors: errors
   });
 });
 
 // This doesn't work as intended. Clears cookie but I feel like it needs work
-router.get('/logout', (request, response, next ) => {
-  if( request.cookies ) {
-    response.clearCookie('user_id');
-    response.redirect('/');
-  }
-});
+// router.get('/logout', (request, response, next ) => {
+//   if( request.cookies ) {
+//     response.clearCookie('user_id');
+//     response.redirect('/');
+//   }
+// });
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -113,25 +112,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((username, done) => {
   User.getUserId( username ).then((user) => {
     done(null, user.id);
-  });
-});
-
-
-router.get('/lobby', function (request, response, next) {
-  response.render('lobby', {
-    title: 'UNO - Lobby'
-  });
-});
-
-router.get('/create-game', function (request, response, next) {
-  response.render('creategame', {
-    title: 'UNO - Create Game'
-  });
-});
-
-router.get('/end-game-page', function (request, response, next) {
-  response.render('endgamepage', {
-    title: 'UNO - End Game'
   });
 });
 
