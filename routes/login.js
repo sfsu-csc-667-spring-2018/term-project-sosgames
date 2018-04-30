@@ -2,23 +2,20 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const {
-  User
-} = require('../database');
+const { User } = require('../database');
 
-router.get('/', function (request, response, next) {
+router.get('/', (request, response, next) => {
   response.render('login', {
     title: 'UNO'
   });
 });
 
-// DEBUG Still Gotta fix this
 router.post('/', (request, response, next) => {
   let formErrors = formValidation(request);
 
   if (formErrors) {
     renderErrors(response, formErrors);
-    
+
   } else {
     const { username, password } = request.body;
 
@@ -30,12 +27,8 @@ router.post('/', (request, response, next) => {
 
         } else {
           const isSecure = request.app.get('env') != 'development';
-          response.cookie(
-            'user_id', result.id, {
-              httpOnly: true,
-              signed: true,
-              secure: isSecure
-            });
+          response.cookie( 'user_id', result.id, 
+                           { httpOnly: true, signed: true,secure: isSecure });
           response.redirect('/lobby');
         }
       });
