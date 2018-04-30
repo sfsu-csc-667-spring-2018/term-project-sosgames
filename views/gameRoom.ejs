@@ -37,23 +37,16 @@
       <!-- CARD DECKS -->
       <div class="row card game-card-decks flex-row">
         <div class="col card-in-play">
-          <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-            <span class="inner">
-              <span class="mark">4</span>
-            </span>
-          </div>
+          <!-- TODO: add logic to display new card after each turn -->
+          <div class="centered sprite wild"></div>
         </div>
-        <div class="col card-in-draw text-center">
+        <div class="col text-center">
           <!-- TODO: add logic for current player's turn to switch 'disabled' -->
           <!-- <button type="button" class="btn" disabled> -->
-          <button type="button" class="btn">
-            <div class="centered uno-card black">
-              <span class="inner">
-                <span class="mark">UNO</span>
-              </span>
-          </button>
-          </div>
+          <div class="centered uno-black-card"></div>
+          <button class="btn btn-outline-dark" id="draw-btn" href="#" role="button">Draw</button>
         </div>
+      </div>
         <!-- CARD DECKS ENDS -->
 
         <!-- PLAYER'S HAND -->
@@ -61,45 +54,27 @@
 
           <!-- Play Button -->
           <div class="col play-btn text-center">
+            <!-- TODO: add logic for current player's turn to switch 'disabled' -->
             <button type="button" class="btn btn-primary">Play</button>
           </div>
 
           <!-- Cards in Hand -->
+          <!-- TODO: cards.foreach(render card) -->
           <div class="row play-hand">
             <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
+              <div class="centered sprite red-0"></div>
             </div>
             <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
+              <div class="centered sprite green-9"></div>
             </div>
             <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
+              <div class="centered sprite blue-reverse"></div>
             </div>
             <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
+              <div class="centered sprite wild-draw-four"></div>
             </div>
             <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
+              <div class="centered sprite yellow-2"></div>
             </div>
           </div>
 
