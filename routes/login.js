@@ -18,68 +18,28 @@ router.post('/', (request, response, next) => {
 
   if (formErrors) {
     renderErrors(response, formErrors);
+    
   } else {
-    const{ username, password } = request.body;
-    let errors = [];
-    // WIP code
-    try {
-      User.login( username, password )
-      .then( result => {
+    const { username, password } = request.body;
 
-        if( result.id == undefined ) {
-          renderErrors( response, result );
+    User.login(username, password)
+      .then(result => {
+
+        if (result.id == undefined) {
+          renderErrors(response, result);
 
         } else {
           const isSecure = request.app.get('env') != 'development';
-            response.cookie(
-              'user_id', result.id, {
+          response.cookie(
+            'user_id', result.id, {
               httpOnly: true,
               signed: true,
               secure: isSecure
             });
-            response.redirect('/lobby');
+          response.redirect('/lobby');
         }
       });
-    } catch ( e ) { console.log(e);}
-
-
-    // This works but - it's not what I want
-  //   User.getUserData(username)
-  //     .then((data) => {
-  //       // Username exists
-  //       bcrypt.compare(password, data.password)
-  //         .then((result) => {
-
-
-  //           if (result) {
-  //             const isSecure = request.app.get('env') != 'development';
-  //             response.cookie(
-  //               'user_id', data.id, {
-  //               httpOnly: true,
-  //               signed: true,
-  //               secure: isSecure
-  //             });
-  //             response.redirect('/lobby');
-  //           } else {
-  //             errors.push({
-  //               msg: "Invalid password."
-  //             });
-  //             renderErrors(response, errors);
-  //           }
-
-  //         }).catch(error => {
-  //           console.log(error);
-
-  //         });
-  //     })
-  //     .catch(error => {
-
-  //       errors.push({
-  //         msg: "Invalid username."
-  //       });
-  //       renderErrors(response, errors);
-  //     });
-   }
+  }
 });
 
 // Validate User
@@ -111,7 +71,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((username, done) => {
-  User.getUserId( username ).then((user) => {
+  User.getUserId(username).then((user) => {
     done(null, user.id);
   });
 });
