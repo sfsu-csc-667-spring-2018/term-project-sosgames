@@ -10,17 +10,6 @@ const GETUSERDATA = `SELECT * FROM users WHERE username = $1`;
 const CREATEUSER = `INSERT INTO users ( username, password, profile_picture_path, total_score, email ) ` +
                    `VALUES ( $1, $2, $3, $4, $5 ) RETURNING *`;
 
-// This code works with the commented out section in signup.js
-// module.exports = {
-//   all: () => db.any( ALL ),
-//   isEmailInUse:  ( email ) => db.one( GETEMAIL, [ email ] ),
-//   isUserNameInUse: ( username ) => db.one( GETUSERNAME, [ username ] ),
-//   getUserData: ( username ) => db.one( GETUSERDATA, [ username ] ),
-//   getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
-//   // Unsure about how long this is
-//   createUser: ( username, password, profile_picture_path, total_score, email ) => 
-//               db.one( CREATEUSER, [ username, password, profile_picture_path, total_score, email ] )
-// };
 let isEmailInUse = ( email ) => {
   return db.oneOrNone( GETEMAIL, [ email ] );
 };
@@ -38,7 +27,6 @@ let getUserData = ( username ) => {
 };
 
 module.exports = {
-  //getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
   create: ( username, email, password, photo_path ) =>
           Promise.all( [ isEmailInUse( email ), isUserNameInUse( username )] )
                  .then( ([ emailUsed, usernameUsed ]) => {
@@ -59,28 +47,19 @@ module.exports = {
                       });
                     }
                  }),
-  // This works but I don't want it like this
-  getUserData: ( username ) => db.one( GETUSERDATA, [ username ] )
-  // WIP code for login
-  // login: ( username, password ) =>
-  //        Promise.all( [ getUserData( username ) ] )
-  //               .then( ([ user ]) => {
-  //                 let errors = [];
-  //                 if( user ) {
-  //                   console.log('there is a user');
-  //                   console.log(user.password);
-  //                   bcrypt.compare( password, user.password )
-  //                         .then( result => {
-  //                             return result;
-  //                         });
 
-  //                   errors.push( { msg: "Invalid password."} );
-  //                 } else {
-  //                   console.log('no user');
-  //                   errors.push({ msg: "Invalid username."});
-  //                 }
-  //                 console.log('1');
-  //                 return errors;
-  //               })
+  login: ( username, password ) =>
+         Promise.all( [ getUserData( username ) ] )
+                .then( ([ user ]) => {
+                  return bcrypt.compare( password, user.password ).then( result => {
+                    if( result ) {
+                      return user;
+                    } else {
+                      return new Array( { msg: "Invalid password." } );
+                    }
+                  });
 
+                }).catch( error => {
+                    return new Array( { msg: "Invalid username." } );
+                })
 };

@@ -20,65 +20,66 @@ router.post('/', (request, response, next) => {
     renderErrors(response, formErrors);
   } else {
     const{ username, password } = request.body;
-
+    let errors = [];
     // WIP code
-    // try {
-    //   User.login( username, password )
-    //   .then( errors => {
-    //     if( errors ) {
-    //       renderErrors( response, errors );
-    //     } else {
-    //       const isSecure = request.app.get('env') != 'development';
-    //         response.cookie(
-    //           'user_id', data.id, {
-    //           httpOnly: true,
-    //           signed: true,
-    //           secure: isSecure
-    //         });
-    //         response.redirect('/lobby');
-    //     }
-    //   });
-    // } catch ( e ) { console.log(e);}
+    try {
+      User.login( username, password )
+      .then( result => {
+
+        if( result.id == undefined ) {
+          renderErrors( response, result );
+
+        } else {
+          const isSecure = request.app.get('env') != 'development';
+            response.cookie(
+              'user_id', result.id, {
+              httpOnly: true,
+              signed: true,
+              secure: isSecure
+            });
+            response.redirect('/lobby');
+        }
+      });
+    } catch ( e ) { console.log(e);}
 
 
     // This works but - it's not what I want
-    let errors = [];
-    User.getUserData(username)
-      .then((data) => {
-        // Username exists
-        bcrypt.compare(password, data.password)
-          .then((result) => {
+  //   User.getUserData(username)
+  //     .then((data) => {
+  //       // Username exists
+  //       bcrypt.compare(password, data.password)
+  //         .then((result) => {
 
 
-            if (result) {
-              const isSecure = request.app.get('env') != 'development';
-              response.cookie(
-                'user_id', data.id, {
-                httpOnly: true,
-                signed: true,
-                secure: isSecure
-              });
-              response.redirect('/lobby');
-            } else {
-              errors.push({
-                msg: "Invalid password."
-              });
-              renderErrors(response, errors);
-            }
+  //           if (result) {
+  //             const isSecure = request.app.get('env') != 'development';
+  //             response.cookie(
+  //               'user_id', data.id, {
+  //               httpOnly: true,
+  //               signed: true,
+  //               secure: isSecure
+  //             });
+  //             response.redirect('/lobby');
+  //           } else {
+  //             errors.push({
+  //               msg: "Invalid password."
+  //             });
+  //             renderErrors(response, errors);
+  //           }
 
-          }).catch(error => {
-            console.log(error);
+  //         }).catch(error => {
+  //           console.log(error);
 
-          });
-      })
-      .catch(error => {
+  //         });
+  //     })
+  //     .catch(error => {
 
-        errors.push({
-          msg: "Invalid username."
-        });
-        renderErrors(response, errors);
-      });
-  }
+  //       errors.push({
+  //         msg: "Invalid username."
+  //       });
+  //       renderErrors(response, errors);
+  //     });
+   }
 });
 
 // Validate User
