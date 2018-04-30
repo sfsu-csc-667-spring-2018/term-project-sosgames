@@ -25,7 +25,7 @@ router.post('/', (request, response, next) => {
             renderErrors(response, errors);
           } else {
             request.flash('success_msg', "You are registered and can now login");
-            response.redirect('/');
+            response.redirect('/login');
           }
         });
   }
