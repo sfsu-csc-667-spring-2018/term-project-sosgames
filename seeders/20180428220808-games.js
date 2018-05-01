@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    let game_names = ["snoop", "doge"];
+    let game_names = ['snoop', 'doge'];
     let is_reversed_flags = [false, true];
     let players_counts = [2, 4];
 
@@ -25,9 +25,9 @@ function createGames(game_names, is_reversed_flags, players_counts) {
       winner_id: null,
       name: game_names[index],
       number_of_players: players_counts[index],
-      createdAt : new Date(),
-      updatedAt : new Date()
-    }
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
 
     games.push(game);
   }

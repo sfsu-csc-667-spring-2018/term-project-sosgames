@@ -11,8 +11,11 @@ const flash = require('connect-flash'); // Might delete
 const LocalStrategy = require('passport-local').Strategy;
 
 // Make use of environment variables defined in .env
-if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
-  require( "dotenv" ).config();
+if (
+  process.env.NODE_ENV === 'development' ||
+  process.env.NODE_ENV === 'production'
+) {
+  require('dotenv').config();
 }
 
 // Routers
@@ -24,6 +27,8 @@ const signup = require('./routes/signup');
 const lobby = require('./routes/lobby');
 const game = require('./routes/game');
 const tests = require('./routes/tests'); // TODO: rm?
+const chat = require('./routes/chat');
+
 const app = express();
 
 // view engine setup
@@ -35,46 +40,50 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
-app.use( expressLayouts );
+app.use(expressLayouts);
 
 // Express Session
-app.use( session({
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true
-}));
+app.use(
+  session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+  })
+);
 
 // Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Express Validator - Taken from Middleware Options on Github
-app.use(expressValidator({
-  errorFormatter: function (param, msg, value) {
-    let namespace = param.split('.'),
-      root = namespace.shift(),
-      formParam = root;
+app.use(
+  expressValidator({
+    errorFormatter: function(param, msg, value) {
+      let namespace = param.split('.'),
+        root = namespace.shift(),
+        formParam = root;
 
-    while (namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
+      while (namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+
+      return {
+        param: formParam,
+        msg: msg,
+        value: value
+      };
     }
-
-    return {
-      param: formParam,
-      msg: msg,
-      value: value
-    };
-  }
-}));
+  })
+);
 
 // Connect Flash
 app.use(flash());
 
 // Global Variables for Flash Messages
-app.use(function (request, response, next) {
+app.use(function(request, response, next) {
   response.locals.success_msg = request.flash('success_msg');
   response.locals.error_msg = request.flash('error_msg');
   response.locals.error = request.flash('error');
@@ -82,14 +91,15 @@ app.use(function (request, response, next) {
   next();
 });
 
-// Middleware for routes 
+// Middleware for routes
 app.use('/', index);
 app.use('/users', users); // TODO: rm? or use this to include login, logout, signup?
 app.use('/login', login);
 app.use('/logout', logout);
-app.use('/signup', signup );
-app.use('/lobby', lobby );
+app.use('/signup', signup);
+app.use('/lobby', lobby);
 app.use('/game', game);
+app.use('/chat', chat);
 app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
