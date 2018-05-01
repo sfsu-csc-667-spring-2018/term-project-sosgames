@@ -5,6 +5,7 @@ const router = express.Router();
 router.get('/', (request, response, next ) => {
   if( request.cookies ) {
     response.clearCookie('user_id');
+    request.flash('success_msg', "You've successfully logged out.");
     response.redirect('/login');
   }
 });

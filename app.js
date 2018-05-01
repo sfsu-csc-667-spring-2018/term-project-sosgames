@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash'); // Might delete
-const LocalStrategy = require('passport-local').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
 
 // Make use of environment variables defined in .env
 if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
@@ -34,19 +34,20 @@ app.set('view engine', 'ejs');
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser());
+app.use( expressLayouts );
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); 
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
-app.use( expressLayouts );
-
 // Express Session
-app.use( session({
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true
+// DEBUG - Robert is still checking this
+app.use(session({
+  secret: process.env.COOKIE_SECRET,
+//  cookie: {maxAge: null},
+  resave: true,
+  saveUninitialized: false,
 }));
-
 // Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());

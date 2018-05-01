@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const requireAuthentication = require('../auth/requireAuthentication');
+
 
 // GET /lobby -- Player visits the lobby
 router.get('/', (request, response, next) => {

@@ -26,10 +26,11 @@ router.post('/', (request, response, next) => {
           renderErrors(response, result);
 
         } else {
-          const isSecure = request.app.get('env') != 'development';
-          response.cookie( 'user_id', result.id, 
-                           { httpOnly: true, signed: true,secure: isSecure });
-          response.redirect('/lobby');
+            const user_id = result.id;
+            request.login( user_id, ( error ) => {
+              response.redirect('/lobby');
+            } );
+         
         }
       });
   }
@@ -51,22 +52,12 @@ let renderErrors = ((response, errors) => {
   });
 });
 
-// This doesn't work as intended. Clears cookie but I feel like it needs work
-// router.get('/logout', (request, response, next ) => {
-//   if( request.cookies ) {
-//     response.clearCookie('user_id');
-//     response.redirect('/');
-//   }
-// });
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
+passport.serializeUser((user_id, done) => {
+  done(null, user_id);
 });
 
-passport.deserializeUser((username, done) => {
-  User.getUserId(username).then((user) => {
-    done(null, user.id);
-  });
+passport.deserializeUser((user_id, done) => {
+  done(null, user_id);
 });
 
 module.exports = router;

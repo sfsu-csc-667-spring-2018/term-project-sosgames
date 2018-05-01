@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const { User } = require('../database');
 
 router.get('/', (request, response, next) => {
@@ -17,7 +15,7 @@ router.post('/', (request, response, next) => {
     renderErrors(response, formErrors);
   } else {
     const { username, email, password } = request.body;
-    const photo_path = '/'; // DEBUG This will be updated
+    const photo_path = 'images/no_profile_pic.png';
 
     User.create(username, email, password, photo_path)
         .then(errors => {
