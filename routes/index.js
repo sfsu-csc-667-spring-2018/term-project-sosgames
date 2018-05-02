@@ -1,14 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const requireAuthentication = require('../auth/requireAuthentication');
+const auth = require('../auth/requireAuthentication');
 
-router.get('/', requireAuthentication, function(request, response, next) {
-  // From jrob
-  // const { user } = request;
-  // response.render('lobby', { user });
-
-  response.render('lobby', {
-    title: 'UNO - Lobby'
+router.get('/', auth.indexAuthentication, (request, response, next) => {
+  response.render('login', {
+    title: 'UNO'
   });
 });
 
