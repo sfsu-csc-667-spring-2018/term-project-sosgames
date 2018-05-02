@@ -1,6 +1,6 @@
 /* GENERAL */
 body {
-  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
 }
 
 html,
@@ -9,7 +9,7 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
 }
 body {
   padding-bottom: 20px;
@@ -20,7 +20,7 @@ body {
 }
 
 /* GENERAL LAYOUT */
-.flex-row  {
+.flex-row {
   flex-direction: row;
 }
 
@@ -29,24 +29,24 @@ body {
 }
 
 /* HOME PAGE */
-#centerNavLogo{
+#centerNavLogo {
   width: 25%;
 }
 
-#octocatLogo{
+#octocatLogo {
   width: 60%;
 }
 
-#octoButton{
+#octoButton {
   background: #343a40;
 }
 
 /* SIGN IN/LOG OUT */
-#logoutButton{
+#logoutButton {
   margin-top: 7px;
 }
 
-#forgotPasswordLink{
+#forgotPasswordLink {
   text-decoration: underline;
   margin-top: 3px;
 }
@@ -56,8 +56,8 @@ body {
 }
 
 :root {
-  --input-padding-x: .75rem;
-  --input-padding-y: .75rem;
+  --input-padding-x: 0.75rem;
+  --input-padding-y: 0.75rem;
 }
 
 .form-signin {
@@ -87,8 +87,8 @@ body {
   line-height: 1.5;
   color: #495057;
   border: 1px solid transparent;
-  border-radius: .25rem;
-  transition: all .1s ease-in-out;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
 }
 
 .form-label-group input::-webkit-input-placeholder {
@@ -120,7 +120,7 @@ body {
   padding-top: calc(var(--input-padding-y) / 3);
   padding-bottom: calc(var(--input-padding-y) / 3);
   font-size: 12px;
-  color: #777; 
+  color: #777;
 }
 /* lobby */
 /* GAME ROOM */
@@ -139,7 +139,7 @@ body {
 }
 
 .player-active {
-  border: #00B7FF 1px solid;
+  border: #00b7ff 1px solid;
   border-radius: 0.25em;
 }
 
@@ -148,33 +148,33 @@ body {
   padding: 1rem;
 }
 
-#chatbox{
+#chatbox {
   background-color: grey;
 }
 
-.table-responsive{
+.table-responsive {
   background-color: darkseagreen;
   height: 150px;
   overflow: auto;
   width: 100%;
   border: 2px solid blue;
-  border-radius: .25rem; 
-  transition: all .1s ease-in-out;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
   padding: 10px;
   margin: 10px;
 }
 
-.chat{
+.chat {
   /* margin-left: px;  */
   /* float: right; */
 }
 
-.lobby{
+.lobby {
   /* float: left; */
 }
 
 /*endGamePage*/
-.avatar-card{
+.avatar-card {
   max-height: 200px;
   max-width: 200px;
 }
@@ -420,7 +420,7 @@ div.sprite.blue-draw-two {
 
 /* Wild Cards */
 div.sprite.wild {
-    background-position: -1856px 0;
+  background-position: -1856px 0;
 }
 
 div.sprite.wild-draw-four {

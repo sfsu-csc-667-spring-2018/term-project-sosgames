@@ -62,6 +62,7 @@ router.post('/:gameId/draw', (request, response, next) => {
  */
 // POST /game/:gameId/message -- Posting a message to game room
 router.post('/:gameId/message', ( request, response, next ) => {
+  let gameId = request.params.gameId;
   response.render('gameRoom', {
     title: 'UNO - Message'
   });
@@ -72,6 +73,7 @@ router.post('/:gameId/message', ( request, response, next ) => {
  */
 // GET /game/:gameId/end -- Going to game end page
 router.get('/:gameId/end', ( request, response, next ) => {
+  let gameId = request.params.gameId;
   response.render('endGame', {
     title: 'UNO - End Game'
   });

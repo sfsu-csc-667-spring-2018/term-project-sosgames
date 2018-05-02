@@ -87,7 +87,42 @@
 
   <!-- CHAT VIEW -->
   <section class="game-room game-room-chat col-lg-4">
-    some chat stuff
+    <div class="col">
+      <div class="chat" style="float: right">
+        <div id="menu">
+          <p class="welcome">Welcome,
+            <b>insert current username</b>
+          </p>
+          <h3>Chat</h3>
+          <div style="clear:both">
+            <div class="table-responsive">
+              <table id="message_list" style="width:100%"></table>
+            </div>
+            <form action="">
+              <input id="m" autocomplete="off" />
+              <button>Send</button>
+            </form>
+
+            <script src="/socket.io/socket.io.js"></script>
+            <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+            <script>
+              $(function () {
+                var socket = io('/game');
+                $('form').submit(function () {
+                  console.log('sending message');
+                  socket.emit('chat_message', $('#m').val());
+                  $('#m').val('');
+                  return false;
+                });
+                // client send through ajax, listen through sockets
+                socket.on('chat_message', function (msg) {
+                  $('#message_list').append($('<tr>').text(msg));
+                  $('#message_list').append($('</tr>').text(msg));
+                });
+              });
+            </script>
+          </div>
+        </div>
   </section>
   <!-- CHAT VIEW ENDS -->
 
