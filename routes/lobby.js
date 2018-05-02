@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const requireAuthentication = require('../auth/requireAuthentication');
+const auth = require('../auth/requireAuthentication');
 
 
 // GET /lobby -- Player visits the lobby
-router.get('/', (request, response, next) => {
+router.get('/', auth.requireAuthentication, (request, response, next) => {
   response.render('lobby', {
     title: 'UNO - Lobby'
   });

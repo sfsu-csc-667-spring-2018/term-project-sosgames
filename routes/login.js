@@ -20,19 +20,18 @@ router.post('/', (request, response, next) => {
     const { username, password } = request.body;
 
     User.login(username, password)
-      .then(result => {
+        .then(result => {
+          if (result.id == undefined) {
+            renderErrors(response, result);
 
-        if (result.id == undefined) {
-          renderErrors(response, result);
-
-        } else {
-            const user_id = result.id;
-            request.login( user_id, ( error ) => {
-              response.redirect('/lobby');
-            } );
-         
-        }
-      });
+          } else {
+              const user_id = result.id;
+              request.login( user_id, ( error ) => {
+                response.cookie('user_id', user_id);
+                response.redirect('/lobby');
+              } );
+          }
+        });
   }
 });
 

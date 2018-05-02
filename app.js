@@ -44,8 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // DEBUG - Robert is still checking this
 app.use(session({
   secret: process.env.COOKIE_SECRET,
-//  cookie: {maxAge: null},
-  resave: true,
+  cookie: {maxAge: 5000},
+  resave: false,
   saveUninitialized: false,
 }));
 // Passport Initialize
