@@ -1,3 +1,10 @@
+// module.exports = {
+//   create: require('./createGame').createGame
+// };
+
+const create = require('./createGame').create;
+
 module.exports = {
-  CreateGame: require('./createGame')
+  create 
 };
+
