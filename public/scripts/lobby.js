@@ -23,4 +23,5 @@ socket.on('message', ({ user, message }) => {
 
   console.log(tr);
   messageList.appendChild(tr);
+  // document.querySelector($(message)).val() = "";
 });
