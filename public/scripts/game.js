@@ -6,7 +6,7 @@ const socket = io(`/game/${gameId}`);
 const playerCards = document.querySelectorAll('.player-card');
 [].forEach.call(playerCards, function(playerCard) {
   playerCard.addEventListener('click', event => {
-    // event.stopPropagation();
+    event.stopPropagation();
     event.preventDefault();
 
     const cardValue = playerCard.dataset.card;
