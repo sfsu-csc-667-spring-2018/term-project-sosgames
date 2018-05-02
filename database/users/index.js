@@ -1,4 +1,4 @@
-const db = require( '../connection' );
+const db = require('../connection');
 const bcrypt = require('bcrypt');
 
 // Methods to Define
@@ -7,8 +7,9 @@ const GETEMAIL = `SELECT email FROM users WHERE email = $1`;
 const GETUSERID = `SELECT id FROM users WHERE username = $1`;
 const GETUSERNAME = `SELECT username FROM users WHERE username = $1`;
 const GETUSERDATA = `SELECT * FROM users WHERE username = $1`;
-const CREATEUSER = `INSERT INTO users ( username, password, profile_picture_path, total_score, email ) ` +
-                   `VALUES ( $1, $2, $3, $4, $5 ) RETURNING *`;
+const CREATEUSER =
+  `INSERT INTO users ( username, password, profile_picture_path, total_score, email ) ` +
+  `VALUES ( $1, $2, $3, $4, $5 ) RETURNING *`;
 
 // This code works with the commented out section in signup.js
 // module.exports = {
@@ -18,49 +19,72 @@ const CREATEUSER = `INSERT INTO users ( username, password, profile_picture_path
 //   getUserData: ( username ) => db.one( GETUSERDATA, [ username ] ),
 //   getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
 //   // Unsure about how long this is
-//   createUser: ( username, password, profile_picture_path, total_score, email ) => 
+//   createUser: ( username, password, profile_picture_path, total_score, email ) =>
 //               db.one( CREATEUSER, [ username, password, profile_picture_path, total_score, email ] )
 // };
-let isEmailInUse = ( email ) => {
-  return db.oneOrNone( GETEMAIL, [ email ] );
+let isEmailInUse = email => {
+  return db.oneOrNone(GETEMAIL, [email]);
 };
 
-let isUserNameInUse = ( username ) => {
-  return db.oneOrNone( GETUSERNAME, [ username ] );
+let isUserNameInUse = username => {
+  return db.oneOrNone(GETUSERNAME, [username]);
 };
 
-let createUser = ( username, password, profile_picture_path, total_score, email ) => {
-  db.one( CREATEUSER, [ username, password, profile_picture_path, 0, email ] );
+let createUser = (
+  username,
+  password,
+  profile_picture_path,
+  total_score,
+  email
+) => {
+  db.one(CREATEUSER, [username, password, profile_picture_path, 0, email]);
 };
 
-let getUserData = ( username ) => {
-  return db.one( GETUSERDATA, [ username ] );
+let getUserData = username => {
+  return db.one(GETUSERDATA, [username]);
+};
+
+const serialize = (user, done) => {
+  console.log('serialize', user);
+  done(null, user.id);
+};
+
+const deserialize = (id, done) => {
+  console.log('deserialize', id);
+  db
+    .one('SELECT * FROM users WHERE id=${id}', { id })
+    .then(({ id, email }) => done(null, { id, email }))
+    .catch(error => done(error));
 };
 
 module.exports = {
+  serialize,
+  deserialize,
   //getUserId: ( username ) => db.one( GETUSERID, [ username ] ),
-  create: ( username, email, password, photo_path ) =>
-          Promise.all( [ isEmailInUse( email ), isUserNameInUse( username )] )
-                 .then( ([ emailUsed, usernameUsed ]) => {
-                    let errors = [];
+  create: (username, email, password, photo_path) =>
+    Promise.all([isEmailInUse(email), isUserNameInUse(username)]).then(
+      ([emailUsed, usernameUsed]) => {
+        let errors = [];
 
-                    if (emailUsed || usernameUsed) {
-                      if (emailUsed) {
-                        errors.push({msg: "Email address is already in use."});
-                      }
-                      if (usernameUsed) {
-                        errors.push({msg: "Username is already in use."});
-                      }
-                      return errors;
-
-                    } else {
-                      bcrypt.hash(password, (Math.floor(Math.random() * 10) + 1)).then(hash => {
-                        return createUser( username, hash, photo_path, 0, email);
-                      });
-                    }
-                 }),
+        if (emailUsed || usernameUsed) {
+          if (emailUsed) {
+            errors.push({ msg: 'Email address is already in use.' });
+          }
+          if (usernameUsed) {
+            errors.push({ msg: 'Username is already in use.' });
+          }
+          return errors;
+        } else {
+          bcrypt
+            .hash(password, Math.floor(Math.random() * 10) + 1)
+            .then(hash => {
+              return createUser(username, hash, photo_path, 0, email);
+            });
+        }
+      }
+    ),
   // This works but I don't want it like this
-  getUserData: ( username ) => db.one( GETUSERDATA, [ username ] )
+  getUserData: username => db.one(GETUSERDATA, [username])
   // WIP code for login
   // login: ( username, password ) =>
   //        Promise.all( [ getUserData( username ) ] )
@@ -82,5 +106,4 @@ module.exports = {
   //                 console.log('1');
   //                 return errors;
   //               })
-
 };

@@ -3,7 +3,7 @@ const router = express.Router();
 const requireAuthentication = require('../auth/requireAuthentication');
 
 router.get('/', requireAuthentication, function(request, response, next) {
-  // From jrob 
+  // From jrob
   // const { user } = request;
   // response.render('lobby', { user });
 

@@ -2,14 +2,10 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    queryInterface.addColumn(
-      'games',
-      'name',
-      {
-        type: Sequelize.STRING,
-        allowNull: false
-      }
-    );
+    queryInterface.addColumn('games', 'name', {
+      type: Sequelize.STRING,
+      allowNull: false
+    });
   },
 
   down: (queryInterface, Sequelize) => {

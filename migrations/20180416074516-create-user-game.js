@@ -12,14 +12,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
-          key: 'id',
+          key: 'id'
         }
       },
       game_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'games',
-          key: 'id',
+          key: 'id'
         }
       },
       current_score: {

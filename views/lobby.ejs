@@ -80,7 +80,6 @@
     </div>
   </div>
 
-
   <!-- chat section -->
   <div class="col">
     <div class="chat" style="float: right">
@@ -91,31 +90,16 @@
         <h3>Chat</h3>
         <div style="clear:both">
           <div class="table-responsive">
-            <table id="message_list" style="width:100%"></table>
+            <table id="message-list" style="width:100%"></table>
           </div>
-          <form action="">
-            <input id="m" autocomplete="off" />
+          <form id="chat-message">
+            <input id="message" autocomplete="off" />
             <button>Send</button>
           </form>
 
           <script src="/socket.io/socket.io.js"></script>
           <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-          <script>
-            $(function () {
-              var socket = io('/lobby');
-              $('form').submit(function () {
-                console.log('sending message');
-                socket.emit('chat_message', $('#m').val());
-                $('#m').val('');
-                return false;
-              });
-              // client send through ajax, listen through sockets
-              socket.on('chat_message', function (msg) {
-                $('#message_list').append($('<tr>').text(msg));
-                $('#message_list').append($('</tr>').text(msg));
-              });
-            });
-          </script>
+          <script src="/scripts/lobby.js"></script>
 
         </div>
       </div>

@@ -61,7 +61,7 @@ router.post('/:gameId/draw', function(request, response, next) {
  * MESSAGING IN A SPECIFIC GAME ROOM
  */
 // POST /game/:gameId/message -- Posting a message to game room
-router.post('/:gameId/message', function( request, response, next ) {
+router.post('/:gameId/message', function(request, response, next) {
   response.render('gameRoom', {
     title: 'UNO - Message'
   });
@@ -71,7 +71,7 @@ router.post('/:gameId/message', function( request, response, next ) {
  * GAME ENDS
  */
 // GET /game/:gameId/end -- Going to game end page
-router.get('/:gameId/end', function( request, response, next ) {
+router.get('/:gameId/end', function(request, response, next) {
   response.render('endGame', {
     title: 'UNO - End Game'
   });
