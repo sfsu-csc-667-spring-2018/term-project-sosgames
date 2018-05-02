@@ -6,6 +6,7 @@ const init = (app, server) => {
 
   app.set('io', io);
 
+
   // LOBBY CHAT
   var nsp_lobby = io.of('/lobby');
   nsp_lobby.on('connection', function(nsp_lobby) {
@@ -16,6 +17,7 @@ const init = (app, server) => {
     });
 
     nsp_lobby.on('chat_message', function(msg) {
+
       console.log(' lobby message: ' + msg);
       // CWD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       //    current problem: lobbies not emitting to the full channel, just themselves.
@@ -23,6 +25,7 @@ const init = (app, server) => {
       // above is the current code that worked previously, below is my best guess
       // nsp_lobby.to('/lobby').emit('chat_message', msg);
     });
+
     // below is a sanity check to see if the windows accept the emit method
     // nsp_lobby.emit('chat_message', 'welcome!');
   });
@@ -61,6 +64,7 @@ const init = (app, server) => {
   //     socket.emit('game_state_update',{GAME_ID, GAME_STATE})
   //   })
   // })
+
 };
 
 module.exports = { init };
