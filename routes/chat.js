@@ -3,7 +3,9 @@ const router = express.Router();
 
 router.post('/', (request, response, next) => {
   const { message } = request.body;
-  const { user } = request;
+  // const user = request.user;
+  // above breaks atm
+  const user = 'username';
 
   request.app
     .get('io')
