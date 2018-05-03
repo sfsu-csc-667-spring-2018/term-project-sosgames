@@ -63,7 +63,9 @@ router.post('/', (request, response) => {
 
       // Games.incrementRoundNumber(1);
 
-      
+      // Games.changeGameDirection(1);
+
+      // Games.changeWinnerId(2,1);
       
       response.render('gameRoom', { title: 'UNO - Game Room' });
   }

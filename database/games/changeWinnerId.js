@@ -1,0 +1,23 @@
+const database = require('../connection');
+
+const UPDATE_WINNER_ID_QUERY = `UPDATE games SET winner_id = $1 WHERE id = $2`;
+
+const changeWinnerId = (gameId, winner_id) => {
+  console.log("i am here");
+  return database.none(UPDATE_WINNER_ID_QUERY, [winner_id, gameId] )
+  // findById(gameId)
+  //   .then(
+  //     () => {
+        
+  //     }
+  //   )
+  //   .catch(
+  //     (error) => {
+  //       console.log("Game ID invalid") 
+  //     }
+  //   )
+};
+
+module.exports={
+  changeWinnerId
+}
