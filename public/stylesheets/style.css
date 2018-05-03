@@ -147,9 +147,23 @@ body {
 .game-card-hand div.col {
   padding: 1rem;
 }
+/* CHAT STYLING */
+#chat-messages {
+  background-color: beige;
+}
 
-#chatbox {
-  background-color: grey;
+td.self-chat-message {
+  background-color: beige;
+  float: right;
+  border-radius: 25px;
+  padding: 0.5rem;
+}
+
+td.external-chat-message {
+  background-color: lightblue;
+  float: left;
+  border-radius: 25px;
+  padding: 0.5rem;
 }
 
 .table-responsive {
@@ -162,11 +176,6 @@ body {
   transition: all 0.1s ease-in-out;
   padding: 10px;
   margin: 10px;
-}
-
-.chat {
-  /* margin-left: px;  */
-  /* float: right; */
 }
 
 .lobby {
