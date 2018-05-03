@@ -43,15 +43,26 @@ router.post('/', (request, response) => {
       gameName: request.body.gameName,
     });
   }else {
-    Games.create(request.body.gameName, request.body.numberOfPlayers)
-      .then( 
-        console.log("here also") 
-      )
-        .catch( console.log('failed to add to database'));
+    // Games.create(request.body.gameName, request.body.numberOfPlayers)
+    //   .then( 
+    //     console.log("here also") 
+    //   )
+    //     .catch( console.log('failed to add to database'));
+
+      // Games.findById(2)
+      //   .then(
+      //     data => {
+      //       console.log(data)
+      //     }
+      //   )
+      //   .catch( 
+      //     error => {
+      //       console.log("doesn't work" + error)
+      //     }
+      //   );      
+      
+      response.render('gameRoom', { title: 'UNO - Game Room' });
   }
-
-  response.render('gameRoom', { title: 'UNO - Game Room' });
-
 });
 
 module.exports = router;

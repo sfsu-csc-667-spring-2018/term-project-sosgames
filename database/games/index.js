@@ -1,10 +1,7 @@
-// module.exports = {
-//   create: require('./createGame').createGame
-// };
-
 const create = require('./createGame').create;
+const findById = require('./findGameById').findById;
 
 module.exports = {
-  create 
+  create, 
+  findById
 };
-
