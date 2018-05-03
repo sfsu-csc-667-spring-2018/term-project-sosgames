@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Games } = require('../database');
+const { Games, UsersGames } = require('../database');
 
 
 // TODO: to be removed? temp for view
@@ -66,7 +66,33 @@ router.post('/', (request, response) => {
       // Games.changeGameDirection(1);
 
       // Games.changeWinnerId(2,1);
-      
+
+      // UsersGames.create(1,3);
+
+      UsersGames.findByUserId(1)
+      .then(
+        data => {
+          console.log(data)
+        }
+      )
+      .catch( 
+        error => {
+          console.log("doesn't work" + error)
+        }
+      ); 
+
+      // UsersGames.findByGameId(2)
+      //   .then(
+      //     data => {
+      //       console.log(data)
+      //     }
+      //   )
+      //   .catch( 
+      //     error => {
+      //       console.log("doesn't work" + error)
+      //     }
+      //   );      
+
       response.render('gameRoom', { title: 'UNO - Game Room' });
   }
 });
