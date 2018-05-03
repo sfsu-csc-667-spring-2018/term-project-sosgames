@@ -69,39 +69,22 @@ router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let { cardValue } = request.body;
 
+  // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
   request.app
   .get('io')
   .of(`/game/${gameId}`)
   .emit('update', { gameId, cardValue });
 
   response.sendStatus(200);
-
-  // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  // Promise.resolve()
-  // .then( () => {
-  //   request.app
-  //   .get('io')
-  //   .of(`/game/${gameId}`)
-  //   .emit('update', { gameId, cardValue });
-  //   console.log("dude");
-  // })
-  // .then( () => { 
-  //   console.log("okkk");
-  //   response.sendStatus(200);
-  // })
-  // .catch( (error) => {
-  //   console.log( error );
-  // });
-
 });
 
 /**
  * MESSAGING IN A SPECIFIC GAME ROOM
  */
 // POST /game/:gameId/message -- Posting a message to game room
-router.post('/:gameId/message', function( request, response, next ) {
+router.post('/:gameId/chat', function( request, response, next ) {
   response.render('gameRoom', {
-    title: 'UNO - Message'
+    title: 'UNO - Chat'
   });
 });
 

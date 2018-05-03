@@ -31,7 +31,8 @@ const init = (app, server) => {
   });
 
   // GAME ROOM CHAT
-  var nsp_game_room = io.of('/game/1');
+  var nsp_game_room = io.of('/game'); // TODO: client has to refresh to get the message
+  // var nsp_game_room = io.of('/game/1'); // TODO: temp fix, not correct
   nsp_game_room.on('connection', function(nsp_game_room) {
     console.log('game user connected');
 
