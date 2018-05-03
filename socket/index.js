@@ -31,7 +31,8 @@ const init = (app, server) => {
   });
 
   // GAME ROOM CHAT
-  var nsp_game_room = io.of('/game');
+  var nsp_game_room = io.of('/game'); // TODO: client has to refresh to get the message
+  // var nsp_game_room = io.of('/game/1'); // TODO: temp fix, not correct
   nsp_game_room.on('connection', function(nsp_game_room) {
     console.log('game user connected');
 
@@ -47,23 +48,23 @@ const init = (app, server) => {
     nsp_game_room.emit('chat_message', 'welcome!');
   });
 
-  // io.on( 'connection', function(socket){
-  //   console.log( 'client connected' )
+  io.on( 'connection', function(socket){
+    console.log( 'client connected' )
 
-  //   socket.on( 'disconnect', function(socket){
-  //     console.log( 'client disconnected' )
-  //   })
+    socket.on( 'disconnect', function(socket){
+      console.log( 'client disconnected' )
+    })
 
-  //   socket.on('chat message', function(msg){
-  //     console.log('message: ' + msg);
-  //     io.emit('chat message', msg);
-  //   });
+    socket.on('chat message', function(msg){
+      console.log('message: ' + msg);
+      io.emit('chat message', msg);
+    });
 
-  //   //idea for how to manage gamestate updates
-  //   socket.on('game_state_update', ({GAME_ID, GAME_STATE})=>{
-  //     socket.emit('game_state_update',{GAME_ID, GAME_STATE})
-  //   })
-  // })
+    //idea for how to manage gamestate updates
+    socket.on('game_state_update', ({GAME_ID, GAME_STATE})=>{
+      socket.emit('game_state_update',{GAME_ID, GAME_STATE})
+    })
+  })
 
 };
 

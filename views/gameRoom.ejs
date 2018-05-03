@@ -55,26 +55,26 @@
           <!-- Play Button -->
           <div class="col play-btn text-center">
             <!-- TODO: add logic for current player's turn to switch 'disabled' -->
-            <button type="button" class="btn btn-primary">Play</button>
+            <button type="button" class="btn btn-primary" id="play-btn">Play</button>
           </div>
 
           <!-- Cards in Hand -->
           <!-- TODO: cards.foreach(render card) -->
-          <div class="row play-hand">
-            <div class="col player-card">
-              <div class="centered sprite red-0"></div>
+          <div class="row player-hand">
+            <div class="col">
+              <div class="player-card centered sprite red-0" data-card="red-0"></div>
             </div>
-            <div class="col player-card">
-              <div class="centered sprite green-9"></div>
+            <div class="col">
+              <div class="player-card centered sprite green-9" data-card="green-9" ></div>
             </div>
-            <div class="col player-card">
-              <div class="centered sprite blue-reverse"></div>
+            <div class="col">
+              <div class="player-card centered sprite blue-reverse" data-card="blue-reverse"></div>
             </div>
-            <div class="col player-card">
-              <div class="centered sprite wild-draw-four"></div>
+            <div class="col">
+              <div class="player-card centered sprite wild-draw-four" data-card="wild-draw-four"></div>
             </div>
-            <div class="col player-card">
-              <div class="centered sprite yellow-2"></div>
+            <div class="col">
+              <div class="player-card centered sprite yellow-2" data-card="yellow-2"></div>
             </div>
           </div>
 
@@ -103,9 +103,9 @@
               <button>Send</button>
             </form>
 
-            <script src="/socket.io/socket.io.js"></script>
-            <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-            <script>
+            <!-- <script src="/socket.io/socket.io.js"></script> -->
+            <!-- <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
+            <!-- <script>
               $(function () {
                 var socket = io('/game');
                 $('form').submit(function () {
@@ -120,11 +120,15 @@
                   $('#message_list').append($('</tr>').text(msg));
                 });
               });
-            </script>
+            </script> -->
           </div>
         </div>
   </section>
   <!-- CHAT VIEW ENDS -->
 
 </section>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/scripts/game.js"></script>
+
 <!-- MAIN VIEW ENDS -->
