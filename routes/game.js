@@ -70,10 +70,9 @@ router.post('/:gameId/play', function(request, response, next) {
   let { cardValue } = request.body;
 
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  request.app
-  .get('io')
-  .of(`/game/${gameId}`)
-  .emit('update', { gameId, cardValue });
+  request.app.io
+    .of(`/game/${gameId}`)
+    .emit('update', { gameId, cardValue });
 
   response.sendStatus(200);
 });

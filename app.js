@@ -30,6 +30,7 @@ const tests = require('./routes/tests'); // TODO: rm?
 const chat = require('./routes/chat');
 
 const app = express();
+app.io = require('./sockets');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

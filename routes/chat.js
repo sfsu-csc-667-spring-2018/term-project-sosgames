@@ -7,8 +7,7 @@ router.post('/', (request, response, next) => {
   // above breaks atm
   const user = 'username';
 
-  request.app
-    .get('io')
+  request.app.io
     .of('lobby')
     .emit('message', { user, message });
 
