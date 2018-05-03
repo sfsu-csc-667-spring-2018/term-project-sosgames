@@ -148,11 +148,45 @@ body {
   padding: 1rem;
 }
 /* CHAT STYLING */
-#chat-messages {
-  background-color: beige;
+
+p {
+  animation-duration: 1s;
+  animation-name: slide-right;
 }
 
+@keyframes slide-right {
+  from {
+    margin-left: 100%;
+    width: 200%;
+    opacity: 0;
+  }
+  to {
+    margin-left: 0%;
+    width: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes slide-left {
+  from {
+    margin-left: 0%;
+    width: 100%;
+    opacity: 1;
+  }
+  to {
+    margin-left: 100%;
+    width: 200%;
+    opacity: 0;
+  }
+}
+/* .chat-messages {
+  background-color: beige;
+  animation: fade 2s linear;
+} */
+
 td.self-chat-message {
+  animation-duration: 0.7s;
+  animation-name: slide-right;
   background-color: beige;
   float: right;
   border-radius: 25px;
@@ -160,6 +194,9 @@ td.self-chat-message {
 }
 
 td.external-chat-message {
+  animation-duration: 0.7s;
+
+  animation-name: slide-left;
   background-color: lightblue;
   float: left;
   border-radius: 25px;
@@ -176,10 +213,6 @@ td.external-chat-message {
   transition: all 0.1s ease-in-out;
   padding: 10px;
   margin: 10px;
-}
-
-.lobby {
-  /* float: left; */
 }
 
 /*endGamePage*/
