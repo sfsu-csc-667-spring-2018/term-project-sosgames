@@ -47,41 +47,41 @@
           <button class="btn btn-outline-dark" id="draw-btn" href="#" role="button">Draw</button>
         </div>
       </div>
-        <!-- CARD DECKS ENDS -->
+      <!-- CARD DECKS ENDS -->
 
-        <!-- PLAYER'S HAND -->
-        <div class="row card game-card-hand flex-row">
+      <!-- PLAYER'S HAND -->
+      <div class="row card game-card-hand flex-row">
 
-          <!-- Play Button -->
-          <div class="col play-btn text-center">
-            <!-- TODO: add logic for current player's turn to switch 'disabled' -->
-            <button type="button" class="btn btn-primary" id="play-btn">Play</button>
-          </div>
-
-          <!-- Cards in Hand -->
-          <!-- TODO: cards.foreach(render card) -->
-          <div class="row player-hand">
-            <div class="col">
-              <div class="player-card centered sprite red-0" data-card="red-0"></div>
-            </div>
-            <div class="col">
-              <div class="player-card centered sprite green-9" data-card="green-9" ></div>
-            </div>
-            <div class="col">
-              <div class="player-card centered sprite blue-reverse" data-card="blue-reverse"></div>
-            </div>
-            <div class="col">
-              <div class="player-card centered sprite wild-draw-four" data-card="wild-draw-four"></div>
-            </div>
-            <div class="col">
-              <div class="player-card centered sprite yellow-2" data-card="yellow-2"></div>
-            </div>
-          </div>
-
+        <!-- Play Button -->
+        <div class="col play-btn text-center">
+          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
+          <button type="button" class="btn btn-primary" id="play-btn">Play</button>
         </div>
-        <!-- PLAYER'S HAND ENDS -->
+
+        <!-- Cards in Hand -->
+        <!-- TODO: cards.foreach(render card) -->
+        <div class="row player-hand">
+          <div class="col">
+            <div class="player-card centered sprite red-0" data-card="red-0"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite green-9" data-card="green-9"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite blue-reverse" data-card="blue-reverse"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite wild-draw-four" data-card="wild-draw-four"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite yellow-2" data-card="yellow-2"></div>
+          </div>
+        </div>
 
       </div>
+      <!-- PLAYER'S HAND ENDS -->
+
+    </div>
   </section>
   <!-- PLAYING VIEW ENDS -->
 
@@ -95,34 +95,19 @@
           </p>
           <h3>Chat</h3>
           <div style="clear:both">
-            <div class="table-responsive">
-              <table id="message_list" style="width:100%"></table>
+            <div class="chat-messages">
+              <div id="chat-window" class="table-responsive">
+                <table id="message-list" style="width:100%"></table>
+              </div>
             </div>
-            <form action="">
-              <input id="m" autocomplete="off" />
-              <button>Send</button>
+            <form id="chat-message-form">
+              <input id="message" autocomplete="off" />
+              <button id="chat-submit-button">Send</button>
             </form>
-
-            <!-- <script src="/socket.io/socket.io.js"></script> -->
-            <!-- <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
-            <!-- <script>
-              $(function () {
-                var socket = io('/game');
-                $('form').submit(function () {
-                  console.log('sending message');
-                  socket.emit('chat_message', $('#m').val());
-                  $('#m').val('');
-                  return false;
-                });
-                // client send through ajax, listen through sockets
-                socket.on('chat_message', function (msg) {
-                  $('#message_list').append($('<tr>').text(msg));
-                  $('#message_list').append($('</tr>').text(msg));
-                });
-              });
-            </script> -->
           </div>
         </div>
+      </div>
+    </div>
   </section>
   <!-- CHAT VIEW ENDS -->
 
