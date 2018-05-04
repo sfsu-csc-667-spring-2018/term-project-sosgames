@@ -23,8 +23,11 @@ socket.on('message', ({ user, message }) => {
   const td = document.createElement('td');
 
   // logic for styling based on the sender
-  // if (user = this.user){ self message}
-  //  else td.className = 'external-chat-message';
+  // if ((user = request.cookies.user)) {
+  //   td.className = 'self-chat-message';
+  // } else {
+  //   td.className = 'external-chat-message';
+  // }
   td.className = 'self-chat-message';
   td.innerText = user + ' : ' + message;
   tr.appendChild(td);
