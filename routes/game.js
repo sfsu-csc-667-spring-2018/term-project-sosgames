@@ -69,17 +69,17 @@ router.post('/', (request, response) => {
 
       // UsersGames.create(1,3);
 
-      UsersGames.findByUserId(1)
-      .then(
-        data => {
-          console.log(data)
-        }
-      )
-      .catch( 
-        error => {
-          console.log("doesn't work" + error)
-        }
-      ); 
+      // UsersGames.findByUserId(1)
+      // .then(
+      //   data => {
+      //     console.log(data)
+      //   }
+      // )
+      // .catch( 
+      //   error => {
+      //     console.log("doesn't work" + error)
+      //   }
+      // ); 
 
       // UsersGames.findByGameId(2)
       //   .then(
@@ -91,7 +91,19 @@ router.post('/', (request, response) => {
       //     error => {
       //       console.log("doesn't work" + error)
       //     }
-      //   );      
+      //   );     
+      
+      // UsersGames.findByUserAndGameId(1,2)
+      //   .then(
+      //     data => {
+      //       console.log(data)
+      //     }
+      //   )
+      //   .catch( 
+      //     error => {
+      //       console.log("doesn't work" + error)
+      //     }
+      //   );       
 
       response.render('gameRoom', { title: 'UNO - Game Room' });
   }
