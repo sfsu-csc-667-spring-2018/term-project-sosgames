@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const gameLogic = require('../gameLogic');
+const gameLogic = require('../gameEngine');
 // const { Card, Game, User } = require('../database');
 
 /**
@@ -19,7 +19,16 @@ router.get('/', function(request, response, next) {
 
 // POST /game -- Create a new game
 router.post('/', function(request, response, next) {
-  response.render('createGame', {
+  // add new game to games table 
+  // - Games.create(gameName, numberOfPlayers); --> obtain game.id
+
+  // add the player who created the game to users_games table
+  // - UsersGames.create(user.id, game.id);
+
+  // populate initial games_cards table
+  // - GamesCards.create(game.id)
+
+  response.render('gameRoom', {
     title: 'UNO - Create Game'
   });
   // TODO: redirect to GET /game/:gameId
@@ -28,17 +37,15 @@ router.post('/', function(request, response, next) {
 /**
  * GO TO SPECIFIC GAME ROOM
  */
-// GET /game/:gameId -- Spectator or gameroom creator goes to a specific game room
+// GET /game/:gameId -- A user goes to a specific game room
 router.get('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
 
-  // Game.findById(gameId)
-  // .then(game => {
+  // Get all users by gameId in users_games
+  // - UsersGames.findUserByGameId(gameId)
 
-  // })
-  // .catch(error => {
-
-  // })
+  // Get all on top cards by gameId in games_cards
+  // - GamesCards.findTopCardByGameId(gameId)
 
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
@@ -48,6 +55,13 @@ router.get('/:gameId', function(request, response, next) {
 // POST /game/:gameId -- A new player joins a specific game room
 router.post('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
+
+  // add the new player to users_games table
+  // - UsersGames.create(user.id, game.id);
+
+  // TODO: redirect to GET /game/:gameId
+
+  // TODO: wrong, rm
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
   });
@@ -56,9 +70,34 @@ router.post('/:gameId', function(request, response, next) {
 /**
  * GAME LOGIC
  */
+// POST /game/:gameId/start -- Player requests to start the game
+router.post('/:gameId/start', function(request, response, next) {
+  let gameId = request.params.gameId;
+
+  // Find user.id and current number of players in users_games
+  // - UsersGames.findById(gameId)
+
+  // Check if 2 <= number of players <= max_number_of_players in games table
+  // - Games.findById(gameId)
+
+  // If not valid --> app.io.emit('not ready')
+
+  // Else --> start dealing
+  // - GamesCards.findById(gameId)
+  // Pick randomly 7 cards for each player by updating games_cards table
+  // -- GamesCards.dealToUser(gameId, user.id, card.id) --> set in_hand = true
+  // Pick randomly 1 numbered card for on top from games_cards table
+  // -- GamesCards.pickOnTop(gameId) --> set on_top = true
+
+  response.render('gameRoom', {
+    title: 'UNO - Game Room ' + gameId
+  });
+});
+
 // POST /game/:gameId/draw -- Player requests a card from draw pile
 router.post('/:gameId/draw', function(request, response, next) {
   let gameId = request.params.gameId;
+
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
   });
