@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const { User } = require('../database');
+const {
+  User
+} = require('../database');
 
 router.get('/', (request, response, next) => {
   response.render('login', {
@@ -17,21 +19,24 @@ router.post('/', (request, response, next) => {
     renderErrors(response, formErrors);
 
   } else {
-    const { username, password } = request.body;
+    const {
+      username,
+      password
+    } = request.body;
 
     User.login(username, password)
-        .then(result => {
-          if (result.id == undefined) {
-            renderErrors(response, result);
+      .then(result => {
+        if (result.id == undefined) {
+          renderErrors(response, result);
 
-          } else {
-              const user_id = result.id;
-              request.login( user_id, ( error ) => {
-                response.cookie('user_id', user_id);
-                response.redirect('/lobby');
-              } );
-          }
-        });
+        } else {
+          request.login(result.id, (error) => {
+            response.cookie('user_id', result.id);
+            response.cookie('username', result.username);
+            response.redirect('/lobby');
+          });
+        }
+      });
   }
 });
 
@@ -61,10 +66,10 @@ passport.serializeUser((user_id, done) => {
 
 passport.deserializeUser((user_id, done) => {
   done(null, user_id);
-// TODO: @robert implement getUserId in database/user.js
-//   User.getUserId(username).then(user => {
-//     done(null, user.id);
-//   });
+  // TODO: @robert implement getUserId in database/user.js
+  //   User.getUserId(username).then(user => {
+  //     done(null, user.id);
+  //   });
 });
 
 module.exports = router;

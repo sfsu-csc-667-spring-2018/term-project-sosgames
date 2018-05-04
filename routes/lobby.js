@@ -5,8 +5,10 @@ const auth = require('../auth/requireAuthentication');
 
 // GET /lobby -- Player visits the lobby
 router.get('/', auth.requireAuthentication, (request, response, next) => {
+  // Change made by Robert WIP
   response.render('lobby', {
-    title: 'UNO - Lobby'
+    title: 'UNO - Lobby',
+    username: request.cookies.username
   });
 });
 
