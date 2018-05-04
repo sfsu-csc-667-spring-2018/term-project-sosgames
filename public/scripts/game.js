@@ -39,7 +39,7 @@ message_form.addEventListener('submit', event => {
   event.preventDefault();
 
   const message = document.querySelector('#message').value;
-  console.log("fetch sending: "+message);
+  console.log('fetch sending: ' + message);
   console.log(JSON.stringify({ message }));
   fetch(`/game/${gameId}/chat`, {
     body: JSON.stringify({ message }),
@@ -49,6 +49,7 @@ message_form.addEventListener('submit', event => {
   })
     .then(data => {
       console.log('fetch done');
+      document.getElementById('chat-message-form').reset();
     })
     .catch(error => {
       console.log(error);
