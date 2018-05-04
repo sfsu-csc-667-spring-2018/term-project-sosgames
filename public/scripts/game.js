@@ -17,8 +17,10 @@ const playerCards = document.querySelectorAll('.player-card');
       headers: new Headers({ 'Content-Type': 'application/json' })
     })
     .then( (data) => {
-      console.log(data);
-      console.log("fetch done")
+      console.log("fetch done");
+    })
+    .catch((error) => {
+      console.log(error);
     });
 
   });
