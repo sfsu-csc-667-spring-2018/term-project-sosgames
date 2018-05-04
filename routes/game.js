@@ -68,7 +68,6 @@ router.post('/:gameId/draw', function(request, response, next) {
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let { cardValue } = request.body;
-
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
   request.app.io
     .of(`/game/${gameId}`)
