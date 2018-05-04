@@ -13,6 +13,9 @@ io.on('connection', socket => {
 });
 
 const extractRoute = (referer) => {
+  // Strip query params
+  referer = referer.substring(0, referer.indexOf('?'));
+
   const lastForwardSlash = referer.lastIndexOf('/');
   return referer.substring(lastForwardSlash + 1, referer.length);
 }
