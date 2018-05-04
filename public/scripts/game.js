@@ -29,15 +29,18 @@ socket.on('update', ({ gameId, cardValue }) => {
   console.log(
     'on update player turn for card ' + cardValue + ' in game ' + gameId
   );
-  RSA_NO_PADDING;
 });
 
 const message_form = document.querySelector('#chat-message-form');
+const messageList = document.querySelector('#message-list');
+
 message_form.addEventListener('submit', event => {
   event.stopPropagation();
   event.preventDefault();
 
   const message = document.querySelector('#message').value;
+  console.log("fetch sending: "+message);
+  console.log(JSON.stringify({ message }));
   fetch(`/game/${gameId}/chat`, {
     body: JSON.stringify({ message }),
     credentials: 'include',
@@ -52,8 +55,8 @@ message_form.addEventListener('submit', event => {
     });
 });
 
-socket.on('message', ({ gameId, user, message }) => {
-  console.log('test');
+socket.on('message', ({ gameId, message, user }) => {
+  console.log('test message frontend');
   console.log(`Received ${message}`, user);
   const tr = document.createElement('tr');
   const td = document.createElement('td');
