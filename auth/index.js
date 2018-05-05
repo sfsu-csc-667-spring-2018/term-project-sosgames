@@ -23,19 +23,22 @@ passport.use(
       passReqToCallback: true
     },
     (request, username, password, done) => {
-      User.getUserData(username)
-        .then(user => {
-          bcrypt.compare(password, user.password).then(result => {
-            if (result) {
-              done(null, user.id);
-            } else {
-              done(null, false, request.flash('error', 'Invalid Password.'));
-            }
+      User.getUserData(username).then(user => {
+        if (!user) {
+          return done(null, false, {
+            msg: 'Invalid Username.'
           });
-        })
-        .catch(error => {
-          done(null, false, request.flash('error', 'Invalid Username.'));
+        }
+        bcrypt.compare(password, user.password).then(result => {
+          if (result) {
+            return done(null, user.id);
+          } else {
+            return done(null, false, {
+              msg: 'Invalid Password.'
+            });
+          }
         });
+      });
     }
   )
 );
