@@ -31,7 +31,7 @@ let createUser = (
 };
 
 let getUserData = username => {
-  return db.one(GET_USER_DATA, [username]);
+  return db.oneOrNone(GET_USER_DATA, [username]);
 };
 
 let getUserDataById = id => {

@@ -29,16 +29,12 @@ passport.use(
             if (result) {
               done(null, user.id);
             } else {
-              done(null, false, {
-                msg: 'Invalid password.'
-              });
+              done(null, false, request.flash('error', 'Invalid Password.'));
             }
           });
         })
         .catch(error => {
-          done(null, false, {
-            msg: 'Invalid username.'
-          });
+          done(null, false, request.flash('error', 'Invalid Username.'));
         });
     }
   )
