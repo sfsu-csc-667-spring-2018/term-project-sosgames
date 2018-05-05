@@ -33,11 +33,13 @@ router.get('/', (request, response, next) => {
 router.post(
   '/',
   passport.authenticate('local', {
-    failureFlash: 'Invalid username or password.',
     successRedirect: '/lobby',
-    failureRedirect: '/login'
+    failureRedirect: '/login',
+    failureFlash: true
   }),
-  (request, response, next) => {}
+  (request, response, next) => {
+    response.redirect('/lobby');
+  }
 );
 
 // Validate User

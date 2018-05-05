@@ -18,23 +18,30 @@ passport.deserializeUser((user_id, done) => {
 });
 
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.getUserData(username)
-      .then(user => {
-        bcrypt.compare(password, user.password).then(result => {
-          if (result) {
-            done(null, user.id);
-          } else {
-            done(null, false, 'Invalid password.');
-          }
+  new LocalStrategy(
+    {
+      passReqToCallback: true
+    },
+    (request, username, password, done) => {
+      User.getUserData(username)
+        .then(user => {
+          bcrypt.compare(password, user.password).then(result => {
+            if (result) {
+              done(null, user.id);
+            } else {
+              done(null, false, {
+                msg: 'Invalid password.'
+              });
+            }
+          });
+        })
+        .catch(error => {
+          done(null, false, {
+            msg: 'Invalid username.'
+          });
         });
-      })
-      .catch(error => {
-        done(null, false, {
-          msg: 'Invalid username.'
-        });
-      });
-  })
+    }
+  )
 );
 
 module.exports = passport;

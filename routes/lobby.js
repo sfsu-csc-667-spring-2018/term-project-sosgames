@@ -4,7 +4,6 @@ const auth = require('../auth/requireAuthentication');
 
 // GET /lobby -- Player visits the lobby
 router.get('/', auth.requireAuthentication, (request, response, next) => {
-  console.log(request.user);
   response.render('lobby', {
     title: 'UNO - Lobby',
     username: request.user.username
