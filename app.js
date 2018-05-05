@@ -42,21 +42,44 @@ app.use(logger('dev'));
 app.use(bodyParser());
 app.use(expressLayouts);
 
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
 // DEBUG - Robert is still checking this
+
+// const pgPool = new pg.Pool({
+//   // Insert pool options here
+//   conString: process.env.DATABASE_URL
+// });
+
+// app.use(session({
+//   store: new pgSession({
+//     pool: pgPool, // Connection pool
+//     tableName: 'session' // Use another table-name than the default "session" one
+//   }),
+//   secret: process.env.COOKIE_SECRET,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     maxAge: 30 * 24 * 60 * 60 * 1000
+//   } // 30 days
+// }));
 app.use(
   session({
+    store: new (require('connect-pg-simple')(session))(),
     secret: process.env.COOKIE_SECRET,
-    // cookie: { secure: true},
-    saveUninitialized: false,
     resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000
+    } // 30 days
   })
 );
 
@@ -67,7 +90,7 @@ app.use(passport.session());
 // Express Validator - Taken from Middleware Options on Github
 app.use(
   expressValidator({
-    errorFormatter: function (param, msg, value) {
+    errorFormatter: function(param, msg, value) {
       let namespace = param.split('.'),
         root = namespace.shift(),
         formParam = root;
@@ -89,7 +112,7 @@ app.use(
 app.use(flash());
 
 // Global Variables for Flash Messages
-app.use(function (request, response, next) {
+app.use(function(request, response, next) {
   response.locals.success_msg = request.flash('success_msg');
   response.locals.error_msg = request.flash('error_msg');
   response.locals.error = request.flash('error');
@@ -109,14 +132,14 @@ app.use('/chat', chat);
 app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
