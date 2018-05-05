@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const gameLogic = require('../gameLogic');
+const auth = require('../auth/requireAuthentication');
+
 // const { Card, Game, User } = require('../database');
 
 /**
  * CREATE GAME
  */
 // GET /game -- Go to create game page
-router.get('/', function(request, response, next) {
+router.get('/', auth.requireAuthentication, function(request, response, next) {
   // DEBUG
   // gameLogic.draw();
   // gameLogic.draw2();
@@ -70,9 +72,10 @@ router.post('/:gameId/play', function(request, response, next) {
   let { cardValue } = request.body;
 
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  request.app.io
-    .of(`/game/${gameId}`)
-    .emit('update', { gameId, cardValue });
+  request.app.io.of(`/game/${gameId}`).emit('update', {
+    gameId,
+    cardValue
+  });
 
   response.sendStatus(200);
 });
@@ -81,7 +84,7 @@ router.post('/:gameId/play', function(request, response, next) {
  * MESSAGING IN A SPECIFIC GAME ROOM
  */
 // POST /game/:gameId/message -- Posting a message to game room
-router.post('/:gameId/chat', function( request, response, next ) {
+router.post('/:gameId/chat', function(request, response, next) {
   response.render('gameRoom', {
     title: 'UNO - Chat'
   });
@@ -91,7 +94,7 @@ router.post('/:gameId/chat', function( request, response, next ) {
  * GAME ENDS
  */
 // GET /game/:gameId/end -- Going to game end page
-router.get('/:gameId/end', function( request, response, next ) {
+router.get('/:gameId/end', function(request, response, next) {
   response.render('endGame', {
     title: 'UNO - End Game'
   });
