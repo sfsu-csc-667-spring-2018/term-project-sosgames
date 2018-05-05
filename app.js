@@ -40,9 +40,11 @@ app.set('view engine', 'ejs');
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser());
-app.use( expressLayouts );
+app.use(expressLayouts);
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
@@ -52,7 +54,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
-    cookie: {maxAge: 5000},
+    // cookie: { secure: true},
     saveUninitialized: false,
     resave: false,
   })
@@ -65,7 +67,7 @@ app.use(passport.session());
 // Express Validator - Taken from Middleware Options on Github
 app.use(
   expressValidator({
-    errorFormatter: function(param, msg, value) {
+    errorFormatter: function (param, msg, value) {
       let namespace = param.split('.'),
         root = namespace.shift(),
         formParam = root;
@@ -87,7 +89,7 @@ app.use(
 app.use(flash());
 
 // Global Variables for Flash Messages
-app.use(function(request, response, next) {
+app.use(function (request, response, next) {
   response.locals.success_msg = request.flash('success_msg');
   response.locals.error_msg = request.flash('error_msg');
   response.locals.error = request.flash('error');
@@ -107,14 +109,14 @@ app.use('/chat', chat);
 app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

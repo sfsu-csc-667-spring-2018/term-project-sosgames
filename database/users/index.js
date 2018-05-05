@@ -7,6 +7,7 @@ const GET_EMAIL = `SELECT email FROM users WHERE email = $1`;
 const GET_USER_ID = `SELECT id FROM users WHERE username = $1`;
 const GET_USERNAME = `SELECT username FROM users WHERE username = $1`;
 const GET_USER_DATA = `SELECT * FROM users WHERE username = $1`;
+const GET_USER_DATA_BY_ID = `SELECT * FROM users WHERE id = $1`;
 const CREATE_USER = `INSERT INTO users ( username, password, profile_picture_path, total_score, email ) ` +
   `VALUES ( $1, $2, $3, $4, $5 ) RETURNING *`;
 
@@ -26,7 +27,12 @@ let getUserData = (username) => {
   return db.one(GET_USER_DATA, [username]);
 };
 
+let getUserDataById = (id) => {
+  return db.one(GET_USER_DATA_BY_ID, [id]);
+};
+
 module.exports = {
+  getUserDataById,
   create: (username, email, password, photo_path) =>
     Promise.all([isEmailInUse(email), isUserNameInUse(username)])
     .then(([emailUsed, usernameUsed]) => {

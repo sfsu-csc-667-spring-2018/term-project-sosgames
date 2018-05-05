@@ -16,6 +16,6 @@ const indexAuthentication = (request, response, next) => {
 };
 
 module.exports = {
-  requireAuthentication : requireAuthentication,
-  indexAuthentication : indexAuthentication
+  requireAuthentication: requireAuthentication,
+  indexAuthentication: indexAuthentication
 };

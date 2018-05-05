@@ -64,8 +64,16 @@ passport.serializeUser((user_id, done) => {
   done(null, user_id);
 });
 
+// Retrieving data we want from user session
 passport.deserializeUser((user_id, done) => {
-  done(null, user_id);
+
+  User.getUserDataById(user_id)
+    .then(user => {
+      done(null, user);
+    }).catch(error => {
+      done(error);
+    });
+
   // TODO: @robert implement getUserId in database/user.js
   //   User.getUserId(username).then(user => {
   //     done(null, user.id);
