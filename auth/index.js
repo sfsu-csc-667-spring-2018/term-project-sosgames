@@ -1,34 +1,40 @@
 const passport = require('passport');
-// const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local');
 const bcrypt = require('bcrypt');
 const User = require('../database/users');
 
-// TODO: from jrob -- can refactor to this?
-// const lookup = (email, password, done) => {
-//   User.find(email)
-//     .then(({ id, hash, email }) => {
-//       if (bcrypt.compareSync(password, hash)) {
-//         done(null, { id, email });
-//       } else {
-//         done('Please verify your email and password', false);
-//       }
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       done('Please verify your email and password', false);
-//     });
-// };
+passport.serializeUser((user_id, done) => {
+  done(null, user_id);
+});
 
-// const strategy = new LocalStrategy(
-//   {
-//     usernameField: 'email',
-//     passwordField: 'password'
-//   },
-//   lookup
-// );
+passport.deserializeUser((user_id, done) => {
+  User.getUserDataById(user_id)
+    .then(user => {
+      done(null, user);
+    })
+    .catch(error => {
+      done(error);
+    });
+});
 
-passport.serializeUser(User.serialize);
-passport.deserializeUser(User.deserialize);
-// passport.use(strategy);
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.getUserData(username)
+      .then(user => {
+        bcrypt.compare(password, user.password).then(result => {
+          if (result) {
+            done(null, user.id);
+          } else {
+            done(null, false, 'Invalid password.');
+          }
+        });
+      })
+      .catch(error => {
+        done(null, false, {
+          msg: 'Invalid username.'
+        });
+      });
+  })
+);
 
 module.exports = passport;

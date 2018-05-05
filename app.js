@@ -52,25 +52,6 @@ app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encry
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
-// DEBUG - Robert is still checking this
-
-// const pgPool = new pg.Pool({
-//   // Insert pool options here
-//   conString: process.env.DATABASE_URL
-// });
-
-// app.use(session({
-//   store: new pgSession({
-//     pool: pgPool, // Connection pool
-//     tableName: 'session' // Use another table-name than the default "session" one
-//   }),
-//   secret: process.env.COOKIE_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     maxAge: 30 * 24 * 60 * 60 * 1000
-//   } // 30 days
-// }));
 app.use(
   session({
     store: new (require('connect-pg-simple')(session))(),
@@ -86,6 +67,11 @@ app.use(
 // Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
+// Helps dynamically create navbar
+app.use((request, response, next) => {
+  response.locals.isAuthenticated = request.isAuthenticated();
+  next();
+});
 
 // Express Validator - Taken from Middleware Options on Github
 app.use(

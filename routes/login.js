@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const passport = require('passport');
+const passport = require('../auth');
 const { User } = require('../database');
 
 router.get('/', (request, response, next) => {
@@ -10,25 +10,35 @@ router.get('/', (request, response, next) => {
   });
 });
 
-router.post('/', (request, response, next) => {
-  let formErrors = formValidation(request);
+// router.post('/', (request, response, next) => {
+//   let formErrors = formValidation(request);
 
-  if (formErrors) {
-    renderErrors(response, formErrors);
-  } else {
-    const { username, password } = request.body;
+//   if (formErrors) {
+//     renderErrors(response, formErrors);
+//   } else {
+//     const { username, password } = request.body;
 
-    User.login(username, password).then(result => {
-      if (result.id == undefined) {
-        renderErrors(response, result);
-      } else {
-        request.login(result.id, error => {
-          response.redirect('/lobby');
-        });
-      }
-    });
-  }
-});
+//     User.login(username, password).then(result => {
+//       if (result.id == undefined) {
+//         renderErrors(response, result);
+//       } else {
+//         request.login(result.id, error => {
+//           response.redirect('/lobby');
+//         });
+//       }
+//     });
+//   }
+// });
+
+router.post(
+  '/',
+  passport.authenticate('local', {
+    failureFlash: 'Invalid username or password.',
+    successRedirect: '/lobby',
+    failureRedirect: '/login'
+  }),
+  (request, response, next) => {}
+);
 
 // Validate User
 let formValidation = request => {
@@ -50,24 +60,24 @@ let renderErrors = (response, errors) => {
   });
 };
 
-passport.serializeUser((user_id, done) => {
-  done(null, user_id);
-});
+// passport.serializeUser((user_id, done) => {
+//   done(null, user_id);
+// });
 
-// Retrieving data we want from user session
-passport.deserializeUser((user_id, done) => {
-  User.getUserDataById(user_id)
-    .then(user => {
-      done(null, user);
-    })
-    .catch(error => {
-      done(error);
-    });
+// // Retrieving data we want from user session
+// passport.deserializeUser((user_id, done) => {
+//   User.getUserDataById(user_id)
+//     .then(user => {
+//       done(null, user);
+//     })
+//     .catch(error => {
+//       done(error);
+//     });
 
-  // TODO: @robert implement getUserId in database/user.js
-  //   User.getUserId(username).then(user => {
-  //     done(null, user.id);
-  //   });
-});
+//   // TODO: @robert implement getUserId in database/user.js
+//   //   User.getUserId(username).then(user => {
+//   //     done(null, user.id);
+//   //   });
+// });
 
 module.exports = router;
