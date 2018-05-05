@@ -2,6 +2,7 @@ const pathArray = window.location.pathname.split( '/' );
 const gameId = pathArray[pathArray.length - 1];
 
 const socket = io(`/game/${gameId}`);
+const socketId = (id) => { return id.split('#')[1]; };
 
 // DOM ELEMENTS
 const startButton = document.querySelector('#start-btn');
@@ -21,9 +22,12 @@ startButton.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
 
+  // let clientSocketId = socketId(socket.id);
+  let clientSocketId = socket.id;
+
   fetch(`/game/${gameId}/start`, {
     // TODO: pass user.id from cookie for auth reason?
-    // body: JSON.stringify({ cardValue }),
+    body: JSON.stringify({ clientSocketId }),
     credentials: 'include',
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' })
@@ -42,9 +46,11 @@ startButton.addEventListener('click', event => {
     event.stopPropagation();
     event.preventDefault();
 
+    let clientSocketId = socketId(socket.id);
+
     const cardValue = playerCard.dataset.card;
     fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({ cardValue }),
+      body: JSON.stringify({ cardValue, clientSocketId }),
       credentials: 'include',
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' })
@@ -77,6 +83,10 @@ socket.on('not ready to start game', () => {
 
 socket.on('update game', ({gameId, cardValue}) => {
   console.log("on update player turn for card " + cardValue + " in game " + gameId);
+});
+
+socket.on('yo', () => {
+  console.log("yooo");
 });
 
 // // TODO: figure out how to do specific socket.id?

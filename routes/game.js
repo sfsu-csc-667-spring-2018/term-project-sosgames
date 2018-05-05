@@ -69,6 +69,7 @@ router.post('/:gameId', function(request, response, next) {
 // POST /game/:gameId/start -- Player requests to start the game
 router.post('/:gameId/start', function(request, response, next) {
   let gameId = request.params.gameId;
+  let { clientSocketId } = request.body;
   let readyToStart = false;
 
   // Find user.id and current number of players in users_games
@@ -116,7 +117,12 @@ router.post('/:gameId/start', function(request, response, next) {
     request.app.io
     .of(`/game/${gameId}`)
     .emit('ready to start game', cardOnTop);
+    
+    // console.log(request.app.io.sockets.sockets);
+    
+    console.log('in routes: socket.id='+clientSocketId);
 
+    request.app.io.to(clientSocketId).emit('yo');
     // Deal to each player
     // players.forEach((player) => {
       // TODO: Update games_cards table
@@ -148,7 +154,7 @@ router.post('/:gameId/draw', function(request, response, next) {
 // POST /game/:gameId/play -- Player plays a card from their hand
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
-  let { cardValue } = request.body;
+  let { cardValue, clientSocketId } = request.body;
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
   request.app.io
     .of(`/game/${gameId}`)
