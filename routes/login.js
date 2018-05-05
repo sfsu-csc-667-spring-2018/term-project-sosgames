@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const {
-  User
-} = require('../database');
+const { User } = require('../database');
 
 router.get('/', (request, response, next) => {
   response.render('login', {
@@ -17,26 +15,18 @@ router.post('/', (request, response, next) => {
 
   if (formErrors) {
     renderErrors(response, formErrors);
-
   } else {
-    const {
-      username,
-      password
-    } = request.body;
+    const { username, password } = request.body;
 
-    User.login(username, password)
-      .then(result => {
-        if (result.id == undefined) {
-          renderErrors(response, result);
-
-        } else {
-          request.login(result.id, (error) => {
-            response.cookie('user_id', result.id);
-            response.cookie('username', result.username);
-            response.redirect('/lobby');
-          });
-        }
-      });
+    User.login(username, password).then(result => {
+      if (result.id == undefined) {
+        renderErrors(response, result);
+      } else {
+        request.login(result.id, error => {
+          response.redirect('/lobby');
+        });
+      }
+    });
   }
 });
 
@@ -66,11 +56,11 @@ passport.serializeUser((user_id, done) => {
 
 // Retrieving data we want from user session
 passport.deserializeUser((user_id, done) => {
-
   User.getUserDataById(user_id)
     .then(user => {
       done(null, user);
-    }).catch(error => {
+    })
+    .catch(error => {
       done(error);
     });
 
