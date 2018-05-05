@@ -2,18 +2,45 @@ const pathArray = window.location.pathname.split('/');
 const gameId = pathArray[pathArray.length - 1];
 
 const socket = io(`/game/${gameId}`);
+const socketId = (id) => { return id.split('#')[1]; };
 
 const playerCards = document.querySelectorAll('.player-card');
+
+// USER'S EVENTS
+// Player clicks on the start button
+startButton.addEventListener('click', event => {
+  event.stopPropagation();
+  event.preventDefault();
+
+  // let clientSocketId = socketId(socket.id);
+  let clientSocketId = socket.id;
+
+  fetch(`/game/${gameId}/start`, {
+    // TODO: pass user.id from cookie for auth reason?
+    body: JSON.stringify({ clientSocketId }),
+    credentials: 'include',
+    method: 'POST',
+    headers: new Headers({ 'Content-Type': 'application/json' })
+  })
+  .then( (data) => {
+    console.log("fetch start done");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+});
+
+// Player clicks on a card in their hand to play
 [].forEach.call(playerCards, function(playerCard) {
   playerCard.addEventListener('click', event => {
     event.stopPropagation();
     event.preventDefault();
 
+    let clientSocketId = socketId(socket.id);
+
     const cardValue = playerCard.dataset.card;
     fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({
-        cardValue
-      }),
+      body: JSON.stringify({ cardValue, clientSocketId }),
       credentials: 'include',
       method: 'POST',
       headers: new Headers({
@@ -82,3 +109,12 @@ socket.on('message', ({ gameId, message, user }) => {
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
+
+socket.on('yo', () => {
+  console.log("yooo");
+});
+
+// // TODO: figure out how to do specific socket.id?
+// socket.on('update hand', ({gameId, cardValue}) => {
+//   console.log("on update player turn for card " + cardValue + " in game " + gameId);
+// });

@@ -59,6 +59,82 @@ router.post('/:gameId', function(request, response, next) {
 /**
  * GAME LOGIC
  */
+// POST /game/:gameId/start -- Player requests to start the game
+router.post('/:gameId/start', function(request, response, next) {
+  let gameId = request.params.gameId;
+  let { clientSocketId } = request.body;
+  let readyToStart = false;
+
+  // Find user.id and current number of players in users_games
+  // - UsersGames.findByGameId(gameId)
+  let numberOfPlayers = 2;
+  let players = [
+    {id: 1, username: 'test username 1'},
+    {id: 2, username: 'test username 2'},
+    {id: 3, username: 'test username 3'}
+  ];
+
+  // Check if 2 <= number of players <= max_number_of_players in games table
+  // - Games.findById(gameId)
+  let maxNumberOfPlayers = 5;
+  if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
+    readyToStart = true;
+  }
+
+  // If not valid --> app.io.emit('not ready')
+
+  // Else --> start dealing
+  // - GamesCards.findById(gameId)
+  // Pick randomly 7 cards for each player by updating games_cards table
+  // -- GamesCards.dealToUser(gameId, user.id, card.id) --> set in_hand = true
+  // Pick randomly 1 numbered card for on top from games_cards table
+  // -- GamesCards.pickOnTop(gameId) --> set on_top = true
+  
+  if (readyToStart) {
+    // - cardsInGame = GamesCards.findCardsByGameId(gameId) + Cards.getCards()
+    let cardsInGame = [
+      {id: 1, inHand: false, inDeck: false, onTop: false, value:'2', color: 'red'},
+      {id: 2, inHand: false, inDeck: false, onTop: false, value:'5', color: 'blue'},
+      {id: 3, inHand: false, inDeck: false, onTop: false, value:'wild', color: 'wild'},
+      {id: 4, inHand: false, inDeck: false, onTop: false, value:'reverse', color: 'yellow'},
+      {id: 5, inHand: false, inDeck: false, onTop: false, value:'1', color: 'yellow'},
+      {id: 6, inHand: false, inDeck: false, onTop: false, value:'4', color: 'green'},
+    ];
+    
+    // Pick 1 card on top
+    let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
+    // console.log(JSON.stringify(cardOnTop));
+    // TODO: Update games_cards table
+
+    // Send game state to game room
+    request.app.io
+    .of(`/game/${gameId}`)
+    .emit('ready to start game', cardOnTop);
+    
+    // console.log(request.app.io.sockets.sockets);
+    
+    console.log('in routes: socket.id='+clientSocketId);
+
+    request.app.io.to(clientSocketId).emit('yo');
+    // Deal to each player
+    // players.forEach((player) => {
+      // TODO: Update games_cards table
+
+    //   // Send 7 cards to each player's hand
+    //   request.app.io
+    //   .of(`/game/${gameId}`)
+    //   .emit('update hand', { gameId });
+    // });
+
+  } else {
+    request.app.io
+    .of(`/game/${gameId}`)
+    .emit('not ready to start game');
+  }
+
+  response.sendStatus(200);
+});
+
 // POST /game/:gameId/draw -- Player requests a card from draw pile
 router.post('/:gameId/draw', function(request, response, next) {
   let gameId = request.params.gameId;
@@ -70,7 +146,7 @@ router.post('/:gameId/draw', function(request, response, next) {
 // POST /game/:gameId/play -- Player plays a card from their hand
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
-  let { cardValue } = request.body;
+  let { cardValue, clientSocketId } = request.body;
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
   request.app.io.of(`/game/${gameId}`).emit('update', {
     gameId,
