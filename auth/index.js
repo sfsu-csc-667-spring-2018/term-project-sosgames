@@ -26,7 +26,7 @@ passport.use(
       User.getUserData(username).then(user => {
         if (!user) {
           return done(null, false, {
-            msg: 'Invalid Username.'
+            errors: 'Invalid Username.'
           });
         }
         bcrypt.compare(password, user.password).then(result => {
@@ -34,7 +34,7 @@ passport.use(
             return done(null, user.id);
           } else {
             return done(null, false, {
-              msg: 'Invalid Password.'
+              errors: 'Invalid Password.'
             });
           }
         });
