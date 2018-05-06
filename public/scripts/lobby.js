@@ -9,10 +9,14 @@ document
 
     const message = document.querySelector('#message').value;
     fetch('/chat', {
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({
+        message
+      }),
       credentials: 'include',
       method: 'POST',
-      headers: new Headers({ 'Content-Type': 'application/json' })
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
     });
     document.getElementById('chat-message-form').reset();
   });
@@ -23,7 +27,7 @@ socket.on('message', ({ user, message }) => {
   const td = document.createElement('td');
 
   // logic for styling based on the sender
-  // if ((user = request.cookies.user)) {
+  // if ((user == request.cookies.user)) {
   //   td.className = 'self-chat-message';
   // } else {
   //   td.className = 'external-chat-message';

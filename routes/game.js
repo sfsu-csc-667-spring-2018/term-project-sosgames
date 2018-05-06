@@ -84,7 +84,6 @@ router.post('/:gameId/chat', function(request, response, next) {
   let user = request.cookies.username;
 
   let gameId = request.params.gameId;
-  // const user = 'username'; // NOTE: copy from chat.js
 
   // NOTE: issue was this line, variable message got console log without being declared
   // fixed bc move it down after let {message} ... above
