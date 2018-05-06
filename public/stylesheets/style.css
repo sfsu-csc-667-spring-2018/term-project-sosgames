@@ -149,10 +149,11 @@ body {
 }
 /* CHAT STYLING */
 
-p {
+/* WIP disabled to fix footer */
+/* p {
   animation-duration: 1s;
   animation-name: slide-right;
-}
+} */
 
 @keyframes slide-right {
   from {
