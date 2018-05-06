@@ -157,39 +157,35 @@ body {
 
 @keyframes slide-right {
   from {
-    margin-left: 100%;
-    width: 200%;
+    /* margin-left: 100%;
+    width: 200%; */
     opacity: 0;
   }
   to {
-    margin-left: 0%;
-    width: 100%;
+    /* margin-left: 0%;
+    width: 100%; */
     opacity: 1;
   }
 }
 
 @keyframes slide-left {
   from {
-    margin-left: 0%;
-    width: 100%;
+    /* margin-left: 0%;
+    width: 100%; */
     opacity: 1;
   }
   to {
-    margin-left: 100%;
-    width: 200%;
+    /* margin-left: 100%;
+    width: 200%; */
     opacity: 0;
   }
 }
-/* .chat-messages {
-  background-color: beige;
-  animation: fade 2s linear;
-} */
 
 td.self-chat-message {
   animation-duration: 0.7s;
   animation-name: slide-right;
   background-color: beige;
-  float: right;
+  /* float: right; */
   border-radius: 25px;
   padding: 0.5rem;
 }
@@ -199,7 +195,7 @@ td.external-chat-message {
 
   animation-name: slide-left;
   background-color: lightblue;
-  float: left;
+  /* float: left; */
   border-radius: 25px;
   padding: 0.5rem;
 }

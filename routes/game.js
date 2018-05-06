@@ -85,9 +85,19 @@ router.post('/:gameId/play', function(request, response, next) {
  */
 // POST /game/:gameId/message -- Posting a message to game room
 router.post('/:gameId/chat', function(request, response, next) {
-  response.render('gameRoom', {
-    title: 'UNO - Chat'
+  let { message } = request.body;
+  let user = request.cookies.username;
+
+  let gameId = request.params.gameId;
+  // console.log('recieved chat message : ' + message);
+
+  request.app.io.of(`/game/${gameId}`).emit('message', {
+    gameId,
+    message,
+    user
   });
+
+  response.sendStatus(200);
 });
 
 /**
