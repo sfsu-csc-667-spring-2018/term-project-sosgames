@@ -6,10 +6,9 @@ router.get('/', (request, response, next) => {
   request.logout();
 
   request.session.destroy(() => {
-    response.clearCookie('connect.sid');
     response.clearCookie('io');
-
-    response.redirect('/login');
+    response.clearCookie('connect.sid');
+    response.redirect('/');
   });
 });
 
