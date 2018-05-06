@@ -62,7 +62,10 @@ router.post('/:gameId', function(request, response, next) {
 // POST /game/:gameId/start -- Player requests to start the game
 router.post('/:gameId/start', function(request, response, next) {
   let gameId = request.params.gameId;
-  let { clientSocketId } = request.body;
+  let { clientSocketId, privateRoom } = request.body;
+  // TODO: get privateRooms somehow...
+  // maybe do sth like io.users[idInSameNamespace]
+
   let readyToStart = false;
 
   // Find user.id and current number of players in users_games
@@ -107,22 +110,23 @@ router.post('/:gameId/start', function(request, response, next) {
     // TODO: Update games_cards table
 
     // Send game state to game room
-    request.app.io
-    .of(`/game/${gameId}`)
-    .emit('ready to start game', cardOnTop);
-    
-    // console.log(request.app.io.sockets.sockets);
-    
-    console.log('in routes: socket.id='+clientSocketId);
+    // request.app.io
+    // .of(`/game/${gameId}`)
+    // .emit('ready to start game', cardOnTop);
 
-    request.app.io.to(clientSocketId).emit('yo');
+    // private socket working
+    // TODO: deal card for each player
+    request.app.io
+    .to(privateRoom)
+    .emit('yo', {hello: `${clientSocketId} in room ${privateRoom}`});
+
     // Deal to each player
     // players.forEach((player) => {
       // TODO: Update games_cards table
 
     //   // Send 7 cards to each player's hand
     //   request.app.io
-    //   .of(`/game/${gameId}`)
+    //   .to(privateRoom)
     //   .emit('update hand', { gameId });
     // });
 
