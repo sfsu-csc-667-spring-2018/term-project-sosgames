@@ -22,7 +22,7 @@ document
   });
 
 socket.on('message', ({ user, message }) => {
-  console.log(`Received ${message}`, user);
+  // console.log(`Received ${message}`, user);
   const tr = document.createElement('tr');
   const td = document.createElement('td');
 
@@ -36,7 +36,6 @@ socket.on('message', ({ user, message }) => {
   td.innerText = user + ' : ' + message;
   tr.appendChild(td);
 
-  console.log(tr);
   messageList.appendChild(tr);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;

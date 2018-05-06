@@ -70,7 +70,10 @@ router.post('/:gameId/play', function(request, response, next) {
   let { cardValue } = request.body;
 
   // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  request.app.io.of(`/game/${gameId}`).emit('update', { gameId, cardValue });
+  request.app.io.of(`/game/${gameId}`).emit('update', {
+    gameId,
+    cardValue
+  });
 
   response.sendStatus(200);
 });
@@ -84,15 +87,13 @@ router.post('/:gameId/chat', function(request, response, next) {
   let user = request.cookies.username;
 
   let gameId = request.params.gameId;
+  // console.log('recieved chat message : ' + message);
 
-  // NOTE: issue was this line, variable message got console log without being declared
-  // fixed bc move it down after let {message} ... above
-  console.log('recieved chat message : ' + message);
-
-  // NOTE: string interpolation is this format, not `game/:gameId`
-  request.app.io
-    .of(`/game/${gameId}`)
-    .emit('message', { gameId, message, user });
+  request.app.io.of(`/game/${gameId}`).emit('message', {
+    gameId,
+    message,
+    user
+  });
 
   response.sendStatus(200);
 });
