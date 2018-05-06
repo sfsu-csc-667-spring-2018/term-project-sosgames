@@ -17,7 +17,16 @@
       <% }); %>
     <% } %>
 
-    <!-- Form Errors -->
+    <!-- Login Form Errors -->
+    <%if( (typeof error != "undefined" ? error : false) ) { %>
+      <% error.forEach(( error ) => { %>
+        <div class="notice error">
+          <div class="alert alert-danger"><%= error %></div>
+        </div>
+      <% }); %>
+    <% } %>
+
+    <!-- Signup Form Errors -->
     <%if( (typeof errors != "undefined" ? errors : false) ) { %>
       <% errors.forEach(( error ) => { %>
         <div class="notice error">
