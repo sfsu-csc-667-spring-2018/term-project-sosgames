@@ -86,7 +86,7 @@ router.post('/:gameId/play', function(request, response, next) {
 // POST /game/:gameId/message -- Posting a message to game room
 router.post('/:gameId/chat', function(request, response, next) {
   let { message } = request.body;
-  let user = request.cookies.username;
+  let user = request.user.username;
 
   let gameId = request.params.gameId;
   // console.log('recieved chat message : ' + message);
