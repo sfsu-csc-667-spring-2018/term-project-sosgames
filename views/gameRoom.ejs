@@ -37,84 +37,83 @@
       <!-- CARD DECKS -->
       <div class="row card game-card-decks flex-row">
         <div class="col card-in-play">
-          <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-            <span class="inner">
-              <span class="mark">4</span>
-            </span>
-          </div>
+          <!-- TODO: add logic to display new card after each turn -->
+          <div class="centered sprite wild"></div>
         </div>
-        <div class="col card-in-draw text-center">
+        <div class="col text-center">
           <!-- TODO: add logic for current player's turn to switch 'disabled' -->
           <!-- <button type="button" class="btn" disabled> -->
-          <button type="button" class="btn">
-            <div class="centered uno-card black">
-              <span class="inner">
-                <span class="mark">UNO</span>
-              </span>
-          </button>
+          <div class="centered uno-black-card"></div>
+          <button class="btn btn-outline-dark" id="draw-btn" href="#" role="button">Draw</button>
+        </div>
+      </div>
+      <!-- CARD DECKS ENDS -->
+
+      <!-- PLAYER'S HAND -->
+      <div class="row card game-card-hand flex-row">
+
+        <!-- Play Button -->
+        <div class="col play-btn text-center">
+          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
+          <button type="button" class="btn btn-primary" id="play-btn">Play</button>
+        </div>
+
+        <!-- Cards in Hand -->
+        <!-- TODO: cards.foreach(render card) -->
+        <div class="row player-hand">
+          <div class="col">
+            <div class="player-card centered sprite red-0" data-card="red-0"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite green-9" data-card="green-9"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite blue-reverse" data-card="blue-reverse"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite wild-draw-four" data-card="wild-draw-four"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite yellow-2" data-card="yellow-2"></div>
           </div>
         </div>
-        <!-- CARD DECKS ENDS -->
-
-        <!-- PLAYER'S HAND -->
-        <div class="row card game-card-hand flex-row">
-
-          <!-- Play Button -->
-          <div class="col play-btn text-center">
-            <button type="button" class="btn btn-primary">Play</button>
-          </div>
-
-          <!-- Cards in Hand -->
-          <div class="row play-hand">
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!-- PLAYER'S HAND ENDS -->
 
       </div>
+      <!-- PLAYER'S HAND ENDS -->
+
+    </div>
   </section>
   <!-- PLAYING VIEW ENDS -->
 
   <!-- CHAT VIEW -->
   <section class="game-room game-room-chat col-lg-4">
-    some chat stuff
+    <div class="col">
+      <div class="chat" style="float: right">
+        <div id="menu">
+          <p class="welcome">Welcome,
+            <b>insert current username</b>
+          </p>
+          <h3>Chat</h3>
+          <div style="clear:both">
+            <div class="chat-messages">
+              <div id="chat-window" class="table-responsive">
+                <table id="message-list" style="width:100%"></table>
+              </div>
+            </div>
+            <form id="chat-message-form">
+              <input id="message" autocomplete="off" />
+              <button id="chat-submit-button">Send</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
   <!-- CHAT VIEW ENDS -->
 
 </section>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/scripts/game.js"></script>
+
 <!-- MAIN VIEW ENDS -->

@@ -130,3 +130,4 @@ typings/
 .DS_Store
 
 # End of https://www.gitignore.io/api/node,jetbrains
+.vscode/settings.json

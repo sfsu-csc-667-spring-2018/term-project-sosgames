@@ -2,11 +2,10 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    
     let cards = [];
-    let colors = ["red", "yellow", "green", "blue"];
-    let actions = ["skip", "reverse", "draw-two"];
-    let wild_cards = ["wild", "wild-draw-four"];
+    let colors = ['red', 'yellow', 'green', 'blue'];
+    let actions = ['skip', 'reverse', 'draw-two'];
+    let wild_cards = ['wild', 'wild-draw-four'];
 
     cards.push(createColoredCards(createNumeredArray(0, 9), colors));
     cards.push(createColoredCards(createNumeredArray(1, 9), colors));
@@ -25,7 +24,6 @@ module.exports = {
   }
 };
 
-
 function createNumeredArray(start, end) {
   let arr = [];
   let number = start;
@@ -42,13 +40,13 @@ function createColoredCards(values, colors, point) {
   for (let value of values) {
     for (let color of colors) {
       let card = {
-        value : value,
-        color : color,
-        point_value : point || +value,
-        image_path : '../public/images/spritesheet_uno_large.png',
-        createdAt : new Date(),
-        updatedAt : new Date()
-      }
+        value: value,
+        color: color,
+        point_value: point || +value,
+        image_path: '../public/images/spritesheet_uno_large.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
       cards.push(card);
     }
@@ -63,13 +61,13 @@ function createWildCards(values, count) {
   for (let value of values) {
     for (let index = 0; index < count; index++) {
       let card = {
-        value : value,
-        color : value,
-        point_value : 50,
-        image_path : '../public/images/spritesheet_uno_large.png',
-        createdAt : new Date(),
-        updatedAt : new Date()
-      }
+        value: value,
+        color: value,
+        point_value: 50,
+        image_path: '../public/images/spritesheet_uno_large.png',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
       cards.push(card);
     }

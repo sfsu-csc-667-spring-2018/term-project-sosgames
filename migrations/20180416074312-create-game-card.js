@@ -12,21 +12,21 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: 'games',
-          key: 'id',
+          key: 'id'
         }
       },
       card_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'cards',
-          key: 'id',
+          key: 'id'
         }
       },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'users',
-          key: 'id',
+          key: 'id'
         }
       },
       in_hand: {
