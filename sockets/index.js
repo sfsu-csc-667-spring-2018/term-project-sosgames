@@ -1,5 +1,6 @@
 const socketio = require('socket.io');
 const io = socketio();
+io.users = {};
 
 io.on('connection', socket => {
   let referer = socket.handshake.headers.referer;
@@ -10,11 +11,16 @@ io.on('connection', socket => {
 
   } else if (referer.includes('/game/')) {
     let gameId = extractRoute(referer);
-
-    socket.join(`/game/${gameId}#${socket.id}`);
-
     // Init namespace for game room by gameId
-    [require('./game')].forEach(fn => fn(io, gameId));
+    [require('./game')].forEach(fn => fn(io, gameId, socket));
+    console.log('new socket: '+socket.id);
+
+    // TODO: in here, can do sth like keep track of all the sockets listening
+    // for each socket of same namespace, add socket to io.users[socket.id]
+    socket.on('join',function(room){
+      console.log('after socket join... ' + socket.id + ' -- room: ' + room);
+      socket.join(room);
+    });
   }
 });
 

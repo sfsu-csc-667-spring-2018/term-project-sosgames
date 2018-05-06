@@ -2,6 +2,7 @@ const pathArray = window.location.pathname.split( '/' );
 const gameId = pathArray[pathArray.length - 1];
 
 const socket = io(`/game/${gameId}`);
+const privateSocket = io();
 const socketId = (id) => { return id.split('#')[1]; };
 
 // DOM ELEMENTS
@@ -15,19 +16,19 @@ const cardOnTop = document.querySelector('#card-on-top');
 const playerHand = document.querySelector('.player-hand');
 const playerCards = document.querySelectorAll('.player-card');
 
-
 // USER'S EVENTS
 // Player clicks on the start button
 startButton.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
 
-  // let clientSocketId = socketId(socket.id);
   let clientSocketId = socket.id;
+  let privateRoom =  `game-${privateSocket.id}`;
+  console.log('private: '+privateRoom);
 
   fetch(`/game/${gameId}/start`, {
     // TODO: pass user.id from cookie for auth reason?
-    body: JSON.stringify({ clientSocketId }),
+    body: JSON.stringify({ clientSocketId, privateRoom }),
     credentials: 'include',
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' })
@@ -46,7 +47,7 @@ startButton.addEventListener('click', event => {
     event.stopPropagation();
     event.preventDefault();
 
-    let clientSocketId = socketId(socket.id);
+    let clientSocketId = getSocketId(socket.id);
 
     const cardValue = playerCard.dataset.card;
     fetch(`/game/${gameId}/play`, {
@@ -85,11 +86,18 @@ socket.on('update game', ({gameId, cardValue}) => {
   console.log("on update player turn for card " + cardValue + " in game " + gameId);
 });
 
-socket.on('yo', () => {
-  console.log("yooo");
+// Private socket for a specific client
+privateSocket.on('connect', () => {
+  privateSocket.emit('join', `game-${privateSocket.id}`);
+  console.log('on connect--'+privateSocket.id);
 });
 
-// // TODO: figure out how to do specific socket.id?
+privateSocket.on('yo', (data) => {
+  console.log("yooo ");
+  console.log(JSON.stringify(data));
+});
+
+// TODO: figure out how to do specific socket.id?
 // socket.on('update hand', ({gameId, cardValue}) => {
 //   console.log("on update player turn for card " + cardValue + " in game " + gameId);
 // });
