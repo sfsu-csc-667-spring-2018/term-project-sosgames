@@ -35,22 +35,29 @@
       <!-- PLAYERS LIST ENDS -->
 
       <!-- CARD DECKS -->
-      <div class="row card game-card-decks flex-row">
-        <div class="col card-in-play">
-          <!-- TODO: add logic to display new card after each turn -->
-          <div class="centered sprite wild"></div>
+      <div class="row flex-row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary btn-lg" id="start-btn">START GAME</button>
+        </div>
+      </div>
+        <!-- CARD DECKS ENDS -->
+
+      <!-- CARD DECKS -->
+      <div class="row card game-card-deck flex-row hide">
+        <div class="col">
+          <div class="centered sprite" id="card-on-top" data-card-value=""></div>
         </div>
         <div class="col text-center">
           <!-- TODO: add logic for current player's turn to switch 'disabled' -->
           <!-- <button type="button" class="btn" disabled> -->
           <div class="centered uno-black-card"></div>
-          <button class="btn btn-outline-dark" id="draw-btn" href="#" role="button">Draw</button>
+          <button type="button" class="btn btn-outline-dark" id="draw-btn">Draw</button>
         </div>
       </div>
       <!-- CARD DECKS ENDS -->
 
       <!-- PLAYER'S HAND -->
-      <div class="row card game-card-hand flex-row">
+      <div class="row card player-hand flex-row hide">
 
         <!-- Play Button -->
         <div class="col play-btn text-center">
@@ -62,19 +69,19 @@
         <!-- TODO: cards.foreach(render card) -->
         <div class="row player-hand">
           <div class="col">
-            <div class="player-card centered sprite red-0" data-card="red-0"></div>
+            <div class="player-card centered sprite" data-card-value="red-0"></div>
           </div>
           <div class="col">
-            <div class="player-card centered sprite green-9" data-card="green-9"></div>
+            <div class="player-card centered sprite" data-card-value="green-9" ></div>
           </div>
           <div class="col">
-            <div class="player-card centered sprite blue-reverse" data-card="blue-reverse"></div>
+            <div class="player-card centered sprite" data-card-value="blue-reverse"></div>
           </div>
           <div class="col">
-            <div class="player-card centered sprite wild-draw-four" data-card="wild-draw-four"></div>
+            <div class="player-card centered sprite" data-card-value="wild-draw-four"></div>
           </div>
           <div class="col">
-            <div class="player-card centered sprite yellow-2" data-card="yellow-2"></div>
+            <div class="player-card centered sprite" data-card-value="yellow-2"></div>
           </div>
         </div>
 

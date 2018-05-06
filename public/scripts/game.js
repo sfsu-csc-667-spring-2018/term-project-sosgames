@@ -150,3 +150,19 @@ socket.on('message', ({ gameId, message, user }) => {
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
+
+// Private socket for a specific client
+privateSocket.on('connect', () => {
+  privateSocket.emit('join', `game-${privateSocket.id}`);
+  console.log('on connect--' + privateSocket.id);
+});
+
+privateSocket.on('yo', data => {
+  console.log('yooo ');
+  console.log(JSON.stringify(data));
+});
+
+// TODO: figure out how to do specific socket.id?
+// socket.on('update hand', ({gameId, cardValue}) => {
+//   console.log("on update player turn for card " + cardValue + " in game " + gameId);
+// });

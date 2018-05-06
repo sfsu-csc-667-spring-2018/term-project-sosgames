@@ -124,17 +124,15 @@ router.post('/', (request, response) => {
 /**
  * GO TO SPECIFIC GAME ROOM
  */
-// GET /game/:gameId -- Spectator or gameroom creator goes to a specific game room
+// GET /game/:gameId -- A user goes to a specific game room
 router.get('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
 
-  // Game.findById(gameId)
-  // .then(game => {
+  // Get all users by gameId in users_games
+  // - UsersGames.findUserByGameId(gameId)
 
-  // })
-  // .catch(error => {
-
-  // })
+  // Get all on top cards by gameId in games_cards
+  // - GamesCards.findTopCardByGameId(gameId)
 
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
@@ -144,6 +142,13 @@ router.get('/:gameId', function(request, response, next) {
 // POST /game/:gameId -- A new player joins a specific game room
 router.post('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
+
+  // add the new player to users_games table
+  // - UsersGames.create(user.id, game.id);
+
+  // TODO: redirect to GET /game/:gameId
+
+  // TODO: wrong, rm
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
   });
@@ -274,6 +279,7 @@ router.post('/:gameId/start', function(request, response, next) {
 // POST /game/:gameId/draw -- Player requests a card from draw pile
 router.post('/:gameId/draw', function(request, response, next) {
   let gameId = request.params.gameId;
+
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
   });
