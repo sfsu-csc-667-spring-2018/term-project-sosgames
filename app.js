@@ -39,28 +39,38 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser());
-app.use( expressLayouts );
+app.use(expressLayouts);
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
-// DEBUG - Robert is still checking this
 app.use(
   session({
+    store: new (require('connect-pg-simple')(session))(),
     secret: process.env.COOKIE_SECRET,
-    cookie: {maxAge: 5000},
-    saveUninitialized: false,
     resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000
+    } // 30 days
   })
 );
 
 // Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
+// Helps dynamically create navbar
+app.use((request, response, next) => {
+  response.locals.isAuthenticated = request.isAuthenticated();
+  next();
+});
 
 // Express Validator - Taken from Middleware Options on Github
 app.use(

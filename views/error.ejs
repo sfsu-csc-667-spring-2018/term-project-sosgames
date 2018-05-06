@@ -10,7 +10,7 @@
 
     <!-- Authentication Errors  -->
     <%if( (typeof error_msg != "undefined" ? error_msg : false) ) { %>
-      <% error_msg.forEach(( success_msg ) => { %>
+      <% error_msg.forEach(( error ) => { %>
         <div class="notice error">
           <div class="alert alert-warning"><%= error_msg %></div>
         </div>

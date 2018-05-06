@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const gameLogic = require('../gameLogic');
+const auth = require('../auth/requireAuthentication');
+
 // const { Card, Game, User } = require('../database');
 
 /**
  * CREATE GAME
  */
 // GET /game -- Go to create game page
-router.get('/', function(request, response, next) {
+router.get('/', auth.requireAuthentication, function(request, response, next) {
   // DEBUG
   // gameLogic.draw();
   // gameLogic.draw2();
