@@ -10,6 +10,8 @@ const session = require('express-session');
 const flash = require('connect-flash'); // Might delete
 // const LocalStrategy = require('passport-local').Strategy;
 
+const { Cards, Games, UsersGames, GamesCards } = require('./database');
+
 // Make use of environment variables defined in .env
 if (
   process.env.NODE_ENV === 'development' ||
@@ -132,6 +134,20 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+// GamesCards.removeAllById(1);
+// Games.create('another game', 5);
+
+// Games.findNumberOfGames()
+//   .then(numberOfGames => {
+//     console.log(numberOfGames.count);
+//   })
+
+// UsersGames.create(2,1)
+
+UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
+  console.log(numberOfPlayers.count);
 });
 
 module.exports = app;
