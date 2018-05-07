@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Cards, Games, UsersGames, GamesCards  } = require('../database');
+const { Cards, Games, UsersGames, GamesCards } = require('../database');
 const gameLogic = require('../gameLogic');
 const auth = require('../auth/requireAuthentication');
 
@@ -21,11 +21,19 @@ router.get('/', auth.requireAuthentication, function(request, response, next) {
 });
 
 // POST /game -- Create a new game
-router.post('/', function(request, response, next) {
-  response.render('createGame', {
-    title: 'UNO - Create Game'
-  });
-  // TODO: redirect to GET /game/:gameId
+router.post('/', auth.requireAuthentication, (request, response, next) => {
+  const { gameName, numberOfPlayers } = request.body;
+
+  Games.create(gameName, numberOfPlayers)
+    .then(gameData => {
+      response.redirect(`/game/${gameData.id}`);
+    })
+    .catch(error => {
+      response.render('createGame', {
+        title: 'UNO - Create Game',
+        errors: 'Unable to create game'
+      });
+    });
 });
 
 /**
@@ -35,24 +43,23 @@ router.post('/', function(request, response, next) {
 router.get('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
 
-  // Game.findById(gameId)
-  // .then(game => {
-
-  // })
-  // .catch(error => {
-
-  // })
-
-  response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
-  });
+  Games.findById(gameId)
+    .then(game => {
+      response.render('gameRoom', {
+        title: `UNO - Game ${game.id}`
+      });
+    })
+    .catch(error => {
+      request.flash('error', 'Game does not exist.');
+      response.redirect('/lobby');
+    });
 });
 
 // POST /game/:gameId -- A new player joins a specific game room
 router.post('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
   response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
+    title: `UNO - Game ${game.id}`
   });
 });
 
@@ -117,7 +124,7 @@ router.post('/', (request, response) => {
   let errors = [];
 
   // function return array takes in request object to check data
-  if(request.body.numberOfPlayers < 2 || request.body.numberOfPlayers > 12){
+  if (request.body.numberOfPlayers < 2 || request.body.numberOfPlayers > 12) {
     errors.push({ msg: '2-12 Players required' });
   }
 
@@ -125,91 +132,91 @@ router.post('/', (request, response) => {
   // if(request.body.password != request.body.confirmPassword){
   //   errors.push({ msg: 'Passwords do not match' });
   // }
-  // checks errors array that comes back 
-  if(errors.length > 0){
-    response.render('creategame', { 
+  // checks errors array that comes back
+  if (errors.length > 0) {
+    response.render('creategame', {
       title: 'UNO - Lobby',
       errors: errors,
-      gameName: request.body.gameName,
+      gameName: request.body.gameName
     });
-  }else {
+  } else {
     // Games.create(request.body.gameName, request.body.numberOfPlayers)
-    //   .then( 
-    //     console.log("here also") 
+    //   .then(
+    //     console.log("here also")
     //   )
     //     .catch( console.log('failed to add to database'));
 
-      // Games.findById(2)
-      //   .then(
-      //     data => {
-      //       console.log(data)
-      //     }
-      //   )
-      //   .catch( 
-      //     error => {
-      //       console.log("doesn't work" + error)
-      //     }
-      //   );      
+    // Games.findById(2)
+    //   .then(
+    //     data => {
+    //       console.log(data)
+    //     }
+    //   )
+    //   .catch(
+    //     error => {
+    //       console.log("doesn't work" + error)
+    //     }
+    //   );
 
-      // Games.incrementRoundNumber(1);
+    // Games.incrementRoundNumber(1);
 
-      // Games.changeGameDirection(1);
+    // Games.changeGameDirection(1);
 
-      // Games.changeWinnerId(2,1);
+    // Games.changeWinnerId(2,1);
 
-      // UsersGames.create(1,3);
+    // UsersGames.create(1,3);
 
-      // UsersGames.findByUserId(1)
-      // .then(
-      //   data => {
-      //     console.log(data)
-      //   }
-      // )
-      // .catch( 
-      //   error => {
-      //     console.log("doesn't work" + error)
-      //   }
-      // ); 
+    // UsersGames.findByUserId(1)
+    // .then(
+    //   data => {
+    //     console.log(data)
+    //   }
+    // )
+    // .catch(
+    //   error => {
+    //     console.log("doesn't work" + error)
+    //   }
+    // );
 
-      // UsersGames.findByGameId(2)
-      //   .then(
-      //     data => {
-      //       console.log(data)
-      //     }
-      //   )
-      //   .catch( 
-      //     error => {
-      //       console.log("doesn't work" + error)
-      //     }
-      //   );     
-      
-      // UsersGames.findByUserAndGameId(1,2)
-      //   .then(
-      //     data => {
-      //       console.log(data)
-      //     }
-      //   )
-      //   .catch( 
-      //     error => {
-      //       console.log("doesn't work" + error)
-      //     }
-      //   );       
+    // UsersGames.findByGameId(2)
+    //   .then(
+    //     data => {
+    //       console.log(data)
+    //     }
+    //   )
+    //   .catch(
+    //     error => {
+    //       console.log("doesn't work" + error)
+    //     }
+    //   );
 
-      // Cards.getAll()
-      //   .then((cards) => {
-      //     console.log(cards);
-      //   }
-      // )
+    // UsersGames.findByUserAndGameId(1,2)
+    //   .then(
+    //     data => {
+    //       console.log(data)
+    //     }
+    //   )
+    //   .catch(
+    //     error => {
+    //       console.log("doesn't work" + error)
+    //     }
+    //   );
 
-      // Cards.findById(4)
-      //   .then((card) => {
-      //       console.log(card);
-      //     }
-      //   )
+    // Cards.getAll()
+    //   .then((cards) => {
+    //     console.log(cards);
+    //   }
+    // )
 
-      GamesCards.create(1)
+    // Cards.findById(4)
+    //   .then((card) => {
+    //       console.log(card);
+    //     }
+    //   )
 
-      response.render('gameRoom', { title: 'UNO - Game Room' });
+    // GamesCards.create(1);
+
+    response.render('gameRoom', { title: 'UNO - Game Room' });
   }
 });
 

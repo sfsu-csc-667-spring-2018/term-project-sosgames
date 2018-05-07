@@ -12,9 +12,9 @@ io.on('connection', socket => {
   }
 });
 
-const extractRoute = (referer) => {
+const extractRoute = referer => {
   const lastForwardSlash = referer.lastIndexOf('/');
   return referer.substring(lastForwardSlash + 1, referer.length);
-}
+};
 
 module.exports = io;
