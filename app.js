@@ -59,7 +59,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      secure: true
+      secure: app.get('env') != 'development'
     } // 30 days
   })
 );
