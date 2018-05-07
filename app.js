@@ -146,8 +146,18 @@ app.use(function(err, req, res, next) {
 
 // UsersGames.create(2,1)
 
-UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
-  console.log(numberOfPlayers.count);
-});
+// UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
+//   console.log(numberOfPlayers.count);
+// });
+
+// GamesCards.create(3);
+
+GamesCards.findAllCardsInGame(2)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
 module.exports = app;
