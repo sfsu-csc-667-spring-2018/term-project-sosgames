@@ -110,8 +110,7 @@ privateSocket.on('connect', () => {
 });
 
 privateSocket.on('yo', data => {
-  console.log('yooo ');
-  console.log(JSON.stringify(data));
+  console.log('yooo ' + JSON.stringify(data));
 });
 
 // TODO: figure out how to do specific socket.id?
