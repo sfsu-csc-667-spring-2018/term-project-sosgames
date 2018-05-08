@@ -140,6 +140,11 @@ body {
   padding: 10px;
   width: 80%;
 }
+
+.game-chat {
+  width: 73%;
+  margin-left: 15px;
+}
 /* WIP disabled to fix footer */
 /* p {
   animation-duration: 1s;
