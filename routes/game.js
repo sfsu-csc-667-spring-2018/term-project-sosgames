@@ -117,7 +117,7 @@ router.post('/', (request, response) => {
 
     GamesCards.create(1);
 
-    response.render('gameRoom', { title: 'UNO - Game Room' });
+    response.render('gameRoom', { title: 'UNO - Game Room', isPlayer: true });
   }
 });
 
@@ -128,6 +128,10 @@ router.post('/', (request, response) => {
 router.get('/:gameId', function(request, response, next) {
   let gameId = request.params.gameId;
 
+  // TODO: query db to check if user is player of the game
+  let isPlayer = false;
+  isPlayer = true;
+
   // Get all users by gameId in users_games
   // - UsersGames.findUserByGameId(gameId)
 
@@ -135,7 +139,8 @@ router.get('/:gameId', function(request, response, next) {
   // - GamesCards.findTopCardByGameId(gameId)
 
   response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
+    title: 'UNO - Game Room ' + gameId,
+    isPlayer: isPlayer
   });
 });
 
@@ -150,7 +155,8 @@ router.post('/:gameId', function(request, response, next) {
 
   // TODO: wrong, rm
   response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
+    title: 'UNO - Game Room ' + gameId,
+    isPlayer: true
   });
 });
 
@@ -251,6 +257,7 @@ router.post('/:gameId/start', function(request, response, next) {
 
     // Send game state to game room
     request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
+    console.log(request.app.io.clients());
 
     // private socket working
     // TODO: deal card for each player

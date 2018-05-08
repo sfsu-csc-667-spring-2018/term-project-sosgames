@@ -19,6 +19,7 @@ io.on('connection', socket => {
     socket.on('join', function(room) {
       console.log('after socket join... ' + socket.id + ' -- room: ' + room);
       socket.join(room);
+      console.log('dudeee \n');
     });
   }
 });
