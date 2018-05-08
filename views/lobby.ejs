@@ -1,5 +1,5 @@
 </br>
-<div class="row text-center">
+<div class="text-center">
   <% include error.ejs %>
 </div>
 
@@ -10,20 +10,19 @@
       <div class="lobby">
         <h3>Current Games</h3>
         <div class="table-responsive">
-          <table style="width:100%">
+          <table style="width:100%" class="text-center">
             <% if( typeof games != "undefined") { %>
               <tr>
-                <th>Owner</th>
                 <th>Game Name</th>
                 <th>Total Players</th>
+                <th>Join Game</th>
               </tr>
               <% games.forEach(( game ) => { %>
-                <tr><!-- This needs to be fixed -->
-                  <td><%= game.name %> </td>
+                <tr style="margin 3px">
                   <td><%= game.name %></td>
                   <td><%= game.number_of_players %></td>
                   <td><a href="/game/<%= game.id %>" class="btn btn-md btn-success btn-block" role="button">Join</a></td>
-                  <td><a href="/game/<%= game.id %>" class="btn btn-md btn-warning btn-block" role="button">Spectate</button></td>
+                  <!-- <td><a href="/game/<%= game.id %>" class="btn btn-sm btn-warning btn-block" role="button">Spectate</button></td> -->
                 </tr>
               <% }); %>
             <% } else { %>
@@ -34,7 +33,7 @@
         </div>
 
 
-        <h3>Scores</h3>
+        <h3>Top Scores</h3>
 
         <div class="table-responsive">
           <table style="width:100%">
@@ -68,17 +67,20 @@
   <div class="col">
     <div class="chat">
       <div id="menu">
-        <h3>Chat: Welcome, <b><%= username %></b></h3>
+        <h3>Chat -  Welcome, <b><%= username %></b></h3>
         <div style="clear:both">
           <div class="chat-messages">
-            <div id="chat-window" class="table-responsive">
-              <table id="message-list" style="width:100%"></table>
+            <div id="chat-window" class="table-responsive-chat">
+              <table id="message-list" style="width:100%"></table> 
             </div>
           </div>
-          <form id="chat-message-form">
-            <input id="message" autocomplete="off" />
-            <button id="chat-submit-button" class="btn btn-info">Send</button>
-          </form>
+          
+          <div>
+            <form id="chat-message-form" class="row">
+              <input id="message" class="form-control chat-input" autocomplete="off" />
+              <button id="chat-submit-button" class="btn btn-info form">Send</button>
+            </form>
+          </div>
 
           <script src="/socket.io/socket.io.js"></script>
           <script src="https://code.jquery.com/jquery-1.11.1.js"></script>

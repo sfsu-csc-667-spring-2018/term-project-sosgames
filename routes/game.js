@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { Cards, Games, UsersGames, GamesCards } = require('../database');
-const gameLogic = require('../gameLogic');
 const auth = require('../auth/requireAuthentication');
 const GameEngine = require('../gameEngine');
 
@@ -39,23 +38,27 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
  * GO TO SPECIFIC GAME ROOM
  */
 // GET /game/:gameId -- A user goes to a specific game room
-router.get('/:gameId', function(request, response, next) {
-  let gameId = request.params.gameId;
+router.get(
+  '/:gameId',
+  auth.requireAuthentication,
+  (request, response, next) => {
+    let gameId = request.params.gameId;
 
-  Games.findById(gameId)
-    .then(game => {
-      response.render('gameRoom', {
-        title: `UNO - Game ${game.id}`
+    Games.findById(gameId)
+      .then(game => {
+        response.render('gameRoom', {
+          title: `UNO - Game ${game.id}`
+        });
+      })
+      .catch(error => {
+        request.flash('error', 'Game does not exist.');
+        response.redirect('/lobby');
       });
-    })
-    .catch(error => {
-      request.flash('error', 'Game does not exist.');
-      response.redirect('/lobby');
-    });
-});
+  }
+);
 
 // POST /game/:gameId -- A new player joins a specific game room
-router.post('/:gameId', function(request, response, next) {
+router.post('/:gameId', (request, response, next) => {
   let gameId = request.params.gameId;
 
   // add the new player to users_games table
@@ -73,7 +76,7 @@ router.post('/:gameId', function(request, response, next) {
  * GAME LOGIC
  */
 // POST /game/:gameId/start -- Player requests to start the game
-router.post('/:gameId/start', function(request, response, next) {
+router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
   // TODO: get privateRooms somehow...
@@ -190,7 +193,7 @@ router.post('/:gameId/start', function(request, response, next) {
 });
 
 // POST /game/:gameId/draw -- Player requests a card from draw pile
-router.post('/:gameId/draw', function(request, response, next) {
+router.post('/:gameId/draw', (request, response, next) => {
   let gameId = request.params.gameId;
 
   response.render('gameRoom', {
@@ -215,7 +218,7 @@ router.post('/:gameId/play', function(request, response, next) {
  * MESSAGING IN A SPECIFIC GAME ROOM
  */
 // POST /game/:gameId/message -- Posting a message to game room
-router.post('/:gameId/chat', function(request, response, next) {
+router.post('/:gameId/chat', (request, response, next) => {
   let { message } = request.body;
   let user = request.user.username;
 
@@ -235,10 +238,14 @@ router.post('/:gameId/chat', function(request, response, next) {
  * GAME ENDS
  */
 // GET /game/:gameId/end -- Going to game end page
-router.get('/:gameId/end', function(request, response, next) {
-  response.render('endGame', {
-    title: 'UNO - End Game'
-  });
-});
+router.get(
+  '/:gameId/end',
+  auth.requireAuthentication,
+  (request, response, next) => {
+    response.render('endGame', {
+      title: 'UNO - End Game'
+    });
+  }
+);
 
 module.exports = router;
