@@ -132,6 +132,8 @@ router.get('/:gameId', function(request, response, next) {
   let isPlayer = false;
   isPlayer = true;
 
+  if (gameId == 2) isPlayer = false;
+
   // Get all users by gameId in users_games
   // - UsersGames.findUserByGameId(gameId)
 
@@ -257,13 +259,21 @@ router.post('/:gameId/start', function(request, response, next) {
 
     // Send game state to game room
     request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
-    console.log(request.app.io.clients());
 
-    // private socket working
+    let rooms = request.app.io.sockets.adapter.rooms;
+    let playersHands = [];
+    Object.keys(rooms).forEach(function(room) {
+      if (room.includes(`/game/${gameId}/`)) {
+        playersHands.push(room);
+      }
+    });
+
     // TODO: deal card for each player
-    request.app.io
-      .to(privateRoom)
-      .emit('yo', { hello: `${clientSocketId} in room ${privateRoom}` });
+    playersHands.forEach(function(playerHand) {
+      request.app.io
+        .to(playerHand)
+        .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
+    });
 
     // Deal to each player
     // players.forEach((player) => {
