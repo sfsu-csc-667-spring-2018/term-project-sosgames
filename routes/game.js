@@ -19,128 +19,46 @@ router.get('/', auth.requireAuthentication, function(request, response, next) {
 });
 
 // POST /game -- Create a new game
-router.post('/', (request, response) => {
-  console.log(request.body);
-  // console.log(request);
-  let errors = [];
+router.post('/', auth.requireAuthentication, (request, response, next) => {
+  const { gameName, numberOfPlayers } = request.body;
 
-  // function return array takes in request object to check data
-  if (request.body.numberOfPlayers < 2 || request.body.numberOfPlayers > 12) {
-    errors.push({ msg: '2-12 Players required' });
-  }
-
-  // possible feature if we have time
-  // if(request.body.password != request.body.confirmPassword){
-  //   errors.push({ msg: 'Passwords do not match' });
-  // }
-  // checks errors array that comes back
-  if (errors.length > 0) {
-    response.render('creategame', {
-      title: 'UNO - Lobby',
-      errors: errors,
-      gameName: request.body.gameName
+  Games.create(gameName, numberOfPlayers)
+    .then(gameData => {
+      response.redirect(`/game/${gameData.id}`);
+    })
+    .catch(error => {
+      response.render('createGame', {
+        title: 'UNO - Create Game',
+        errors: 'Unable to create game'
+      });
     });
-  } else {
-    // Games.create(request.body.gameName, request.body.numberOfPlayers)
-    //   .then(
-    //     console.log("here also")
-    //   )
-    //     .catch( console.log('failed to add to database'));
-
-    // Games.findById(2)
-    //   .then(
-    //     data => {
-    //       console.log(data)
-    //     }
-    //   )
-    //   .catch(
-    //     error => {
-    //       console.log("doesn't work" + error)
-    //     }
-    //   );
-
-    // Games.incrementRoundNumber(1);
-
-    // Games.changeGameDirection(1);
-
-    // Games.changeWinnerId(2,1);
-
-    // UsersGames.create(1,3);
-
-    // UsersGames.findByUserId(1)
-    // .then(
-    //   data => {
-    //     console.log(data)
-    //   }
-    // )
-    // .catch(
-    //   error => {
-    //     console.log("doesn't work" + error)
-    //   }
-    // );
-
-    // UsersGames.findByGameId(2)
-    //   .then(
-    //     data => {
-    //       console.log(data)
-    //     }
-    //   )
-    //   .catch(
-    //     error => {
-    //       console.log("doesn't work" + error)
-    //     }
-    //   );
-
-    // UsersGames.findByUserAndGameId(1,2)
-    //   .then(
-    //     data => {
-    //       console.log(data)
-    //     }
-    //   )
-    //   .catch(
-    //     error => {
-    //       console.log("doesn't work" + error)
-    //     }
-    //   );
-
-    // Cards.getAll()
-    //   .then((cards) => {
-    //     console.log(cards);
-    //   }
-    // )
-
-    // Cards.findById(4)
-    //   .then((card) => {
-    //       console.log(card);
-    //     }
-    //   )
-
-    GamesCards.create(1);
-
-    response.render('gameRoom', { title: 'UNO - Game Room' });
-  }
 });
 
 /**
  * GO TO SPECIFIC GAME ROOM
  */
 // GET /game/:gameId -- A user goes to a specific game room
-router.get('/:gameId', function(request, response, next) {
-  let gameId = request.params.gameId;
+router.get(
+  '/:gameId',
+  auth.requireAuthentication,
+  (request, response, next) => {
+    let gameId = request.params.gameId;
 
-  // Get all users by gameId in users_games
-  // - UsersGames.findUserByGameId(gameId)
-
-  // Get all on top cards by gameId in games_cards
-  // - GamesCards.findTopCardByGameId(gameId)
-
-  response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
-  });
-});
+    Games.findById(gameId)
+      .then(game => {
+        response.render('gameRoom', {
+          title: `UNO - Game ${game.id}`
+        });
+      })
+      .catch(error => {
+        request.flash('error', 'Game does not exist.');
+        response.redirect('/lobby');
+      });
+  }
+);
 
 // POST /game/:gameId -- A new player joins a specific game room
-router.post('/:gameId', function(request, response, next) {
+router.post('/:gameId', (request, response, next) => {
   let gameId = request.params.gameId;
 
   // add the new player to users_games table
@@ -150,7 +68,7 @@ router.post('/:gameId', function(request, response, next) {
 
   // TODO: wrong, rm
   response.render('gameRoom', {
-    title: 'UNO - Game Room ' + gameId
+    title: `UNO - Game ${game.id}`
   });
 });
 
@@ -158,7 +76,7 @@ router.post('/:gameId', function(request, response, next) {
  * GAME LOGIC
  */
 // POST /game/:gameId/start -- Player requests to start the game
-router.post('/:gameId/start', function(request, response, next) {
+router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
   // TODO: get privateRooms somehow...
@@ -250,9 +168,7 @@ router.post('/:gameId/start', function(request, response, next) {
     // TODO: Update games_cards table
 
     // Send game state to game room
-    // request.app.io
-    // .of(`/game/${gameId}`)
-    // .emit('ready to start game', cardOnTop);
+    request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
 
     // private socket working
     // TODO: deal card for each player
@@ -277,7 +193,7 @@ router.post('/:gameId/start', function(request, response, next) {
 });
 
 // POST /game/:gameId/draw -- Player requests a card from draw pile
-router.post('/:gameId/draw', function(request, response, next) {
+router.post('/:gameId/draw', (request, response, next) => {
   let gameId = request.params.gameId;
 
   response.render('gameRoom', {
@@ -302,7 +218,7 @@ router.post('/:gameId/play', function(request, response, next) {
  * MESSAGING IN A SPECIFIC GAME ROOM
  */
 // POST /game/:gameId/message -- Posting a message to game room
-router.post('/:gameId/chat', function(request, response, next) {
+router.post('/:gameId/chat', (request, response, next) => {
   let { message } = request.body;
   let user = request.user.username;
 
@@ -322,10 +238,14 @@ router.post('/:gameId/chat', function(request, response, next) {
  * GAME ENDS
  */
 // GET /game/:gameId/end -- Going to game end page
-router.get('/:gameId/end', function(request, response, next) {
-  response.render('endGame', {
-    title: 'UNO - End Game'
-  });
-});
+router.get(
+  '/:gameId/end',
+  auth.requireAuthentication,
+  (request, response, next) => {
+    response.render('endGame', {
+      title: 'UNO - End Game'
+    });
+  }
+);
 
 module.exports = router;
