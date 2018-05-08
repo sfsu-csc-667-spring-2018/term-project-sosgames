@@ -165,9 +165,7 @@ router.post('/:gameId/start', function(request, response, next) {
     // TODO: Update games_cards table
 
     // Send game state to game room
-    // request.app.io
-    // .of(`/game/${gameId}`)
-    // .emit('ready to start game', cardOnTop);
+    request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
 
     // private socket working
     // TODO: deal card for each player
