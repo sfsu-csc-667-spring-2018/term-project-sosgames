@@ -152,12 +152,20 @@ app.use(function(err, req, res, next) {
 
 // GamesCards.create(3);
 
-GamesCards.findAllCardsInGame(2)
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+// GamesCards.findAllCardsInGame(2)
+//   .then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+
+// boolean, gameid, cardid
+// GamesCards.changeInDeck(true, 1, 100);
+
+// GamesCards.changeInHand(true, 1, 100);
+// GamesCards.changeUserId(1, 1, 100);
+
+GamesCards.changeOnTop(true, 1, 100);
 
 module.exports = app;

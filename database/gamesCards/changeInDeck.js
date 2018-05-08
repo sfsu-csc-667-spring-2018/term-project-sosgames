@@ -1,6 +1,11 @@
 const database = require('../connection');
-const findById = require('./findGameById').findById;
 
-const UPDATE_IN_HAND_QUERY = `UPDATE games SET is_reversed = $1 WHERE id = $2`;
+const UPDATE_IN_DECK_QUERY = `UPDATE games_cards SET in_deck = $1 WHERE game_id = $2 AND card_id = $3`;
 
-module.exports = {};
+const changeInDeck = (inDeck, gameId, cardId) => {
+  return database.none(UPDATE_IN_DECK_QUERY, [inDeck, gameId, cardId]);
+};
+
+module.exports = {
+  changeInDeck
+};

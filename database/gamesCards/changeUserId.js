@@ -1,6 +1,11 @@
 const database = require('../connection');
-const findById = require('./findGameById').findById;
 
-const UPDATE_IS_REVERSED_QUERY = `UPDATE games SET is_reversed = $1 WHERE id = $2`;
+const UPDATE_USER_ID_QUERY = `UPDATE games_cards SET user_id = $1 WHERE game_id = $2 AND card_id = $3`;
 
-module.exports = {};
+const changeUserId = (userId, gameId, cardId) => {
+  return database.none(UPDATE_USER_ID_QUERY, [userId, gameId, cardId]);
+};
+
+module.exports = {
+  changeUserId
+};
