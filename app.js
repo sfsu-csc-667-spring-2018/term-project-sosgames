@@ -8,71 +8,99 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash'); // Might delete
-const LocalStrategy = require('passport-local').Strategy;
-// const routes = require('./routes'); - Was giving me a bug
+// const LocalStrategy = require('passport-local').Strategy;
+
+const { Cards, Games, UsersGames, GamesCards } = require('./database');
 
 // Make use of environment variables defined in .env
-if( process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production' ) {
-  require( "dotenv" ).config();
+if (
+  process.env.NODE_ENV === 'development' ||
+  process.env.NODE_ENV === 'production'
+) {
+  require('dotenv').config();
 }
 
-// Routes?
-const login = require('./routes/login'); 
-const users = require('./routes/users');
-const tests = require('./routes/tests');
-const game = require('./routes/game');
+// Routers
+const index = require('./routes/index');
+const users = require('./routes/users'); // TODO: rm? or use this to include login, logout, signup?
+const login = require('./routes/login');
+const logout = require('./routes/logout');
 const signup = require('./routes/signup');
+const lobby = require('./routes/lobby');
+const game = require('./routes/game');
+const tests = require('./routes/tests'); // TODO: rm?
+const chat = require('./routes/chat');
+
 const app = express();
+app.io = require('./sockets');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); 
+app.use(expressLayouts);
+
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
+app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
 app.use(express.static(path.join(__dirname, 'public')));
-app.use( expressLayouts );
 
 // Express Session
-app.use( session({
-  secret: 'secret',
-  saveUninitialized: true,
-  resave: true
-}));
+app.use(
+  session({
+    store: new (require('connect-pg-simple')(session))(),
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: app.get('env') != 'development'
+    } // 30 days
+  })
+);
 
 // Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
+// Helps dynamically create navbar
+app.use((request, response, next) => {
+  response.locals.isAuthenticated = request.isAuthenticated();
+  next();
+});
 
 // Express Validator - Taken from Middleware Options on Github
-app.use(expressValidator({
-  errorFormatter: function (param, msg, value) {
-    let namespace = param.split('.'),
-      root = namespace.shift(),
-      formParam = root;
+app.use(
+  expressValidator({
+    errorFormatter: function(param, msg, value) {
+      let namespace = param.split('.'),
+        root = namespace.shift(),
+        formParam = root;
 
-    while (namespace.length) {
-      formParam += '[' + namespace.shift() + ']';
+      while (namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+
+      return {
+        param: formParam,
+        msg: msg,
+        value: value
+      };
     }
-
-    return {
-      param: formParam,
-      msg: msg,
-      value: value
-    };
-  }
-}));
+  })
+);
 
 // Connect Flash
 app.use(flash());
 
 // Global Variables for Flash Messages
-app.use(function (request, response, next) {
+app.use(function(request, response, next) {
   response.locals.success_msg = request.flash('success_msg');
   response.locals.error_msg = request.flash('error_msg');
   response.locals.error = request.flash('error');
@@ -80,13 +108,16 @@ app.use(function (request, response, next) {
   next();
 });
 
-
-// Middleware for routes 
-app.use('/', login);
-app.use('/users', users);
-app.use('/tests', tests);
+// Middleware for routes
+app.use('/', index);
+app.use('/users', users); // TODO: rm? or use this to include login, logout, signup?
+app.use('/login', login);
+app.use('/logout', logout);
+app.use('/signup', signup);
+app.use('/lobby', lobby);
 app.use('/game', game);
-app.use('/signup', signup );
+app.use('/chat', chat);
+app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -105,5 +136,37 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// GamesCards.removeAllById(1);
+// Games.create('another game', 5);
+
+// Games.findNumberOfGames()
+//   .then(numberOfGames => {
+//     console.log(numberOfGames.count);
+//   })
+
+// UsersGames.create(2,1)
+
+// UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
+//   console.log(numberOfPlayers.count);
+// });
+
+// GamesCards.create(3);
+
+// GamesCards.findAllCardsInGame(2)
+//   .then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+
+// boolean, gameid, cardid
+// GamesCards.changeInDeck(true, 1, 100);
+
+// GamesCards.changeInHand(true, 1, 100);
+// GamesCards.changeUserId(1, 1, 100);
+
+GamesCards.changeOnTop(true, 1, 100);
 
 module.exports = app;

@@ -7,7 +7,7 @@
     </ul>
   </div>
   <div class="mx-auto order-0 text-center">
-    <img id="centerNavLogo" class="navbar-brand mx-auto" src="./images/unoLogo.png">
+    <img id="centerNavLogo" class="navbar-brand mx-auto" src="../images/unoLogo.png">
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
       <span class="navbar-toggler-icon"></span>
@@ -15,31 +15,37 @@
   </div>
   <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames">
-          GitHub
-          <i class="fab fa-github-alt"></i>
-        </a>
-      </li>
-      <!-- Login and Sign Up only shown when user isn't authenticated -->
-
-      <li class="nav-item">
-        <a class="nav-link" href="/">Login
-          <i class="fas fa-sign-in-alt"></i>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/signup">
-          Sign Up
-          <i class="fas fa-user-plus"></i>
-        </a>
-      </li>
       <!-- Only shown when logged in -->
-      <li class="nav-item">
-        <a class="nav-link" href="/logout">Log Out
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
-      </li>
+      <% if( isAuthenticated ) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/lobby">Lobby
+            <i class="fas fa-gamepad"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Log Out
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
+        </li>
+      <% } else  { %>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames">
+            GitHub
+            <i class="fab fa-github-alt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/">Login
+            <i class="fas fa-sign-in-alt"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/signup">
+            Sign Up
+            <i class="fas fa-user-plus"></i>
+          </a>
+        </li>
+      <% } %>
     </ul>
   </div>
 </nav>

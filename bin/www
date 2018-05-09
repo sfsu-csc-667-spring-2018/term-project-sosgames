@@ -7,7 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('term-project-sosgames:server');
 var http = require('http');
-const socket = require( '../socket' );
+// const socket = require( '../socket' );
 
 /**
  * Get port from environment and store in Express.
@@ -21,7 +21,8 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-socket.init( app, server )
+// socket.init( app, server )
+app.io.attach(server);
 
 /**
  * Listen on provided port, on all network interfaces.

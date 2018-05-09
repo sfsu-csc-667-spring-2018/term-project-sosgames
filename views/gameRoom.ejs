@@ -35,86 +35,92 @@
       <!-- PLAYERS LIST ENDS -->
 
       <!-- CARD DECKS -->
-      <div class="row card game-card-decks flex-row">
-        <div class="col card-in-play">
-          <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-            <span class="inner">
-              <span class="mark">4</span>
-            </span>
-          </div>
+      <div class="row flex-row">
+        <div class="col text-center">
+          <button type="button" class="btn btn-primary btn-lg <% if (!isPlayer || isPlayer == null) {%> hide <% } %>" id="start-btn">START GAME</button>
         </div>
-        <div class="col card-in-draw text-center">
-          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
-          <!-- <button type="button" class="btn" disabled> -->
-          <button type="button" class="btn">
-            <div class="centered uno-card black">
-              <span class="inner">
-                <span class="mark">UNO</span>
-              </span>
-          </button>
-          </div>
-        </div>
+      </div>
         <!-- CARD DECKS ENDS -->
 
-        <!-- PLAYER'S HAND -->
-        <div class="row card game-card-hand flex-row">
-
-          <!-- Play Button -->
-          <div class="col play-btn text-center">
-            <button type="button" class="btn btn-primary">Play</button>
-          </div>
-
-          <!-- Cards in Hand -->
-          <div class="row play-hand">
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-            <div class="col player-card">
-              <div class="centered uno-card num-4 blue" data-card-value="4" data-card-color="blue">
-                <span class="inner">
-                  <span class="mark">4</span>
-                </span>
-              </div>
-            </div>
-          </div>
-
+      <!-- CARD DECKS -->
+      <div class="row card game-card-deck flex-row hide">
+        <div class="col">
+          <div class="centered sprite" id="card-on-top" data-card-value=""></div>
         </div>
-        <!-- PLAYER'S HAND ENDS -->
+        <div class="col text-center">
+          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
+          <!-- <button type="button" class="btn" disabled> -->
+          <div class="centered uno-black-card"></div>
+          <button type="button" class="btn btn-outline-dark" id="draw-btn">Draw</button>
+        </div>
+      </div>
+      <!-- CARD DECKS ENDS -->
+
+      <!-- PLAYER'S HAND -->
+      <div class="row card player-hand flex-row hide">
+
+        <!-- Play Button -->
+        <div class="col play-btn text-center">
+          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
+          <button type="button" class="btn btn-primary" id="play-btn">Play</button>
+        </div>
+
+        <!-- Cards in Hand -->
+        <!-- TODO: cards.foreach(render card) -->
+        <div class="row player-hand">
+          <div class="col">
+            <div class="player-card centered sprite" data-card-value="red-0"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite" data-card-value="green-9" ></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite" data-card-value="blue-reverse"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite" data-card-value="wild-draw-four"></div>
+          </div>
+          <div class="col">
+            <div class="player-card centered sprite" data-card-value="yellow-2"></div>
+          </div>
+        </div>
 
       </div>
+      <!-- PLAYER'S HAND ENDS -->
+
+    </div>
   </section>
   <!-- PLAYING VIEW ENDS -->
 
   <!-- CHAT VIEW -->
   <section class="game-room game-room-chat col-lg-4">
-    some chat stuff
+    <div class="col">
+      <div class="chat">
+        <div id="menu">
+          <h3>Chat</h3>
+          <div style="clear:both">
+            <div class="chat-messages">
+              <div id="chat-window" class="table-responsive-chat">
+                <table id="message-list" style="width:100%"></table> 
+              </div>
+            </div>
+          </div>
+          <div>
+            <form id="chat-message-form" class="row">
+              <input id="message" class="form-control game-chat" autocomplete="off" />
+              <button class="btn btn-info form">Send</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </section>
   <!-- CHAT VIEW ENDS -->
 
 </section>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/scripts/game.js"></script>
+
 <!-- MAIN VIEW ENDS -->

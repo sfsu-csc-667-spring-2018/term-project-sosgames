@@ -7,6 +7,7 @@
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
+    "connect-pg-simple": "^4.2.1",
     "cookie-parser": "~1.4.3",
     "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
@@ -29,38 +30,57 @@
     "socket.io": "^2.1.0"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "husky": "^0.14.3",
+    "lint-staged": "^7.0.5",
+    "nodemon": "^1.17.3",
+    "prettier": "^1.12.1"
   },
   "scripts": {
     "start:dev": "NODE_ENV=development DEBUG=APP_NAME:* nodemon ./bin/www",
     "start": "NODE_ENV=production nodemon ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:create:model:card": "sequelize model:create --name card --attributes value:string,color:string,point_value:integer,image_path:string",
-    "db:create:model:user": "sequelize model:create --name user --attributes username:string,password:string,profile_picture_path:string,total_score:integer,email:string",
-    "db:create:model:game": "sequelize model:create --name game --attributes round_number:integer,is_reversed:boolean,winner_id:integer",
-    "db:create:model:gameCard": "sequelize model:create --name gameCard --attributes game_id:integer,card_id:integer,user_id:integer,in_hand:boolean,in_deck:boolean,on_top:boolean",
-    "db:create:model:userGame": "sequelize model:create --name userGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
+    "db:create:model:card":
+      "sequelize model:create --name card --attributes value:string,color:string,point_value:integer,image_path:string",
+    "db:create:model:user":
+      "sequelize model:create --name user --attributes username:string,password:string,profile_picture_path:string,total_score:integer,email:string",
+    "db:create:model:game":
+      "sequelize model:create --name game --attributes round_number:integer,is_reversed:boolean,winner_id:integer",
+    "db:create:model:gameCard":
+      "sequelize model:create --name gameCard --attributes game_id:integer,card_id:integer,user_id:integer,in_hand:boolean,in_deck:boolean,on_top:boolean",
+    "db:create:model:userGame":
+      "sequelize model:create --name userGame --attributes user_id:integer,game_id:integer,current_score:integer,number_of_cards:integer",
+    "db:create:model:session":
+      "sequelize model:create --name session --attributes sess:json,expire:date",
     "db:create:migration": "sequelize migration:generate --name",
     "db:migrate": "sequelize db:migrate",
-    "postinstall": "sequelize db:migrate && sequelize db:seed:all",
     "db:rollback": "sequelize db:migrate:undo",
     "db:rollback:all": "sequelize db:migrate:undo:all",
-
-    "db:seed:card": "sequelize seed:create --name cards",
-    "db:seed:user": "sequelize seed:create --name users",
-
+    "postinstall": "sequelize db:migrate",
+    "db:seed:create": "sequelize seed:create --name",
     "db:seed": "sequelize db:seed --seed",
+    "db:seed:new":
+      "sequelize db:seed --seed 20180428210951-users.js && sequelize db:seed --seed 20180428220808-games.js",
     "db:seed:all": "sequelize db:seed:all",
-    "db:seed:rollback": "sequelize db:seed:undo:all"
+    "db:seed:undo": "sequelize db:seed:undo --seed",
+    "db:seed:rollback": "sequelize db:seed:undo:all",
+    "prettify":
+      "prettier --write '{.,bin,db,public,routes,migrations,config}/**/*.{js,json,css,md}'",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames.git"
+    "url":
+      "git+https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames/issues"
+    "url":
+      "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames/issues"
   },
-  "homepage": "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames#readme"
+  "homepage":
+    "https://github.com/sfsu-csc-667-spring-2018/term-project-sosgames#readme"
 }
