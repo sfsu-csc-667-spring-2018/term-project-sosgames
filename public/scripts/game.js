@@ -2,10 +2,11 @@ const pathArray = window.location.pathname.split('/');
 const gameId = pathArray[pathArray.length - 1];
 
 const socket = io(`/game/${gameId}`);
-const privateSocket = io();
 const socketId = id => {
   return id.split('#')[1];
 };
+
+const privateSocket = io();
 
 // DOM ELEMENTS
 const startButton = document.querySelector('#start-btn');
@@ -28,11 +29,12 @@ startButton.addEventListener('click', event => {
   event.preventDefault();
 
   let clientSocketId = socket.id;
-  let privateRoom = `game-${privateSocket.id}`;
+  const privateSocketId = privateSocket.id;
+  const privateRoomName = `/game/${gameId}/${privateSocketId}`;
 
   fetch(`/game/${gameId}/start`, {
     // TODO: pass user.id from cookie for auth reason?
-    body: JSON.stringify({ clientSocketId, privateRoom }),
+    body: JSON.stringify({ clientSocketId, privateRoomName }),
     credentials: 'include',
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' })
@@ -71,6 +73,7 @@ startButton.addEventListener('click', event => {
   });
 });
 
+// A user submits a chat message
 message_form.addEventListener('submit', event => {
   event.stopPropagation();
   event.preventDefault();
@@ -99,13 +102,15 @@ message_form.addEventListener('submit', event => {
 
 // PRIVATE SOCKET for a specific client
 privateSocket.on('connect', () => {
-  privateSocket.emit('join', `game-${privateSocket.id}`);
-  console.log('on connect--' + privateSocket.id);
+  if (!startButton.classList.contains('hide')) {
+    privateSocket.emit('join', `/game/${gameId}/${privateSocket.id}`);
+    console.log('on emit-- ' + privateSocket.id);
+  }
+  console.log('on connect-- ' + privateSocket.id);
 });
 
 privateSocket.on('yo', data => {
-  console.log('yooo ');
-  console.log(JSON.stringify(data));
+  console.log('yooo ' + JSON.stringify(data));
 });
 
 // TODO: figure out how to do specific socket.id?
@@ -123,12 +128,6 @@ socket.on('ready to start game', card => {
 
 socket.on('not ready to start game', () => {
   alert('Not ready to start game!');
-});
-
-socket.on('update', ({ gameId, cardValue }) => {
-  console.log(
-    'on update player turn for card ' + cardValue + ' in game ' + gameId
-  );
 });
 
 // CHAT in game room
@@ -150,19 +149,3 @@ socket.on('message', ({ gameId, message, user }) => {
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
-
-// Private socket for a specific client
-privateSocket.on('connect', () => {
-  privateSocket.emit('join', `game-${privateSocket.id}`);
-  console.log('on connect--' + privateSocket.id);
-});
-
-privateSocket.on('yo', data => {
-  console.log('yooo ');
-  console.log(JSON.stringify(data));
-});
-
-// TODO: figure out how to do specific socket.id?
-// socket.on('update hand', ({gameId, cardValue}) => {
-//   console.log("on update player turn for card " + cardValue + " in game " + gameId);
-// });
