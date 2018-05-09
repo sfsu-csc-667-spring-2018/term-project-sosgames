@@ -5,6 +5,7 @@ const incrementRoundNumber = require('./incrementRoundNumber')
 const changeGameDirection = require('./changeGameDirection')
   .changeGameDirection;
 const changeWinnerId = require('./changeWinnerId').changeWinnerId;
+const findNumberOfGames = require('./findNumberOfGames').findNumberOfGames;
 const getAllGames = require('./getAllGames').getAllGames;
 
 module.exports = {
@@ -13,5 +14,6 @@ module.exports = {
   incrementRoundNumber,
   changeGameDirection,
   changeWinnerId,
+  findNumberOfGames
   getAllGames
 };
