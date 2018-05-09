@@ -78,6 +78,7 @@ router.post('/:gameId', (request, response, next) => {
   response.render('gameRoom', {
     title: `UNO - Game ${game.id}`,
     username: user.username,
+    userId: user.id,
     isPlayer: true
   });
 });
@@ -89,19 +90,12 @@ router.post('/:gameId', (request, response, next) => {
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
-  // TODO: get privateRooms somehow...
-  // maybe do sth like io.users[idInSameNamespace]
-
   let readyToStart = false;
 
   // Find user.id and current number of players in users_games
   // - UsersGames.findByGameId(gameId)
   let numberOfPlayers = 2;
-  let players = [
-    { id: 1, username: 'test username 1' },
-    { id: 2, username: 'test username 2' },
-    { id: 3, username: 'test username 3' }
-  ];
+  let players = [{ id: 1, username: 'dude' }, { id: 2, username: 'khanh' }];
 
   // Check if 2 <= number of players <= max_number_of_players in games table
   // - Games.findById(gameId)
@@ -177,22 +171,28 @@ router.post('/:gameId/start', (request, response, next) => {
     // TODO: Update games_cards table
 
     // Send game state to game room
-    request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
+    // request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
 
     let rooms = request.app.io.sockets.adapter.rooms;
-    let playersHands = [];
+    let playersRooms = [];
     Object.keys(rooms).forEach(function(room) {
       if (room.includes(`/game/${gameId}/`)) {
-        playersHands.push(room);
+        playersRooms.push(room);
+        // let roomName = room.split('/');
+        // let userId = roomName[3];
+        // console.log(userId);
       }
     });
 
+    console.log(playersRooms);
+
     // TODO: deal card for each player
-    playersHands.forEach(function(playerHand) {
-      request.app.io
-        .to(playerHand)
-        .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
-    });
+    // grab user id from room
+    // use game engine to deal cards by user.id and card.id
+    playersRooms.forEach(function(playerRoom) {});
+    // request.app.io
+    //   .to(playerHand)
+    //   .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
   } else {
     request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
   }

@@ -37,7 +37,7 @@
       <!-- CARD DECKS -->
       <div class="row flex-row">
         <div class="col text-center">
-          <button type="button" class="btn btn-primary btn-lg <% if (!isPlayer || isPlayer == null) {%> hide <% } %>" id="start-btn">START GAME</button>
+          <button type="button" class="btn btn-primary btn-lg" id="start-btn">START GAME</button>
         </div>
       </div>
         <!-- CARD DECKS ENDS -->
@@ -58,6 +58,9 @@
 
       <!-- PLAYER'S HAND -->
       <div class="row card player-hand flex-row hide">
+        <%# if (isPlayer) { %>
+          <input id="userId" name="userId" type="hidden" value="<%= userId %>">
+        <%# } %>
 
         <!-- Play Button -->
         <div class="col play-btn text-center">
