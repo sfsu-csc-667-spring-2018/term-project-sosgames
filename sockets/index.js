@@ -28,7 +28,6 @@ const extractRoute = referer => {
   if (referer.includes('?')) {
     referer = referer.substring(0, referer.indexOf('?'));
   }
-
   const lastForwardSlash = referer.lastIndexOf('/');
   return referer.substring(lastForwardSlash + 1, referer.length);
 };

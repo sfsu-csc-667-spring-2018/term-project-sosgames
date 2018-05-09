@@ -25,17 +25,13 @@ passport.use(
     (request, username, password, done) => {
       User.getUserData(username).then(user => {
         if (!user) {
-          return done(null, false, {
-            errors: 'Invalid Username.'
-          });
+          return done(null, false, { message: 'Invalid Username.' });
         }
         bcrypt.compare(password, user.password).then(result => {
           if (result) {
             return done(null, user.id);
           } else {
-            return done(null, false, {
-              errors: 'Invalid Password.'
-            });
+            return done(null, false, { message: 'Invalid Password.' });
           }
         });
       });
