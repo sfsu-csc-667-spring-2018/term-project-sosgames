@@ -43,11 +43,23 @@ router.get(
   auth.requireAuthentication,
   (request, response, next) => {
     let gameId = request.params.gameId;
+    let user = request.user;
+
+    let isPlayer = false;
+
+    UsersGames.findUserByUserIdAndGameId(user.id, gameId)
+      .then(user => {
+        isPlayer = true;
+      })
+      .catch(error => {
+        response.redirect('/lobby');
+      });
 
     Games.findById(gameId)
       .then(game => {
         response.render('gameRoom', {
-          title: `UNO - Game ${game.id}`
+          title: `UNO - Game ${game.id}`,
+          isPlayer: isPlayer
         });
       })
       .catch(error => {
