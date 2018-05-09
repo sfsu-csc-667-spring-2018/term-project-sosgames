@@ -14,6 +14,6 @@ module.exports = {
   incrementRoundNumber,
   changeGameDirection,
   changeWinnerId,
-  findNumberOfGames
+  findNumberOfGames,
   getAllGames
 };

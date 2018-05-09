@@ -43,11 +43,22 @@ router.get(
   auth.requireAuthentication,
   (request, response, next) => {
     let gameId = request.params.gameId;
+    let user = request.user;
+    let isPlayer = false;
 
     Games.findById(gameId)
       .then(game => {
+        UsersGames.findUserByUserIdAndGameId(user.id, game.id)
+          .then(user => {
+            isPlayer = true;
+          })
+          .catch(error => {});
+
         response.render('gameRoom', {
-          title: `UNO - Game ${game.id}`
+          title: `UNO - Game ${game.id}`,
+          isPlayer: isPlayer,
+          username: user.username,
+          userId: user.id
         });
       })
       .catch(error => {
@@ -66,6 +77,7 @@ router.post('/:gameId', (request, response, next) => {
 
   response.render('gameRoom', {
     title: `UNO - Game ${game.id}`,
+    username: user.username,
     isPlayer: true
   });
 });
@@ -162,7 +174,6 @@ router.post('/:gameId/start', (request, response, next) => {
 
     // Pick 1 card on top
     let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
-    // console.log(JSON.stringify(cardOnTop));
     // TODO: Update games_cards table
 
     // Send game state to game room
@@ -182,16 +193,6 @@ router.post('/:gameId/start', (request, response, next) => {
         .to(playerHand)
         .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
     });
-
-    // Deal to each player
-    // players.forEach((player) => {
-    // TODO: Update games_cards table
-
-    //   // Send 7 cards to each player's hand
-    //   request.app.io
-    //   .to(privateRoom)
-    //   .emit('update hand', { gameId });
-    // });
   } else {
     request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
   }

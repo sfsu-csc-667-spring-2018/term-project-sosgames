@@ -18,9 +18,9 @@
                 <th>Join Game</th>
               </tr>
               <% games.forEach(( game ) => { %>
-                <tr style="margin 3px">
+                <tr style="margin: 3px">
                   <td><%= game.name %></td>
-                  <td><%= game.number_of_players %></td>
+                  <td><%= game.max_number_of_players %></td>
                   <td><a href="/game/<%= game.id %>" class="btn btn-md btn-success btn-block" role="button">Join</a></td>
                   <!-- <td><a href="/game/<%= game.id %>" class="btn btn-sm btn-warning btn-block" role="button">Spectate</button></td> -->
                 </tr>

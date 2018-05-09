@@ -3,6 +3,8 @@ const findByUserId = require('./findUsersGamesByUserId').findByUserId;
 const findByGameId = require('./findUserGamesByGameId').findByGameId;
 const findByUserAndGameId = require('./findUserGamesByUserAndGameId')
   .findByUserAndGameId;
+const findUserByUserIdAndGameId = require('./findUserByUserIdAndGameId')
+  .findUserByUserIdAndGameId;
 const findNumberOfJoinedPlayers = require('./findNumberOfJoinedPlayers')
   .findNumberOfPlayersJoined;
 
@@ -11,5 +13,6 @@ module.exports = {
   findByUserId,
   findByGameId,
   findByUserAndGameId,
+  findUserByUserIdAndGameId,
   findNumberOfJoinedPlayers
 };
