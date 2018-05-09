@@ -22,7 +22,7 @@ const playerCards = document.querySelectorAll('.player-card');
 const message_form = document.querySelector('#chat-message-form');
 const messageList = document.querySelector('#message-list');
 
-const userId = document.querySelector('#userId').value;
+const userIdInput = document.querySelector('#userId');
 
 // USER'S EVENTS
 // Player clicks on the start button
@@ -104,12 +104,11 @@ message_form.addEventListener('submit', event => {
 
 // PRIVATE SOCKET for a specific client
 privateSocket.on('connect', () => {
-  console.log(`/game/${gameId}/${userId}/${privateSocket.id}`);
-
-  // if (!startButton.classList.contains('hide')) {
-  privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
-  console.log('on emit-- ' + privateSocket.id);
-  // }
+  if (!startButton.classList.contains('hide')) {
+    let userId = userIdInput.value;
+    privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
+    console.log('on emit-- ' + privateSocket.id);
+  }
   console.log('on connect-- ' + privateSocket.id);
 });
 

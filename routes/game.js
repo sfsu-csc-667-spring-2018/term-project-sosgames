@@ -9,10 +9,6 @@ const GameEngine = require('../gameEngine');
  */
 // GET /game -- Go to create game page
 router.get('/', auth.requireAuthentication, function(request, response, next) {
-  // DEBUG
-  // gameLogic.draw();
-  // gameLogic.draw2();
-
   response.render('createGame', {
     title: 'UNO - Create Game'
   });
@@ -21,10 +17,17 @@ router.get('/', auth.requireAuthentication, function(request, response, next) {
 // POST /game -- Create a new game
 router.post('/', auth.requireAuthentication, (request, response, next) => {
   const { gameName, numberOfPlayers } = request.body;
+  let user = request.user;
 
   Games.create(gameName, numberOfPlayers)
     .then(gameData => {
-      response.redirect(`/game/${gameData.id}`);
+      UsersGames.create(user.id, gameData.id)
+        .then(userInGame => {
+          response.redirect(`/game/${gameData.id}`);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     })
     .catch(error => {
       response.render('createGame', {
@@ -44,22 +47,24 @@ router.get(
   (request, response, next) => {
     let gameId = request.params.gameId;
     let user = request.user;
-    let isPlayer = false;
 
     Games.findById(gameId)
       .then(game => {
         UsersGames.findUserByUserIdAndGameId(user.id, game.id)
-          .then(user => {
-            isPlayer = true;
+          .then(userGameData => {
+            response.render('gameRoom', {
+              title: `UNO - Game ${game.id}`,
+              isPlayer: true,
+              username: user.username,
+              userId: user.id
+            });
           })
-          .catch(error => {});
-
-        response.render('gameRoom', {
-          title: `UNO - Game ${game.id}`,
-          isPlayer: isPlayer,
-          username: user.username,
-          userId: user.id
-        });
+          .catch(error => {
+            response.render('gameRoom', {
+              title: `UNO - Game ${game.id}`,
+              isPlayer: false
+            });
+          });
       })
       .catch(error => {
         request.flash('error', 'Game does not exist.');
@@ -71,16 +76,21 @@ router.get(
 // POST /game/:gameId -- A new player joins a specific game room
 router.post('/:gameId', (request, response, next) => {
   let gameId = request.params.gameId;
+  let user = request.user;
 
-  // add the new player to users_games table
-  // - UsersGames.create(user.id, game.id);
-
-  response.render('gameRoom', {
-    title: `UNO - Game ${game.id}`,
-    username: user.username,
-    userId: user.id,
-    isPlayer: true
-  });
+  UsersGames.create(user.id, gameId)
+    .then(userInGame => {
+      response.render('gameRoom', {
+        title: `UNO - Game ${gameId}`,
+        username: user.username,
+        userId: user.id,
+        isPlayer: true
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      response.redirect('/lobby');
+    });
 });
 
 /**
@@ -184,7 +194,10 @@ router.post('/:gameId/start', (request, response, next) => {
       }
     });
 
-    console.log(playersRooms);
+    // console.log(playersRooms);
+    for (const playerRoom of playersRooms) {
+      console.log(playerRoom);
+    }
 
     // TODO: deal card for each player
     // grab user id from room
@@ -231,8 +244,6 @@ router.post('/:gameId/chat', (request, response, next) => {
   let user = request.user.username;
 
   let gameId = request.params.gameId;
-  // console.log('recieved chat message : ' + message);
-
   request.app.io.of(`/game/${gameId}`).emit('message', {
     gameId,
     message,
