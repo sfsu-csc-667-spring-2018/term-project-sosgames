@@ -44,19 +44,16 @@ router.get(
   (request, response, next) => {
     let gameId = request.params.gameId;
     let user = request.user;
-
     let isPlayer = false;
-
-    UsersGames.findUserByUserIdAndGameId(user.id, gameId)
-      .then(user => {
-        isPlayer = true;
-      })
-      .catch(error => {
-        response.redirect('/lobby');
-      });
 
     Games.findById(gameId)
       .then(game => {
+        UsersGames.findUserByUserIdAndGameId(user.id, game.id)
+          .then(user => {
+            isPlayer = true;
+          })
+          .catch(error => {});
+
         response.render('gameRoom', {
           title: `UNO - Game ${game.id}`,
           isPlayer: isPlayer
