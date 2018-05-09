@@ -4,7 +4,7 @@ const { Cards, Games, UsersGames, GamesCards } = require('../database');
 const auth = require('../auth/requireAuthentication');
 
 // GET /lobby -- Player visits the lobby
-router.get('/', (request, response, next) => {
+router.get('/', auth.requireAuthentication, (request, response, next) => {
   Games.getAllGames()
     .then(games => {
       response.render('lobby', {
