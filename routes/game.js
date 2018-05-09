@@ -187,25 +187,27 @@ router.post('/:gameId/start', (request, response, next) => {
     let playersRooms = [];
     Object.keys(rooms).forEach(function(room) {
       if (room.includes(`/game/${gameId}/`)) {
-        playersRooms.push(room);
-        // let roomName = room.split('/');
-        // let userId = roomName[3];
-        // console.log(userId);
+        let userId = room.split('/')[3];
+        let playerInRoom = {};
+
+        playerInRoom.room = room;
+        playerInRoom.userId = userId;
+        playersRooms.push(playerInRoom);
       }
     });
 
-    // console.log(playersRooms);
     for (const playerRoom of playersRooms) {
-      console.log(playerRoom);
+      // console.log(playerRoom);
+      request.app.io
+        .to(playerRoom.room)
+        .emit('yo', {
+          hello: `${playerRoom.userId} in room ${playerRoom.room}`
+        });
     }
 
     // TODO: deal card for each player
     // grab user id from room
     // use game engine to deal cards by user.id and card.id
-    playersRooms.forEach(function(playerRoom) {});
-    // request.app.io
-    //   .to(playerHand)
-    //   .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
   } else {
     request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
   }
