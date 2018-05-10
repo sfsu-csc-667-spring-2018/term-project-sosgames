@@ -1,4 +1,7 @@
 </br>
+<div class="text-center">
+  <% include error.ejs %>
+</div>
 
 <div class="row">
   <!-- Test tables -->
@@ -7,48 +10,30 @@
       <div class="lobby">
         <h3>Current Games</h3>
         <div class="table-responsive">
-          <table style="width:100%">
-            <tr>
-              <th>Owner</th>
-              <th>Game Name</th>
-              <th>Total Players</th>
-            </tr>
-            <%var gameNames = ["lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs","lobby1", "noScopeOnly", "noobs"];%>
-              <%var gamePlayerNum = ["2","5","1","2","5","1","2","5","1"];%>
-                <% for(var i=0; i<gameNames.length; i++) {%>
-                  <tr>
-                    <td>
-                      <%= gameNames[i] %>
-                    </td>
-                    <td>
-                      <%= gamePlayerNum[i] %>/8</td>
-                    <td>
-                      <button type="submit" class="btn btn-success">Join</button>
-                    </td>
-                    <td>
-                      <button type="submit" class="btn btn-warning">Spectate</button>
-                    </td>
-                  </tr>
-                  <% } %>
-
-                    <tr>
-                      <td>
-                        <%= gameNames[i-1] %>
-                      </td>
-                      <td>
-                        <%= gamePlayerNum[i-1] %>/8</td>
-                      <td>
-                        <button type="submit" class="btn btn-success disabled">Join(disabled)</button>
-                      </td>
-                      <td>
-                        <button type="submit" class="btn btn-warning disabled">Spectate(disabled)</button>
-                      </td>
-                    </tr>
+          <table style="width:100%" class="text-center">
+            <% if( typeof games != "undefined") { %>
+              <tr>
+                <th>Game Name</th>
+                <th>Total Players</th>
+                <th>Join Game</th>
+              </tr>
+              <% games.forEach(( game ) => { %>
+                <tr style="margin 3px">
+                  <td><%= game.name %></td>
+                  <td><%= game.number_of_players %></td>
+                  <td><a href="/game/<%= game.id %>" class="btn btn-md btn-success btn-block" role="button">Join</a></td>
+                  <!-- <td><a href="/game/<%= game.id %>" class="btn btn-sm btn-warning btn-block" role="button">Spectate</button></td> -->
+                </tr>
+              <% }); %>
+            <% } else { %>
+              <tr><h3>No Current Games.</h3></tr>
+              <tr><h3>Please create a game to play.</h3></tr>
+            <% } %>
           </table>
         </div>
 
 
-        <h3>Scores</h3>
+        <h3>Top Scores</h3>
 
         <div class="table-responsive">
           <table style="width:100%">
@@ -56,8 +41,8 @@
               <th>Name</th>
               <th>Score</th>
             </tr>
-            <%var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"];%>
-              <%var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"];%>
+            <% var namesInGame = ["Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR","Jon", "Robert", "CZAR"]%>
+            <% var scores = ["100","36","6969","100","36","6969","100","36","6969","100","36","6969"]%>
                 <% for(var i=0; i<namesInGame.length; i++) {%>
                   <tr>
                     <td>
@@ -66,44 +51,42 @@
                     <td>
                       <%= scores[i] %>
                     </td>
-                    <% } %>
                   </tr>
+                <% } %>
           </table>
         </div>
 
         <div class="form-signin">
-          <a href="/game" class="btn btn-lg btn-success btn-block" role="button">
-            Create Game
-          </a>
+          <a href="/game" class="btn btn-lg btn-success btn-block" role="button">Create Game</a>
         </div>
+        
       </div>
     </div>
   </div>
-
   <!-- chat section -->
   <div class="col">
-    <div class="chat" style="float: right">
+    <div class="chat">
       <div id="menu">
-        <p class="welcome">Welcome, 
-          <b><%= username %></b>
-        </p>
-        <h3>Chat</h3>
+        <h3>Chat -  Welcome, <b><%= username %></b></h3>
         <div style="clear:both">
-        <div class="chat-messages">
-          <div id="chat-window" class="table-responsive">
-            <table id="message-list" style="width:100%"></table>
+          <div class="chat-messages">
+            <div id="chat-window" class="table-responsive-chat">
+              <table id="message-list" style="width:100%"></table> 
+            </div>
           </div>
-        </div>
-          <form id="chat-message-form">
-            <input id="message" autocomplete="off" />
-            <button id="chat-submit-button">Send</button>
-          </form>
+          
+          <div>
+            <form id="chat-message-form" class="row">
+              <input id="message" class="form-control chat-input" autocomplete="off" />
+              <button id="chat-submit-button" class="btn btn-info form">Send</button>
+            </form>
+          </div>
 
           <script src="/socket.io/socket.io.js"></script>
           <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
           <script src="../scripts/lobby.js"></script>
-
         </div>
       </div>
     </div>
   </div>
+</div>

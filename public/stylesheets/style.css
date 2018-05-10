@@ -126,6 +126,25 @@ body {
 
 /* CHAT STYLING */
 
+#chat-submit-button {
+  float: right;
+  margin-top: 10px;
+  margin-left: 5px;
+  padding: 8px;
+  width: 14%;
+}
+
+.chat-input {
+  margin-top: 13px;
+  margin-left: 15px;
+  padding: 10px;
+  width: 80%;
+}
+
+.game-chat {
+  width: 73%;
+  margin-left: 15px;
+}
 /* WIP disabled to fix footer */
 /* p {
   animation-duration: 1s;
@@ -165,6 +184,7 @@ td.self-chat-message {
   /* float: right; */
   border-radius: 25px;
   padding: 0.5rem;
+  margin: 5px;
 }
 
 td.external-chat-message {
@@ -179,14 +199,26 @@ td.external-chat-message {
 
 .table-responsive {
   background-color: darkseagreen;
-  height: 150px;
+  height: 30vh;
   overflow: auto;
   width: 100%;
   border: 2px solid blue;
   border-radius: 0.25rem;
   transition: all 0.1s ease-in-out;
   padding: 10px;
-  margin: 10px;
+  margin: 0px 0px 10px 0px;
+}
+
+.table-responsive-chat {
+  background-color: darkseagreen;
+  height: 65.5vh;
+  overflow: auto;
+  width: 100%;
+  border: 2px solid blue;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
+  padding: 10px;
+  margin: 0px 0px 15px 0px;
 }
 
 /*endGamePage*/
@@ -466,7 +498,7 @@ div.sprite[data-card-value='blue-draw-two'] {
 }
 
 /* Wild Cards */
-div.sprite.[data-card-value='wild'] {
+div.sprite[data-card-value='wild'] {
   background-position: -1856px 0;
 }
 
