@@ -5,6 +5,7 @@ const changeInDeck = require('./changeInDeck').changeInDeck;
 const changeInHand = require('./changeInHand').changeInHand;
 const changeUserId = require('./changeUserId').changeUserId;
 const changeOnTop = require('./changeOnTop').changeOnTop;
+const draw = require('./draw').draw;
 
 module.exports = {
   create,
@@ -13,5 +14,6 @@ module.exports = {
   changeInDeck,
   changeInHand,
   changeUserId,
-  changeOnTop
+  changeOnTop,
+  draw
 };
