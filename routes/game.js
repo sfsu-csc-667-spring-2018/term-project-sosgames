@@ -50,6 +50,7 @@ router.get(
 
     Games.findById(gameId)
       .then(game => {
+        // Find existing user in game
         UsersGames.findUserByUserIdAndGameId(user.id, game.id)
           .then(userGameData => {
             response.render('gameRoom', {
@@ -60,10 +61,27 @@ router.get(
             });
           })
           .catch(error => {
-            response.render('gameRoom', {
-              title: `UNO - Game ${game.id}`,
-              isPlayer: false
-            });
+            // Create new player for a game
+            // TODO: check max number of players for gameId
+            UsersGames.create(user.id, gameId)
+              .then(userInGame => {
+                response.render('gameRoom', {
+                  title: `UNO - Game ${gameId}`,
+                  username: user.username,
+                  userId: user.id,
+                  isPlayer: true
+                });
+              })
+              .catch(error => {
+                // If game maxed out number of players
+                console.log(error);
+                response.redirect('/lobby');
+              });
+            // Not supported -- This is for spectator mode
+            // response.render('gameRoom', {
+            //   title: `UNO - Game ${game.id}`,
+            //   isPlayer: false
+            // });
           });
       })
       .catch(error => {
@@ -73,25 +91,28 @@ router.get(
   }
 );
 
+// Handle this in GET /game/:gameId since we dont support spectator mode
 // POST /game/:gameId -- A new player joins a specific game room
-router.post('/:gameId', (request, response, next) => {
-  let gameId = request.params.gameId;
-  let user = request.user;
+// router.post('/:gameId', (request, response, next) => {
+//   let gameId = request.params.gameId;
+//   let user = request.user;
 
-  UsersGames.create(user.id, gameId)
-    .then(userInGame => {
-      response.render('gameRoom', {
-        title: `UNO - Game ${gameId}`,
-        username: user.username,
-        userId: user.id,
-        isPlayer: true
-      });
-    })
-    .catch(error => {
-      console.log(error);
-      response.redirect('/lobby');
-    });
-});
+//   UsersGames.create(user.id, gameId)
+//     .then(userInGame => {
+//       console.log('join!');
+
+//       response.render('gameRoom', {
+//         title: `UNO - Game ${gameId}`,
+//         username: user.username,
+//         userId: user.id,
+//         isPlayer: true
+//       });
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       response.redirect('/lobby');
+//     });
+// });
 
 /**
  * GAME LOGIC
@@ -183,6 +204,7 @@ router.post('/:gameId/start', (request, response, next) => {
     // Send game state to game room
     // request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
 
+    // Get players' private rooms in the same game
     let rooms = request.app.io.sockets.adapter.rooms;
     let playersRooms = [];
     Object.keys(rooms).forEach(function(room) {
@@ -197,12 +219,9 @@ router.post('/:gameId/start', (request, response, next) => {
     });
 
     for (const playerRoom of playersRooms) {
-      // console.log(playerRoom);
-      request.app.io
-        .to(playerRoom.room)
-        .emit('yo', {
-          hello: `${playerRoom.userId} in room ${playerRoom.room}`
-        });
+      request.app.io.to(playerRoom.room).emit('yo', {
+        hello: `${playerRoom.userId} in room ${playerRoom.room}`
+      });
     }
 
     // TODO: deal card for each player
