@@ -9,10 +9,6 @@ const GameEngine = require('../gameEngine');
  */
 // GET /game -- Go to create game page
 router.get('/', auth.requireAuthentication, function(request, response, next) {
-  // DEBUG
-  // gameLogic.draw();
-  // gameLogic.draw2();
-
   response.render('createGame', {
     title: 'UNO - Create Game'
   });
@@ -21,10 +17,17 @@ router.get('/', auth.requireAuthentication, function(request, response, next) {
 // POST /game -- Create a new game
 router.post('/', auth.requireAuthentication, (request, response, next) => {
   const { gameName, numberOfPlayers } = request.body;
+  let user = request.user;
 
   Games.create(gameName, numberOfPlayers)
     .then(gameData => {
-      response.redirect(`/game/${gameData.id}`);
+      UsersGames.create(user.id, gameData.id)
+        .then(userInGame => {
+          response.redirect(`/game/${gameData.id}`);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     })
     .catch(error => {
       response.render('createGame', {
@@ -44,22 +47,42 @@ router.get(
   (request, response, next) => {
     let gameId = request.params.gameId;
     let user = request.user;
-    let isPlayer = false;
 
     Games.findById(gameId)
       .then(game => {
+        // Find existing user in game
         UsersGames.findUserByUserIdAndGameId(user.id, game.id)
-          .then(user => {
-            isPlayer = true;
+          .then(userGameData => {
+            response.render('gameRoom', {
+              title: `UNO - Game ${game.id}`,
+              isPlayer: true,
+              username: user.username,
+              userId: user.id
+            });
           })
-          .catch(error => {});
-
-        response.render('gameRoom', {
-          title: `UNO - Game ${game.id}`,
-          isPlayer: isPlayer,
-          username: user.username,
-          userId: user.id
-        });
+          .catch(error => {
+            // Create new player for a game
+            // TODO: check max number of players for gameId
+            UsersGames.create(user.id, gameId)
+              .then(userInGame => {
+                response.render('gameRoom', {
+                  title: `UNO - Game ${gameId}`,
+                  username: user.username,
+                  userId: user.id,
+                  isPlayer: true
+                });
+              })
+              .catch(error => {
+                // If game maxed out number of players
+                console.log(error);
+                response.redirect('/lobby');
+              });
+            // Not supported -- This is for spectator mode
+            // response.render('gameRoom', {
+            //   title: `UNO - Game ${game.id}`,
+            //   isPlayer: false
+            // });
+          });
       })
       .catch(error => {
         request.flash('error', 'Game does not exist.');
@@ -68,19 +91,28 @@ router.get(
   }
 );
 
+// Handle this in GET /game/:gameId since we dont support spectator mode
 // POST /game/:gameId -- A new player joins a specific game room
-router.post('/:gameId', (request, response, next) => {
-  let gameId = request.params.gameId;
+// router.post('/:gameId', (request, response, next) => {
+//   let gameId = request.params.gameId;
+//   let user = request.user;
 
-  // add the new player to users_games table
-  // - UsersGames.create(user.id, game.id);
+//   UsersGames.create(user.id, gameId)
+//     .then(userInGame => {
+//       console.log('join!');
 
-  response.render('gameRoom', {
-    title: `UNO - Game ${game.id}`,
-    username: user.username,
-    isPlayer: true
-  });
-});
+//       response.render('gameRoom', {
+//         title: `UNO - Game ${gameId}`,
+//         username: user.username,
+//         userId: user.id,
+//         isPlayer: true
+//       });
+//     })
+//     .catch(error => {
+//       console.log(error);
+//       response.redirect('/lobby');
+//     });
+// });
 
 /**
  * GAME LOGIC
@@ -89,19 +121,12 @@ router.post('/:gameId', (request, response, next) => {
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
-  // TODO: get privateRooms somehow...
-  // maybe do sth like io.users[idInSameNamespace]
-
   let readyToStart = false;
 
   // Find user.id and current number of players in users_games
   // - UsersGames.findByGameId(gameId)
   let numberOfPlayers = 2;
-  let players = [
-    { id: 1, username: 'test username 1' },
-    { id: 2, username: 'test username 2' },
-    { id: 3, username: 'test username 3' }
-  ];
+  let players = [{ id: 1, username: 'dude' }, { id: 2, username: 'khanh' }];
 
   // Check if 2 <= number of players <= max_number_of_players in games table
   // - Games.findById(gameId)
@@ -177,22 +202,31 @@ router.post('/:gameId/start', (request, response, next) => {
     // TODO: Update games_cards table
 
     // Send game state to game room
-    request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
+    // request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
 
+    // Get players' private rooms in the same game
     let rooms = request.app.io.sockets.adapter.rooms;
-    let playersHands = [];
+    let playersRooms = [];
     Object.keys(rooms).forEach(function(room) {
       if (room.includes(`/game/${gameId}/`)) {
-        playersHands.push(room);
+        let userId = room.split('/')[3];
+        let playerInRoom = {};
+
+        playerInRoom.room = room;
+        playerInRoom.userId = userId;
+        playersRooms.push(playerInRoom);
       }
     });
 
+    for (const playerRoom of playersRooms) {
+      request.app.io.to(playerRoom.room).emit('yo', {
+        hello: `${playerRoom.userId} in room ${playerRoom.room}`
+      });
+    }
+
     // TODO: deal card for each player
-    playersHands.forEach(function(playerHand) {
-      request.app.io
-        .to(playerHand)
-        .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
-    });
+    // grab user id from room
+    // use game engine to deal cards by user.id and card.id
   } else {
     request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
   }
@@ -231,8 +265,6 @@ router.post('/:gameId/chat', (request, response, next) => {
   let user = request.user.username;
 
   let gameId = request.params.gameId;
-  // console.log('recieved chat message : ' + message);
-
   request.app.io.of(`/game/${gameId}`).emit('message', {
     gameId,
     message,

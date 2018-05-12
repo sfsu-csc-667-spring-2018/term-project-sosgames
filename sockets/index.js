@@ -16,9 +16,8 @@ io.on('connection', socket => {
     console.log('new socket: ' + socket.id);
 
     socket.on('join', function(room) {
-      console.log('after socket join... ' + socket.id + ' -- room: ' + room);
       socket.join(room);
-      console.log('dudeee \n');
+      console.log('after socket join... ' + socket.id + ' -- room: ' + room);
     });
   }
 });
