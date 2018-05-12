@@ -137,36 +137,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// GamesCards.removeAllById(1);
-// Games.create('another game', 5);
+// GamesCards.changeInDeck(true,1,7);
+// GamesCards.changeInDeck(true,1,9);
+// GamesCards.changeInDeck(true,1,10);
+// GamesCards.changeInDeck(true,1,3);
+// GamesCards.changeInDeck(true,1,4);
 
-// Games.findNumberOfGames()
-//   .then(numberOfGames => {
-//     console.log(numberOfGames.count);
-//   })
-
-// UsersGames.create(2,1)
-
-// UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
-//   console.log(numberOfPlayers.count);
-// });
-
-// GamesCards.create(3);
-
-// GamesCards.findAllCardsInGame(2)
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
-
-// boolean, gameid, cardid
-// GamesCards.changeInDeck(true, 1, 100);
-
-// GamesCards.changeInHand(true, 1, 100);
-// GamesCards.changeUserId(1, 1, 100);
-
-GamesCards.changeOnTop(true, 1, 100);
+GamesCards.draw(1, 1);
 
 module.exports = app;
