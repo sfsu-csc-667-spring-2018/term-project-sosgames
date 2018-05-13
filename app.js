@@ -143,6 +143,6 @@ app.use(function(err, req, res, next) {
 // GamesCards.changeInDeck(true,1,3);
 // GamesCards.changeInDeck(true,1,4);
 
-GamesCards.draw(1, 1);
+// GamesCards.draw(1, 1);
 
 module.exports = app;
