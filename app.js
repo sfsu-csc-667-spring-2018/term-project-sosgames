@@ -137,12 +137,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// GamesCards.changeInDeck(true,1,7);
-// GamesCards.changeInDeck(true,1,9);
-// GamesCards.changeInDeck(true,1,10);
-// GamesCards.changeInDeck(true,1,3);
-// GamesCards.changeInDeck(true,1,4);
-
-// GamesCards.draw(1, 1);
-
 module.exports = app;
