@@ -58,7 +58,7 @@
 
       <!-- PLAYER'S HAND -->
       <div class="row card player-hand flex-row hide">
-        <% if (isPlayer) { %>
+        <% if ( typeof isPlayer !== "undefined" && isPlayer) { %>
           <input id="userId" name="userId" type="hidden" value="<%= userId %>">
         <% } %>
 
