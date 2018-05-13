@@ -134,75 +134,15 @@ router.post('/:gameId/start', (request, response, next) => {
         readyToStart = true;
       }
 
-      // Get players' id in game
-      for (const userGame of usersGamesData) {
-        let player = {
-          userId: userGame.user_id,
-          numberOfCards: userGame.number_of_cards
-        };
-        players.push(player);
-      }
-
       if (readyToStart) {
-        // - cardsInGame = GamesCards.findCardsByGameId(gameId) + Cards.getCards()
-
-        let cardsInGame = [
-          {
-            id: 1,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: '2',
-            color: 'red'
-          },
-          {
-            id: 2,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: '5',
-            color: 'blue'
-          },
-          {
-            id: 3,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: 'wild',
-            color: 'wild'
-          },
-          {
-            id: 4,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: 'reverse',
-            color: 'yellow'
-          },
-          {
-            id: 5,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: '1',
-            color: 'yellow'
-          },
-          {
-            id: 6,
-            inHand: false,
-            inDeck: false,
-            onTop: false,
-            value: '4',
-            color: 'green'
-          }
-        ];
-
-        // Pick 1 card on top
-        let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
-        // TODO: Update games_cards table
-
-        // Send game state to game room
-        // request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
+        // Get all players' ids in game
+        for (const userGame of usersGamesData) {
+          let player = {
+            userId: userGame.user_id,
+            numberOfCards: userGame.number_of_cards
+          };
+          players.push(player);
+        }
 
         // Get players' private rooms in the same game
         let rooms = request.app.io.sockets.adapter.rooms;
@@ -218,29 +158,42 @@ router.post('/:gameId/start', (request, response, next) => {
           }
         });
 
-        for (const playerRoom of playersRooms) {
-          request.app.io.to(playerRoom.room).emit('yo', {
-            hello: `${playerRoom.userId} in room ${playerRoom.room}`
-          });
-        }
+        GamesCards.findAllCardsInGame(gameId)
+          .then(cardsInGame => {
+            // Pick 1 card on top
+            let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
+            cardsInGame.splice(cardOnTop[0], 1);
+            // Update games_cards (gameId, cardOnTop.card_id, cardOnTop.on_top)
 
-        // TODO: deal card for each player
-        // grab user id from room
-        // use game engine to deal cards by user.id and card.id
+            // Send game state to game room
+            request.app.io
+              .of(`/game/${gameId}`)
+              .emit('ready to start game', cardOnTop[1]);
+
+            // Deal cards
+            let cardsInHands = GameEngine.dealCards(
+              cardsInGame,
+              usersGamesData
+            );
+
+            // Send cards to each hand
+            for (const playerRoom of playersRooms) {
+              let cardsInPlayerHand = cardsInHands[playerRoom.userId];
+              request.app.io
+                .to(playerRoom.room)
+                .emit('update hand', cardsInPlayerHand.cards);
+            }
+
+            // TODO: Update users_games(number_of_cards=7) and games_cards(on_top, in_hand, user_id) tables
+          })
+          .catch(error => {
+            console.log(error);
+          });
       } else {
         request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
       }
     });
   });
-
-  // If not valid --> app.io.emit('not ready')
-
-  // Else --> start dealing
-  // - GamesCards.findById(gameId)
-  // Pick randomly 7 cards for each player by updating games_cards table
-  // -- GamesCards.dealToUser(gameId, user.id, card.id) --> set in_hand = true
-  // Pick randomly 1 numbered card for on top from games_cards table
-  // -- GamesCards.pickOnTop(gameId) --> set on_top = true
 
   response.sendStatus(200);
 });

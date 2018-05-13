@@ -17,6 +17,7 @@ const gameDeck = document.querySelector('.game-card-deck');
 const cardOnTop = document.querySelector('#card-on-top');
 
 const playerHand = document.querySelector('.player-hand');
+const cardsInHand = document.querySelector('#cards-in-hand');
 const playerCards = document.querySelectorAll('.player-card');
 
 const message_form = document.querySelector('#chat-message-form');
@@ -112,14 +113,24 @@ privateSocket.on('connect', () => {
   console.log('on connect-- ' + privateSocket.id);
 });
 
-privateSocket.on('yo', data => {
-  console.log('yooo ' + JSON.stringify(data));
-});
+privateSocket.on('update hand', cards => {
+  // console.log(playerHand);
+  for (const card of cards) {
+    let cardData = card.value.includes('wild')
+      ? `${card.value}`
+      : `${card.color}-${card.value}`;
 
-// TODO: figure out how to do specific socket.id?
-// privateSocket.on('update hand', ({gameId, cardValue}) => {
-//   console.log("on update player turn for card " + cardValue + " in game " + gameId);
-// });
+    let div = document.createElement('div');
+    div.className = 'col';
+
+    let innerDiv = document.createElement('div');
+    innerDiv.className = 'player-card centered sprite';
+    innerDiv.setAttribute('data-card-value', cardData);
+
+    div.appendChild(innerDiv);
+    cardsInHand.appendChild(div);
+  }
+});
 
 // GAME ROOM specific sockets
 socket.on('ready to start game', card => {
