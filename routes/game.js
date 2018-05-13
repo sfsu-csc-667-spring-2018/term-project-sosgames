@@ -47,7 +47,6 @@ router.get(
   (request, response, next) => {
     let gameId = request.params.gameId;
     let user = request.user;
-    console.log('got redirected to GET GAME');
 
     Games.findById(gameId)
       .then(game => {
@@ -62,27 +61,47 @@ router.get(
             });
           })
           .catch(error => {
-            // Create new player for a game
-            // TODO: check max number of players for gameId
-            UsersGames.create(user.id, gameId)
-              .then(userInGame => {
-                response.render('gameRoom', {
-                  title: `UNO - Game ${gameId}`,
-                  username: user.username,
-                  userId: user.id,
-                  isPlayer: true
-                });
+            UsersGames.findByGameId(gameId)
+              .then(usersGamesData => {
+                let numberOfPlayers = usersGamesData.length + 1;
+
+                if (
+                  numberOfPlayers >= 1 &&
+                  numberOfPlayers <= game.max_number_of_players
+                ) {
+                  // Create new player for a game
+                  UsersGames.create(user.id, gameId).then(userInGame => {
+                    response.render('gameRoom', {
+                      title: `UNO - Game ${gameId}`,
+                      username: user.username,
+                      userId: user.id,
+                      isPlayer: true
+                    });
+                  });
+                } else {
+                  request.flash(
+                    'error',
+                    `Game Room ${game.name} is already full.`
+                  );
+                  response.redirect('/lobby');
+                }
               })
               .catch(error => {
-                // If game maxed out number of players
-                console.log(error);
-                response.redirect('/lobby');
+                // Create new player for a game
+                UsersGames.create(user.id, gameId)
+                  .then(userInGame => {
+                    response.render('gameRoom', {
+                      title: `UNO - Game ${gameId}`,
+                      username: user.username,
+                      userId: user.id,
+                      isPlayer: true
+                    });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    response.redirect('/lobby');
+                  });
               });
-            // Not supported -- This is for spectator mode
-            // response.render('gameRoom', {
-            //   title: `UNO - Game ${game.id}`,
-            //   isPlayer: false
-            // });
           });
       })
       .catch(error => {
@@ -91,29 +110,6 @@ router.get(
       });
   }
 );
-
-// Handle this in GET /game/:gameId since we dont support spectator mode
-// POST /game/:gameId -- A new player joins a specific game room
-// router.post('/:gameId', (request, response, next) => {
-//   let gameId = request.params.gameId;
-//   let user = request.user;
-
-//   UsersGames.create(user.id, gameId)
-//     .then(userInGame => {
-//       console.log('join!');
-
-//       response.render('gameRoom', {
-//         title: `UNO - Game ${gameId}`,
-//         username: user.username,
-//         userId: user.id,
-//         isPlayer: true
-//       });
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       response.redirect('/lobby');
-//     });
-// });
 
 /**
  * GAME LOGIC
