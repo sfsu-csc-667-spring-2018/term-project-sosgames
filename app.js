@@ -137,4 +137,26 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// GamesCards.getCardInDeck(1)
+//   .then( cardData => {
+//     console.log(cardData);
+//   });
+
+// for(i = 0; i < 108; i++){
+//   GamesCards.changeInDeck(true,1,i);
+// }
+
+GamesCards.draw(1, 1, 2)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+
+// GamesCards.findCardById(1,1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
 module.exports = app;
