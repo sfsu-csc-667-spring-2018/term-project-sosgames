@@ -146,7 +146,7 @@ app.use(function(err, req, res, next) {
 //   GamesCards.changeInDeck(true,1,i);
 // }
 
-GamesCards.draw(1, 1, 2)
+GamesCards.draw(1, 1, 7)
   .then(data => {
     console.log(data);
   })
