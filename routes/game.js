@@ -21,8 +21,8 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
 
   Games.create(gameName, numberOfPlayers)
     .then(gameData => {
-      UsersGames.create(user.id, gameData.id)
-        .then(userInGame => {
+      GamesCards.create(gameData.id)
+        .then(() => {
           response.redirect(`/game/${gameData.id}`);
         })
         .catch(error => {
@@ -61,27 +61,47 @@ router.get(
             });
           })
           .catch(error => {
-            // Create new player for a game
-            // TODO: check max number of players for gameId
-            UsersGames.create(user.id, gameId)
-              .then(userInGame => {
-                response.render('gameRoom', {
-                  title: `UNO - Game ${gameId}`,
-                  username: user.username,
-                  userId: user.id,
-                  isPlayer: true
-                });
+            UsersGames.findByGameId(gameId)
+              .then(usersGamesData => {
+                let numberOfPlayers = usersGamesData.length + 1;
+
+                if (
+                  numberOfPlayers >= 1 &&
+                  numberOfPlayers <= game.max_number_of_players
+                ) {
+                  // Create new player for a game
+                  UsersGames.create(user.id, gameId).then(userInGame => {
+                    response.render('gameRoom', {
+                      title: `UNO - Game ${gameId}`,
+                      username: user.username,
+                      userId: user.id,
+                      isPlayer: true
+                    });
+                  });
+                } else {
+                  request.flash(
+                    'error',
+                    `Game Room ${game.name} is already full.`
+                  );
+                  response.redirect('/lobby');
+                }
               })
               .catch(error => {
-                // If game maxed out number of players
-                console.log(error);
-                response.redirect('/lobby');
+                // Create new player for a game
+                UsersGames.create(user.id, gameId)
+                  .then(userInGame => {
+                    response.render('gameRoom', {
+                      title: `UNO - Game ${gameId}`,
+                      username: user.username,
+                      userId: user.id,
+                      isPlayer: true
+                    });
+                  })
+                  .catch(error => {
+                    console.log(error);
+                    response.redirect('/lobby');
+                  });
               });
-            // Not supported -- This is for spectator mode
-            // response.render('gameRoom', {
-            //   title: `UNO - Game ${game.id}`,
-            //   isPlayer: false
-            // });
           });
       })
       .catch(error => {
@@ -91,29 +111,6 @@ router.get(
   }
 );
 
-// Handle this in GET /game/:gameId since we dont support spectator mode
-// POST /game/:gameId -- A new player joins a specific game room
-// router.post('/:gameId', (request, response, next) => {
-//   let gameId = request.params.gameId;
-//   let user = request.user;
-
-//   UsersGames.create(user.id, gameId)
-//     .then(userInGame => {
-//       console.log('join!');
-
-//       response.render('gameRoom', {
-//         title: `UNO - Game ${gameId}`,
-//         username: user.username,
-//         userId: user.id,
-//         isPlayer: true
-//       });
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       response.redirect('/lobby');
-//     });
-// });
-
 /**
  * GAME LOGIC
  */
@@ -121,115 +118,82 @@ router.get(
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
+
   let readyToStart = false;
+  let numberOfPlayers = 0,
+    maxNumberOfPlayers = 0;
+  let players = [];
 
-  // Find user.id and current number of players in users_games
-  // - UsersGames.findByGameId(gameId)
-  let numberOfPlayers = 2;
-  let players = [{ id: 1, username: 'dude' }, { id: 2, username: 'khanh' }];
+  Games.findById(gameId).then(gameData => {
+    maxNumberOfPlayers = gameData.max_number_of_players;
 
-  // Check if 2 <= number of players <= max_number_of_players in games table
-  // - Games.findById(gameId)
-  let maxNumberOfPlayers = 5;
-  if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
-    readyToStart = true;
-  }
-
-  // If not valid --> app.io.emit('not ready')
-
-  // Else --> start dealing
-  // - GamesCards.findById(gameId)
-  // Pick randomly 7 cards for each player by updating games_cards table
-  // -- GamesCards.dealToUser(gameId, user.id, card.id) --> set in_hand = true
-  // Pick randomly 1 numbered card for on top from games_cards table
-  // -- GamesCards.pickOnTop(gameId) --> set on_top = true
-
-  if (readyToStart) {
-    // - cardsInGame = GamesCards.findCardsByGameId(gameId) + Cards.getCards()
-    let cardsInGame = [
-      {
-        id: 1,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '2',
-        color: 'red'
-      },
-      {
-        id: 2,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '5',
-        color: 'blue'
-      },
-      {
-        id: 3,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: 'wild',
-        color: 'wild'
-      },
-      {
-        id: 4,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: 'reverse',
-        color: 'yellow'
-      },
-      {
-        id: 5,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '1',
-        color: 'yellow'
-      },
-      {
-        id: 6,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '4',
-        color: 'green'
+    UsersGames.findByGameId(gameId).then(usersGamesData => {
+      // Check if valid number of players to start
+      numberOfPlayers = usersGamesData.length;
+      if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
+        readyToStart = true;
       }
-    ];
 
-    // Pick 1 card on top
-    let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
-    // TODO: Update games_cards table
+      if (readyToStart) {
+        // Get all players' ids in game
+        for (const userGame of usersGamesData) {
+          let player = {
+            userId: userGame.user_id,
+            numberOfCards: userGame.number_of_cards
+          };
+          players.push(player);
+        }
 
-    // Send game state to game room
-    // request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
+        // Get players' private rooms in the same game
+        let rooms = request.app.io.sockets.adapter.rooms;
+        let playersRooms = [];
+        Object.keys(rooms).forEach(function(room) {
+          if (room.includes(`/game/${gameId}/`)) {
+            let userId = room.split('/')[3];
+            let playerInRoom = {};
 
-    // Get players' private rooms in the same game
-    let rooms = request.app.io.sockets.adapter.rooms;
-    let playersRooms = [];
-    Object.keys(rooms).forEach(function(room) {
-      if (room.includes(`/game/${gameId}/`)) {
-        let userId = room.split('/')[3];
-        let playerInRoom = {};
+            playerInRoom.room = room;
+            playerInRoom.userId = userId;
+            playersRooms.push(playerInRoom);
+          }
+        });
 
-        playerInRoom.room = room;
-        playerInRoom.userId = userId;
-        playersRooms.push(playerInRoom);
+        GamesCards.findAllCardsInGame(gameId)
+          .then(cardsInGame => {
+            // Pick 1 card on top
+            let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
+            cardsInGame.splice(cardOnTop[0], 1);
+            // Update games_cards (gameId, cardOnTop.card_id, cardOnTop.on_top)
+
+            // Send game state to game room
+            request.app.io
+              .of(`/game/${gameId}`)
+              .emit('ready to start game', cardOnTop[1]);
+
+            // Deal cards
+            let cardsInHands = GameEngine.dealCards(
+              cardsInGame,
+              usersGamesData
+            );
+
+            // Send cards to each hand
+            for (const playerRoom of playersRooms) {
+              let cardsInPlayerHand = cardsInHands[playerRoom.userId];
+              request.app.io
+                .to(playerRoom.room)
+                .emit('update hand', cardsInPlayerHand.cards);
+            }
+
+            // TODO: Update users_games(number_of_cards=7) and games_cards(on_top, in_hand, user_id) tables
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      } else {
+        request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
       }
     });
-
-    for (const playerRoom of playersRooms) {
-      request.app.io.to(playerRoom.room).emit('yo', {
-        hello: `${playerRoom.userId} in room ${playerRoom.room}`
-      });
-    }
-
-    // TODO: deal card for each player
-    // grab user id from room
-    // use game engine to deal cards by user.id and card.id
-  } else {
-    request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
-  }
+  });
 
   response.sendStatus(200);
 });
