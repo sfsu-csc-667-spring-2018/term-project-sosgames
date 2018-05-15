@@ -146,15 +146,25 @@ app.use(function(err, req, res, next) {
 //   GamesCards.changeInDeck(true,1,i);
 // }
 
-GamesCards.draw(1, 1, 7)
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+// GamesCards.draw(1, 1, 7)
+//   .then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
 
 // GamesCards.findCardById(1,1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
+// GamesCards.getNumberCardInDeck(1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
+// GamesCards.getCardInDeck(1)
 //   .then(card => {
 //     console.log(card);
 //   })
