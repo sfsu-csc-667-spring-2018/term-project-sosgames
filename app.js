@@ -169,4 +169,8 @@ app.use(function(err, req, res, next) {
 //     console.log(card);
 //   })
 
+GamesCards.flipTopCard(1).then(card => {
+  console.log(card);
+});
+
 module.exports = app;
