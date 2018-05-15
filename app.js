@@ -49,18 +49,18 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
-app.enable('trust proxy'); // add this line DEBUG
+app.enable('trust proxy');
 app.use(
   session({
     store: new (require('connect-pg-simple')(session))(),
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    proxy: true, // add this line DEBUG
+    proxy: true,
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       secure: app.get('env') != 'development'

@@ -25,18 +25,12 @@ passport.use(
     (request, username, password, done) => {
       User.getUserData(username).then(user => {
         if (!user) {
-          //DEBUG ADDED
-          console.log('Invalid username case in LocalStrategy');
           return done(null, false, { message: 'Invalid Username.' });
         }
         bcrypt.compare(password, user.password).then(result => {
           if (result) {
-            //DEBUG ADDED
-            console.log('Valid user case in LocalStrategy');
             return done(null, user.id);
           } else {
-            // DEBUG ADDED
-            console.log('Invalid password case in LocalStrategy');
             return done(null, false, { message: 'Invalid Password.' });
           }
         });
