@@ -167,6 +167,6 @@ app.use(function(err, req, res, next) {
 // GamesCards.changeInHand(true, 1, 100);
 // GamesCards.changeUserId(1, 1, 100);
 
-GamesCards.changeOnTop(true, 1, 100);
+// GamesCards.changeOnTop(true, 1, 100);
 
 module.exports = app;
