@@ -1,12 +1,12 @@
 const database = require('../connection');
 const findById = require('./findGameById').findById;
 
-const UPDATE_IS_REVERSED_QUERY = `UPDATE games SET is_reversed = $1 WHERE id = $2`;
+const UPDATE_IS_REVERSED_QUERY = `UPDATE games SET is_reversed = $1 WHERE id = $2 RETURNING is_reversed`;
 
 const changeGameDirection = gameId => {
-  findById(gameId)
+  return findById(gameId)
     .then(gameData => {
-      return database.none(UPDATE_IS_REVERSED_QUERY, [
+      return database.one(UPDATE_IS_REVERSED_QUERY, [
         !gameData.is_reversed,
         gameId
       ]);

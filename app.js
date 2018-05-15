@@ -137,12 +137,40 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// GamesCards.changeInDeck(true,1,7);
-// GamesCards.changeInDeck(true,1,9);
-// GamesCards.changeInDeck(true,1,10);
-// GamesCards.changeInDeck(true,1,3);
-// GamesCards.changeInDeck(true,1,4);
+// GamesCards.getCardInDeck(1)
+//   .then( cardData => {
+//     console.log(cardData);
+//   });
 
-GamesCards.draw(1, 1);
+// for(i = 0; i < 108; i++){
+//   GamesCards.changeInDeck(true,1,i);
+// }
+
+// GamesCards.draw(1, 1, 7)
+//   .then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+
+// GamesCards.findCardById(1,1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
+// GamesCards.getNumberCardInDeck(1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
+// GamesCards.getCardInDeck(1)
+//   .then(card => {
+//     console.log(card);
+//   })
+
+GamesCards.flipTopCard(1).then(card => {
+  console.log(card);
+});
 
 module.exports = app;
