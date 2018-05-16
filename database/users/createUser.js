@@ -11,7 +11,8 @@ const createUser = (
   total_score,
   email
 ) => {
-  db.one(CREATE_USER, [username, password, profile_picture_path, 0, email]);
+  // test this plz :D
+  return db.one(CREATE_USER, [username, password, profile_picture_path, 0, email]);
 };
 
 module.exports = {
