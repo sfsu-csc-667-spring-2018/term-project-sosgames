@@ -16,22 +16,20 @@
     <div class="container">
       <!-- PLAYERS LIST -->
       <div class="row card game-players flex-row">
-        <div class="text-center col player-avatar player-active">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image">
-          <div class="player-name">Player 1 (You)</div>
-          <div class="player-num-cards">Cards: 4</div>
-        </div>
-        <div class="text-center col player-avatar">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image">
-          <div class="player-name">Player 2</div>
-          <div class="player-num-cards">Cards: 1</div>
-        </div>
-        <div class="text-center col player-avatar">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image">
-          <div class="player-name">Player 3</div>
-          <div class="player-num-cards">Cards: 2</div>
-        </div>
+        <% if( typeof players != "undefined") { %>
+
+          <% players.forEach(( player ) => { %>
+            <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">
+              <img class="rounded-circle" src="<%= player.profile_path %>"
+                    alt="player image">
+              <div class="player-name"><%= player.username %> </div>
+              <div class="player-points">Score: <%= player.current_score %></div>
+              <div class="player-num-cards">Cards: <%= player.number_of_cards %></div>
+            </div>
+          <% }); %>
+        <% } %>       
       </div>
+
       <!-- PLAYERS LIST ENDS -->
 
       <!-- CARD DECKS -->
