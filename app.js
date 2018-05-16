@@ -144,8 +144,20 @@ app.use(function(err, req, res, next) {
 //     console.log(cardData);
 //   });
 
-// for(i = 0; i < 108; i++){
+// for(i = 0; i < 109; i++){
 //   GamesCards.changeInDeck(true,1,i);
+// }
+
+// for(i = 0; i < 109; i++){
+//   GamesCards.changeInHand(false,1,i);
+// }
+
+// for(i = 0; i < 109; i++){
+//   GamesCards.changeOnTop(false,1,i);
+// }
+
+// for(i = 0; i < 109; i++){
+//   GamesCards.changeUserId(null,1,i);
 // }
 
 // GamesCards.draw(1, 1, 7)
@@ -171,8 +183,8 @@ app.use(function(err, req, res, next) {
 //     console.log(card);
 //   })
 
-GamesCards.flipTopCard(1).then(card => {
-  console.log(card);
-});
+// GamesCards.flipTopCard(1).then(card => {
+//   console.log(card);
+// });
 
 module.exports = app;
