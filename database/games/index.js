@@ -15,5 +15,6 @@ module.exports = {
   changeGameDirection,
   changeWinnerId,
   findNumberOfGames,
-  getAllGames
+  getAllGames,
+  doThing: require('./doThing')
 };

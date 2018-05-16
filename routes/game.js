@@ -48,6 +48,14 @@ router.get(
     let gameId = request.params.gameId;
     let user = request.user;
 
+    // Games.doThing(gameId, user)
+    //   .then(({ game, user }) => {
+    //     response.render('game')
+    //   })
+    //   .catch( error => {
+    //     response.redirect('lobby')
+    //   })
+
     Games.findById(gameId)
       .then(game => {
         // Find existing user in game
