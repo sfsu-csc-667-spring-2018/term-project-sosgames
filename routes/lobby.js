@@ -1,15 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const { Cards, Games, UsersGames, GamesCards } = require('../database');
+const { User, Games, UsersGames, Cards, GamesCards } = require('../database');
 const auth = require('../auth/requireAuthentication');
 
 // GET /lobby -- Player visits the lobby
 router.get('/', auth.requireAuthentication, (request, response, next) => {
-  Games.getAllGames()
-    .then(games => {
+  Promise.all([User.getTopTenScores(), Games.getAllGames()])
+    .then(([scores, games]) => {
       response.render('lobby', {
         title: 'UNO - Lobby',
         username: request.user.username,
+        scores: scores,
         games: games
       });
     })
