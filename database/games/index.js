@@ -16,5 +16,5 @@ module.exports = {
   changeWinnerId,
   findNumberOfGames,
   getAllGames,
-  doThing: require('./doThing')
+  verifyUserAndGame: require('./verifyUserAndGame')
 };

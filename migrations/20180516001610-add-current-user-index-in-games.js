@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     queryInterface.addColumn('games', 'current_player_index', {
       type: Sequelize.INTEGER,
-      defaultValue: null
+      defaultValue: -1
     });
   },
 
