@@ -1,5 +1,4 @@
 const database = require('../connection');
-// const getNumberCardInDeck = require('./getNumberCardInDeck').getNumberCardInDeck;
 const changeInDeck = require('./changeInDeck').changeInDeck;
 const changeInHand = require('./changeInHand').changeInHand;
 const changeOnTop = require('./changeOnTop').changeOnTop;

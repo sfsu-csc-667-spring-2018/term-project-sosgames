@@ -11,6 +11,8 @@ const findCardById = require('./findCardById').findCardById;
 const getNumberCardInDeck = require('./getNumberCardInDeck')
   .getNumberCardInDeck;
 const flipTopCard = require('./flipTopCard').flipTopCard;
+const findTopCardByGameId = require('./findTopCardByGameId')
+  .findTopCardByGameId;
 
 module.exports = {
   create,
@@ -24,5 +26,6 @@ module.exports = {
   getCardInDeck,
   findCardById,
   getNumberCardInDeck,
-  flipTopCard
+  flipTopCard,
+  findTopCardByGameId
 };
