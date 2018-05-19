@@ -17,5 +17,6 @@ module.exports = {
   findNumberOfGames,
   getAllGames,
   verifyUserAndGame: require('./verifyUserAndGame'),
-  isStarted: require('./isStarted')
+  isStarted: require('./isStarted'),
+  getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand')
 };

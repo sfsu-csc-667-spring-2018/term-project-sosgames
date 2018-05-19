@@ -70,19 +70,27 @@ router.get(
               response.render('gameRoom', renderData);
             } else {
               console.log('game started');
-              // TODO: add stuff for game data?
+              // TODO: add stuff for game data == deck + hand
+              // Get the card on top
+              // Get all players in games
+              // Get current player's hand
+              Games.getGameStateAndAPlayerHand(gameId, userId)
+                .then(data => {
+                  console.log('get game state doneee');
+                  console.log(data);
+                })
+                .catch(error => {
+                  console.log(error);
+                  console.log('oh well');
+                });
               response.render('gameRoom', renderData);
             }
           })
           .catch(error => {
             console.log('game not exist?');
-            request.flash('error', 'Game not exists.');
+            request.flash('error', 'Game does not exists.');
             response.redirect('/lobby');
           });
-
-        // TODO:
-        // If game started --> data.gameState != null && data.hands != null
-        // Else --> send basic stuff
       })
       .catch(error => {
         console.log('dudeeee');
