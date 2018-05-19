@@ -48,6 +48,20 @@ router.get(
     let gameId = request.params.gameId;
     let user = request.user;
 
+    // DEBUG - If we can get all of this data PER user in one array, we can display all players
+    // in players in player div
+    let testObject = {
+      username: request.user.username,
+      current_score: '100',
+      number_of_cards: '4',
+      currentPlayer: true,
+      profile_path: request.user.profile_picture_path
+    };
+    let testPlayerArray = [];
+    for (var i = 0; i < 10; i++) {
+      testPlayerArray.push(testObject);
+    }
+
     // Games.doThing(gameId, user)
     //   .then(({ game, user }) => {
     //     response.render('game')
@@ -65,7 +79,9 @@ router.get(
               title: `UNO - Game ${game.id}`,
               isPlayer: true,
               username: user.username,
-              userId: user.id
+              userId: user.id,
+              // DEBUG
+              players: testPlayerArray
             });
           })
           .catch(error => {
@@ -83,7 +99,9 @@ router.get(
                       title: `UNO - Game ${gameId}`,
                       username: user.username,
                       userId: user.id,
-                      isPlayer: true
+                      isPlayer: true,
+                      // DEBUG
+                      players: testPlayerArray
                     });
                   });
                 } else {
@@ -102,7 +120,9 @@ router.get(
                       title: `UNO - Game ${gameId}`,
                       username: user.username,
                       userId: user.id,
-                      isPlayer: true
+                      isPlayer: true,
+                      // DEBUG
+                      players: testPlayerArray
                     });
                   })
                   .catch(error => {
