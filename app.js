@@ -138,4 +138,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+GamesCards.changeWildColorToGreenById(1, 1);
+
 module.exports = app;
