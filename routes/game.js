@@ -49,19 +49,45 @@ router.get(
     let user = request.user;
 
     Games.verifyUserAndGame(gameId, user)
-      .then(usersGamesData => {
+      .then(data => {
         console.log('verify done bois');
-        console.log(usersGamesData);
-        // TODO: grab player info
-        // let game = usersGamesData.currentGame;
-        response.render('lobby', {
-          title: `test`
-        });
+        console.log(data);
+        let username = data.username;
+        let userId = data.id;
+        console.log(gameId);
+        let renderData = {
+          title: `UNO - Game ${gameId}`,
+          username: username,
+          userId: userId,
+          isPlayer: true
+        };
+
+        Games.findById(gameId)
+          .then(gameData => {
+            console.log(gameData);
+            if (gameData.current_player_index === -1) {
+              console.log('game not started');
+              response.render('gameRoom', renderData);
+            } else {
+              console.log('game started');
+              // TODO: add stuff for game data?
+              response.render('gameRoom', renderData);
+            }
+          })
+          .catch(error => {
+            console.log('game not exist?');
+            request.flash('error', 'Game not exists.');
+            response.redirect('/lobby');
+          });
+
+        // TODO:
+        // If game started --> data.gameState != null && data.hands != null
+        // Else --> send basic stuff
       })
       .catch(error => {
         console.log('dudeeee');
-
         console.log(error);
+        request.flash('error', error);
         response.redirect('/lobby');
       });
 

@@ -16,5 +16,6 @@ module.exports = {
   changeWinnerId,
   findNumberOfGames,
   getAllGames,
-  verifyUserAndGame: require('./verifyUserAndGame')
+  verifyUserAndGame: require('./verifyUserAndGame'),
+  isStarted: require('./isStarted')
 };
