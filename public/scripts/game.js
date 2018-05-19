@@ -1,3 +1,4 @@
+// const { User, Games, UsersGames, Cards, GamesCards } = require('../../../database');
 const pathArray = window.location.pathname.split('/');
 const gameId = pathArray[pathArray.length - 1];
 
@@ -114,8 +115,13 @@ privateSocket.on('connect', () => {
   console.log('on connect-- ' + privateSocket.id);
 });
 
+// Client side event for a hand update
 privateSocket.on('update hand', cards => {
-  // console.log(playerHand);
+  const cardOnTopValues = cardOnTop.getAttribute('data-card-value').split('-');
+  const cardOnTopColor = cardOnTopValues[0];
+  const cardOnTopNumber = cardOnTopValues[1];
+
+  // console.log( playerHand);
   for (const card of cards) {
     let cardData = card.value.includes('wild')
       ? `${card.value}`
@@ -126,6 +132,16 @@ privateSocket.on('update hand', cards => {
 
     let innerDiv = document.createElement('div');
     innerDiv.className = 'player-card centered sprite';
+
+    // Testing
+    if (
+      !card.color.includes(cardOnTopColor) &&
+      !card.value.includes(cardOnTopNumber) &&
+      !card.value.includes('wild')
+    ) {
+      innerDiv.className += ' disabled-card';
+    }
+
     innerDiv.setAttribute('data-card-value', cardData);
 
     div.appendChild(innerDiv);
