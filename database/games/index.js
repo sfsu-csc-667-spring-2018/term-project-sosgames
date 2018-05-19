@@ -13,6 +13,12 @@ const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId')
   .findCurrentPlayerIndexById;
 const findMaxNumberOfPlayersById = require('./findMaxNumberOfPlayersByGameId')
   .findMaxNumberOfPlayersById;
+const changeCurrentPlayerIndex = require('./changeCurrentPlayerIndex')
+  .changeCurrentPlayerIndex;
+const findIsReversedById = require('./findIsReversedByGameId')
+  .findIsReversedById;
+
+const nextPlayerTurn = require('./nextPlayerTurn').nextPlayerTurn;
 
 module.exports = {
   create,
@@ -24,5 +30,8 @@ module.exports = {
   getAllGames,
   addCurrentPlayerIndex,
   findCurrentPlayerIndexById,
-  findMaxNumberOfPlayersById
+  findMaxNumberOfPlayersById,
+  changeCurrentPlayerIndex,
+  findIsReversedById,
+  nextPlayerTurn
 };

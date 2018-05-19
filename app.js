@@ -200,16 +200,30 @@ app.use(function(err, req, res, next) {
 
 // console.log(indexToBeReturned);
 
-UsersGames.findNumberOfJoinedPlayers(1).then(data => {
+// UsersGames.findNumberOfJoinedPlayers(1).then(data => {
+//   console.log(data);
+// });
+
+// Games.findCurrentPlayerIndexById(1).then(index => {
+//   console.log(index);
+// });
+
+// Games.findMaxNumberOfPlayersById(1).then(index => {
+//   console.log(index);
+// });
+
+// Games.changeCurrentPlayerIndex(2,1)
+//   .then(data => {
+//     console.log(data);
+//   })
+
+// Games.findIsReversedById(1)
+//   .then(data => {
+//     console.log(data.is_reversed);
+//   })
+
+Games.nextPlayerTurn(1).then(data => {
   console.log(data);
-});
-
-Games.findCurrentPlayerIndexById(1).then(index => {
-  console.log(index);
-});
-
-Games.findMaxNumberOfPlayersById(1).then(index => {
-  console.log(index);
 });
 
 module.exports = app;
