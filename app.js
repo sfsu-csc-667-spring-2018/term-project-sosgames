@@ -187,4 +187,29 @@ app.use(function(err, req, res, next) {
 //   console.log(card);
 // });
 
+// Games.addCurrentPlayerIndex(1,1)
+//   .then(index => {
+//     console.log(index);
+//   })
+
+// let maxPlayers = 4;
+// let currentPlayerIndex = 3;
+// let skip = 1;
+
+// let indexToBeReturned = (maxPlayers + currentPlayerIndex + skip) % maxPlayers;
+
+// console.log(indexToBeReturned);
+
+UsersGames.findNumberOfJoinedPlayers(1).then(data => {
+  console.log(data);
+});
+
+Games.findCurrentPlayerIndexById(1).then(index => {
+  console.log(index);
+});
+
+Games.findMaxNumberOfPlayersById(1).then(index => {
+  console.log(index);
+});
+
 module.exports = app;
