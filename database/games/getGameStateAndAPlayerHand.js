@@ -6,7 +6,7 @@ const GET_PLAYERS_IN_GAME =
   'SELECT users_games.user_id, users.username, users_games.current_score, users_games.number_of_cards FROM users, users_games WHERE users.id=users_games.user_id AND game_id=$1;';
 
 const GET_PLAYER_HAND =
-  'SELECT * FROM games_cards WHERE game_id=$1 and user_id=$2 AND in_hand=true;';
+  'select * from cards where id in (select card_id FROM games_cards WHERE game_id=1 and user_id=2 AND in_hand=true);';
 
 const getGameStateAndAPlayerHand = (gameId, userId) => {
   console.log(gameId);
@@ -18,11 +18,8 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     database.many(GET_PLAYERS_IN_GAME, [gameId]),
     database.many(GET_PLAYER_HAND, [gameId, userId])
   ]).then(([cardOnTop, players, playerHand]) => {
-    console.log(cardOnTop);
-    console.log(players);
-    console.log(playerHand);
     console.log('after promise get game state');
-    return Promise.resolve({ cardOnTop, players });
+    return Promise.resolve({ cardOnTop, players, playerHand });
   });
 };
 
