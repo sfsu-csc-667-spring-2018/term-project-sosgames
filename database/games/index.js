@@ -34,4 +34,5 @@ module.exports = {
   changeCurrentPlayerIndex,
   findIsReversedById,
   nextPlayerTurn
+  doThing: require('./doThing')
 };

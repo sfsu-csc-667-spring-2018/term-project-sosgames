@@ -51,7 +51,8 @@ startButton.addEventListener('click', event => {
 });
 
 // Player clicks on a card in their hand to play
-[].forEach.call(playerCards, function(playerCard) {
+playerCards.forEach(function(playerCard) {
+  // rs[].forEach.call(playerCards, function (playerCard) {
   playerCard.addEventListener('click', event => {
     event.stopPropagation();
     event.preventDefault();
@@ -142,6 +143,9 @@ socket.on('ready to start game', card => {
 
 socket.on('not ready to start game', () => {
   alert('Not ready to start game!');
+});
+socket.on('update', () => {
+  alert('stuff');
 });
 
 // CHAT in game room

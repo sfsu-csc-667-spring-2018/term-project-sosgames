@@ -7,10 +7,9 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
-const flash = require('connect-flash'); // Might delete
-// const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
 
-const { Cards, Games, UsersGames, GamesCards } = require('./database');
+const { User, Cards, Games, UsersGames, GamesCards } = require('./database');
 
 // Make use of environment variables defined in .env
 if (
@@ -137,93 +136,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-// GamesCards.getCardInDeck(1)
-//   .then( cardData => {
-//     console.log(cardData);
-//   });
-
-// for(i = 0; i < 109; i++){
-//   GamesCards.changeInDeck(true,1,i);
-// }
-
-// for(i = 0; i < 109; i++){
-//   GamesCards.changeInHand(false,1,i);
-// }
-
-// for(i = 0; i < 109; i++){
-//   GamesCards.changeOnTop(false,1,i);
-// }
-
-// for(i = 0; i < 109; i++){
-//   GamesCards.changeUserId(null,1,i);
-// }
-
-// GamesCards.draw(1, 1, 7)
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
-
-// GamesCards.findCardById(1,1)
-//   .then(card => {
-//     console.log(card);
-//   })
-
-// GamesCards.getNumberCardInDeck(1)
-//   .then(card => {
-//     console.log(card);
-//   })
-
-// GamesCards.getCardInDeck(1)
-//   .then(card => {
-//     console.log(card);
-//   })
-
-// GamesCards.flipTopCard(1).then(card => {
-//   console.log(card);
-// });
-
-// Games.addCurrentPlayerIndex(1,1)
-//   .then(index => {
-//     console.log(index);
-//   })
-
-// let maxPlayers = 4;
-// let currentPlayerIndex = 3;
-// let skip = 1;
-
-// let indexToBeReturned = (maxPlayers + currentPlayerIndex + skip) % maxPlayers;
-
-// console.log(indexToBeReturned);
-
-// UsersGames.findNumberOfJoinedPlayers(1).then(data => {
-//   console.log(data);
-// });
-
-// Games.findCurrentPlayerIndexById(1).then(index => {
-//   console.log(index);
-// });
-
-// Games.findMaxNumberOfPlayersById(1).then(index => {
-//   console.log(index);
-// });
-
-// Games.changeCurrentPlayerIndex(2,1)
-//   .then(data => {
-//     console.log(data);
-//   })
-
-// Games.findIsReversedById(1)
-//   .then(data => {
-//     console.log(data.is_reversed);
-//   })
-
-Games.nextPlayerTurn(1).then(data => {
-  console.log(data);
 });
 
 module.exports = app;
