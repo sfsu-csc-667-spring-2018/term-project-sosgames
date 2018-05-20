@@ -169,6 +169,17 @@ app.use(function(err, req, res, next) {
 
 // UsersGames.changeCurrentScoreById(1,1,400)
 
-UsersGames.addCurrentScoreById(1, 1, 20);
+// UsersGames.addCurrentScoreById(1, 1, 20);
+
+// UsersGames.findNumberOfCardsById(1,1)
+//   .then(cards => {
+//     console.log(cards)
+//   })
+
+// UsersGames.changeNumberOfCardsById(1,1,4)
+
+// UsersGames.incrementNumberOfCardsById(1,1)
+
+// UsersGames.decrementNumberOfCardsById(1,1)
 
 module.exports = app;
