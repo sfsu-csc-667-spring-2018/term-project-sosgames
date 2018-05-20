@@ -22,6 +22,7 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     database.any(GET_PLAYER_HAND, [gameId, userId])
   ]).then(([game, playerIndex, cardOnTop, players, playerHand]) => {
     let currentPlayerIndex = playerIndex.current_player_index;
+    let yourIndex = -1;
 
     for (const [index, player] of players.entries()) {
       if (currentPlayerIndex === index) {
@@ -29,14 +30,16 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
       }
       if (player.user_id == userId) {
         player.isYou = true;
+        yourIndex = index;
       }
     }
 
     for (const card of playerHand) {
       if (
-        !card.color.includes(cardOnTop.color) &&
-        !card.value.includes(cardOnTop.value) &&
-        !card.value.includes('wild')
+        yourIndex !== currentPlayerIndex ||
+        (!card.color.includes(cardOnTop.color) &&
+          !card.value.includes(cardOnTop.value) &&
+          !card.value.includes('wild'))
       ) {
         card.disabled = true;
       }

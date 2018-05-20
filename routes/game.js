@@ -50,8 +50,6 @@ router.get(
 
     Games.verifyUserAndGame(gameId, user)
       .then(userAndGameData => {
-        console.log('verify done bois');
-        console.log(userAndGameData);
         let game = userAndGameData.game;
 
         let playerInGame = userAndGameData.playerInGame;
@@ -67,8 +65,6 @@ router.get(
 
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
-            console.log('get game state doneee');
-            console.log(gameStateData);
             if (game.current_player_index !== -1) {
               renderData.isStarted = true;
               renderData.cardOnTop = gameStateData.cardOnTop;
@@ -76,16 +72,13 @@ router.get(
             }
             renderData.game = game;
             renderData.players = gameStateData.players;
-            console.log(renderData);
             response.render('gameRoom', renderData);
           })
           .catch(error => {
             console.log(error);
-            console.log('oh well');
           });
       })
       .catch(error => {
-        console.log(error);
         request.flash('error', 'Cannot enter game.');
         response.redirect('/lobby');
       });
