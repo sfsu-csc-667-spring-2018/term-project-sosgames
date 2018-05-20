@@ -14,8 +14,6 @@ const GET_PLAYER_HAND =
   'select * from cards where id in (select card_id FROM games_cards WHERE game_id=$1 and user_id=$2 AND in_hand=true);';
 
 const getGameStateAndAPlayerHand = (gameId, userId) => {
-  console.log(userId);
-
   return Promise.all([
     findGameById(gameId),
     findCurrentPlayerIndexById(gameId),

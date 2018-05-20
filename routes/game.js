@@ -65,7 +65,6 @@ router.get(
           isStarted: false
         };
 
-        // TODO: check if is turn of current user?
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
             console.log('get game state doneee');
