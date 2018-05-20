@@ -72,9 +72,9 @@
           <% for (card of playerHand) { %>
             <div class="col">
               <% if (card.color.includes('wild') ) { %>
-                <div class="player-card centered sprite" data-card-value="<%= card.color %>"></div>
+                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>"></div>
               <% } else { %>
-                <div class="player-card centered sprite" data-card-value="<%= card.color %>-<%= card.value %>"></div>
+                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>-<%= card.value %>"></div>
               <% } %>
             </div>
             <% } %>
