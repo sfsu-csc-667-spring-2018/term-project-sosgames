@@ -19,6 +19,11 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     database.many(GET_PLAYER_HAND, [gameId, userId])
   ]).then(([cardOnTop, players, playerHand]) => {
     console.log('after promise get game state');
+    for (const player of players) {
+      if (player.user_id == userId) {
+        player.isYou = true;
+      }
+    }
     return Promise.resolve({ cardOnTop, players, playerHand });
   });
 };

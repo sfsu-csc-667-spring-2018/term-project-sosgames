@@ -59,32 +59,30 @@ router.get(
           title: `UNO - Game ${gameId}`,
           username: username,
           userId: userId,
-          isPlayer: true
+          isStarted: false
         };
 
         Games.findById(gameId)
           .then(gameData => {
             console.log(gameData);
-            if (gameData.current_player_index === -1) {
-              console.log('game not started');
-              response.render('gameRoom', renderData);
-            } else {
-              console.log('game started');
-              // TODO: add stuff for game data == deck + hand
-              // Get the card on top
-              // Get all players in games
-              // Get current player's hand
-              Games.getGameStateAndAPlayerHand(gameId, userId)
-                .then(data => {
-                  console.log('get game state doneee');
-                  console.log(data);
-                })
-                .catch(error => {
-                  console.log(error);
-                  console.log('oh well');
-                });
-              response.render('gameRoom', renderData);
-            }
+            Games.getGameStateAndAPlayerHand(gameId, userId)
+              .then(data => {
+                console.log('get game state doneee');
+                console.log(data);
+                if (gameData.current_player_index !== -1) {
+                  renderData.isStarted = true;
+                  renderData.cardOnTop = data.cardOnTop;
+                  renderData.playerHand = data.playerHand;
+                  console.log('game started');
+                }
+                renderData.players = data.players;
+                console.log(renderData);
+                response.render('gameRoom', renderData);
+              })
+              .catch(error => {
+                console.log(error);
+                console.log('oh well');
+              });
           })
           .catch(error => {
             console.log('game not exist?');
