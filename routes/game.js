@@ -63,6 +63,9 @@ router.get(
 
         Games.findById(gameId)
           .then(gameData => {
+            console.log(gameData);
+
+            // TODO: check if is turn of current user?
             Games.getGameStateAndAPlayerHand(gameId, userId)
               .then(data => {
                 console.log('get game state doneee');
@@ -94,68 +97,6 @@ router.get(
         request.flash('error', error);
         response.redirect('/lobby');
       });
-
-    // crap, rm
-    // Games.findById(gameId)
-    //   .then(game => {
-    //     // Find existing user in game
-    //     UsersGames.findUserByUserIdAndGameId(user.id, game.id)
-    //       .then(userGameData => {
-    //         response.render('gameRoom', {
-    //           title: `UNO - Game ${game.id}`,
-    //           isPlayer: true,
-    //           username: user.username,
-    //           userId: user.id
-    //         });
-    //       })
-    //       .catch(error => {
-    //         UsersGames.findByGameId(gameId)
-    //           .then(usersGamesData => {
-    //             let numberOfPlayers = usersGamesData.length + 1;
-
-    //             if (
-    //               numberOfPlayers >= 1 &&
-    //               numberOfPlayers <= game.max_number_of_players
-    //             ) {
-    //               // Create new player for a game
-    //               UsersGames.create(user.id, gameId).then(userInGame => {
-    //                 response.render('gameRoom', {
-    //                   title: `UNO - Game ${gameId}`,
-    //                   username: user.username,
-    //                   userId: user.id,
-    //                   isPlayer: true
-    //                 });
-    //               });
-    //             } else {
-    //               request.flash(
-    //                 'error',
-    //                 `Game Room ${game.name} is already full.`
-    //               );
-    //               response.redirect('/lobby');
-    //             }
-    //           })
-    //           .catch(error => {
-    //             // Create new player for a game
-    //             UsersGames.create(user.id, gameId)
-    //               .then(userInGame => {
-    //                 response.render('gameRoom', {
-    //                   title: `UNO - Game ${gameId}`,
-    //                   username: user.username,
-    //                   userId: user.id,
-    //                   isPlayer: true
-    //                 });
-    //               })
-    //               .catch(error => {
-    //                 console.log(error);
-    //                 response.redirect('/lobby');
-    //               });
-    //           });
-    //       });
-    //   })
-    //   .catch(error => {
-    //     request.flash('error', 'Game does not exist.');
-    //     response.redirect('/lobby');
-    //   });
   }
 );
 

@@ -1,4 +1,5 @@
 const database = require('../connection');
+const gamesCards = require('../gamesCards');
 const findGameById = require('./findGameById').findById;
 
 const GET_CARD_ON_TOP =
