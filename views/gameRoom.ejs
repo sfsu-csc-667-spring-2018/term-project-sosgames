@@ -2,8 +2,17 @@
 <div class="row">
   <div class="col text-center">
     <h1>
-      <span class="badge badge-primary">Round 1</span>
+      <span class="badge badge-primary">Round <%= game.round_number %></span>
     </h1>
+    <h5>
+      <span class="badge badge-pill badge-light">
+        <% if (game.is_reversed) { %>
+          Direction is right to left.
+        <% } else { %>
+          Direction is left to right.
+        <% } %>
+      </span>
+    </h5>
   </div>
 </div>
 <!-- ROUND NUMBER ENDS -->
@@ -46,8 +55,6 @@
           <% } %>
         </div>
         <div class="col text-center">
-          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
-          <!-- <button type="button" class="btn" disabled> -->
           <div class="centered uno-black-card"></div>
           <button type="button" class="btn btn-outline-dark" id="draw-btn">Draw</button>
         </div>
@@ -55,18 +62,21 @@
       <!-- CARD DECKS ENDS -->
 
       <!-- PLAYER'S HAND -->
-      <div class="row card player-hand flex-row hide">
+      <div id="cards-in-hand" class="row card player-hand flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <input id="userId" name="userId" type="hidden" value="<%= userId %>">
 
-        <!-- Play Button -->
-        <div class="col play-btn text-center">
-          <!-- TODO: add logic for current player's turn to switch 'disabled' -->
-          <button type="button" class="btn btn-primary" id="play-btn">Play</button>
-        </div>
-
         <!-- Cards in Hand -->
-        <div class="row" id="cards-in-hand">
-        </div>
+        <% if(typeof playerHand != "undefined") { %>
+          <% for (card of playerHand) { %>
+            <div class="col">
+              <% if (card.color.includes('wild') ) { %>
+                <div class="player-card centered sprite" data-card-value="<%= card.color %>"></div>
+              <% } else { %>
+                <div class="player-card centered sprite" data-card-value="<%= card.color %>-<%= card.value %>"></div>
+              <% } %>
+            </div>
+            <% } %>
+        <% } %>
 
       </div>
       <!-- PLAYER'S HAND ENDS -->

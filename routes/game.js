@@ -54,7 +54,6 @@ router.get(
         console.log(data);
         let username = data.username;
         let userId = data.id;
-        console.log(gameId);
         let renderData = {
           title: `UNO - Game ${gameId}`,
           username: username,
@@ -64,7 +63,6 @@ router.get(
 
         Games.findById(gameId)
           .then(gameData => {
-            console.log(gameData);
             Games.getGameStateAndAPlayerHand(gameId, userId)
               .then(data => {
                 console.log('get game state doneee');
@@ -73,8 +71,8 @@ router.get(
                   renderData.isStarted = true;
                   renderData.cardOnTop = data.cardOnTop;
                   renderData.playerHand = data.playerHand;
-                  console.log('game started');
                 }
+                renderData.game = data.game;
                 renderData.players = data.players;
                 console.log(renderData);
                 response.render('gameRoom', renderData);
