@@ -63,6 +63,9 @@ router.get(
 
         Games.findById(gameId)
           .then(gameData => {
+            console.log(gameData);
+
+            // TODO: check if is turn of current user?
             Games.getGameStateAndAPlayerHand(gameId, userId)
               .then(data => {
                 console.log('get game state doneee');
