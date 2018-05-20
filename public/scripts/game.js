@@ -52,30 +52,28 @@ startButton.addEventListener('click', event => {
 });
 
 // Player clicks on a card in their hand to play
-playerCards.forEach(function(playerCard) {
-  // rs[].forEach.call(playerCards, function (playerCard) {
-  playerCard.addEventListener('click', event => {
-    event.stopPropagation();
-    event.preventDefault();
+cardsInHand.addEventListener('click', event => {
+  let playerCard = event.target;
+  event.stopPropagation();
+  event.preventDefault();
 
-    let clientSocketId = socketId(socket.id);
+  let clientSocketId = socketId(socket.id);
 
-    const cardValue = playerCard.dataset.card;
-    fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({ cardValue, clientSocketId }),
-      credentials: 'include',
-      method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
+  const cardValue = playerCard.dataset.card;
+  fetch(`/game/${gameId}/play`, {
+    body: JSON.stringify({ cardValue, clientSocketId }),
+    credentials: 'include',
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
     })
-      .then(data => {
-        console.log('fetch done');
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  });
+  })
+    .then(data => {
+      console.log('fetch done');
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // A user submits a chat message
