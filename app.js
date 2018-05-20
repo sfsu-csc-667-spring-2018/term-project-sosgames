@@ -140,11 +140,19 @@ app.use(function(err, req, res, next) {
 
 // GamesCards.changeWildColorToGreenById(1, 1);
 
-GamesCards.findAllDiscardedCardsById(1).then(cards => {
-  console.log(cards);
-});
+// GamesCards.findAllDiscardedCardsById(1).then(cards => {
+//   console.log(cards);
+// });
 
-GamesCards.changeWildColorToNull(1, 42);
-GamesCards.changeUserIdToNull(1, 42);
+// GamesCards.changeWildColorToNull(1, 42);
+// GamesCards.changeUserIdToNull(1, 42);
+
+UsersGames.findByUserId(1)
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
 
 module.exports = app;
