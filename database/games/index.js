@@ -33,6 +33,7 @@ module.exports = {
   findMaxNumberOfPlayersById,
   changeCurrentPlayerIndex,
   findIsReversedById,
-  nextPlayerTurn
-  doThing: require('./doThing')
+  nextPlayerTurn,
+  verifyUserAndGame: require('./verifyUserAndGame'),
+  getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand')
 };

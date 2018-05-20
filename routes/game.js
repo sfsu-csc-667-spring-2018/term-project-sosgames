@@ -49,11 +49,15 @@ router.get(
     let user = request.user;
 
     Games.verifyUserAndGame(gameId, user)
-      .then(data => {
+      .then(userAndGameData => {
         console.log('verify done bois');
-        console.log(data);
-        let username = data.username;
-        let userId = data.id;
+        console.log(userAndGameData);
+        let game = userAndGameData.game;
+
+        let playerInGame = userAndGameData.playerInGame;
+        let username = playerInGame.username;
+        let userId = playerInGame.id;
+
         let renderData = {
           title: `UNO - Game ${gameId}`,
           username: username,
@@ -61,32 +65,29 @@ router.get(
           isStarted: false
         };
 
-        Games.findById(gameId)
-          .then(gameData => {
-            console.log(gameData);
-
-            // TODO: check if is turn of current user?
-            Games.getGameStateAndAPlayerHand(gameId, userId)
-              .then(data => {
-                console.log('get game state doneee');
-                console.log(data);
-                if (gameData.current_player_index !== -1) {
-                  renderData.isStarted = true;
-                  renderData.cardOnTop = data.cardOnTop;
-                  renderData.playerHand = data.playerHand;
-                }
-                renderData.game = data.game;
-                renderData.players = data.players;
-                console.log(renderData);
-                response.render('gameRoom', renderData);
-              })
-              .catch(error => {
-                console.log(error);
-                console.log('oh well');
-              });
+        // TODO: check if is turn of current user?
+        Games.getGameStateAndAPlayerHand(gameId, userId)
+          .then(gameStateData => {
+            console.log('get game state doneee');
+            console.log(gameStateData);
+            if (game.current_player_index !== -1) {
+              renderData.isStarted = true;
+              renderData.cardOnTop = gameStateData.cardOnTop;
+              renderData.playerHand = gameStateData.playerHand;
+            }
+            renderData.game = game;
+            renderData.players = gameStateData.players;
+            console.log(renderData);
+            response.render('gameRoom', renderData);
           })
+          .catch(error => {
+            console.log(error);
+            console.log('oh well');
+          });
+      })
       .catch(error => {
-        request.flash('error', 'Game does not exist.');
+        console.log(error);
+        request.flash('error', 'Cannot enter game.');
         response.redirect('/lobby');
       });
   }
