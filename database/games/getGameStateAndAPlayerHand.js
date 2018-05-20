@@ -1,6 +1,8 @@
 const database = require('../connection');
-const gamesCards = require('../gamesCards');
 const findGameById = require('./findGameById').findById;
+const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId')
+  .findCurrentPlayerIndexById;
+const gamesCards = require('../gamesCards');
 
 const GET_CARD_ON_TOP =
   'SELECT * FROM cards WHERE cards.id IN (SELECT games_cards.card_id FROM games_cards WHERE game_id=$1 AND on_top=true);';
@@ -16,11 +18,16 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
 
   return Promise.all([
     findGameById(gameId),
+    findCurrentPlayerIndexById(gameId),
     database.oneOrNone(GET_CARD_ON_TOP, [gameId]),
     database.any(GET_PLAYERS_IN_GAME, [gameId]),
     database.any(GET_PLAYER_HAND, [gameId, userId])
-  ]).then(([game, cardOnTop, players, playerHand]) => {
-    for (const player of players) {
+  ]).then(([game, playerIndex, cardOnTop, players, playerHand]) => {
+    let currentPlayerIndex = playerIndex.current_player_index;
+    for (const [index, player] of players.entries()) {
+      if (currentPlayerIndex === index) {
+        player.currentPlayer = true;
+      }
       if (player.user_id == userId) {
         player.isYou = true;
       }
