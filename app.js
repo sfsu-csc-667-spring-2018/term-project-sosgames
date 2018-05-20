@@ -147,12 +147,28 @@ app.use(function(err, req, res, next) {
 // GamesCards.changeWildColorToNull(1, 42);
 // GamesCards.changeUserIdToNull(1, 42);
 
-UsersGames.findByUserId(1)
-  .then(data => {
-    console.log(data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+// UsersGames.findByUserId(1)
+//   .then(data => {
+//     console.log(data);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
+
+// UsersGames.findCurrentScoreById(1,1)
+//   .then(data => {
+//     console.log(data);
+//   })
+
+// Games.nextPlayerTurn(1)
+//   .then(data => {
+//     console.log(data);
+//   })
+
+// UsersGames.addCurrentScoreById(1,1)
+
+// UsersGames.changeCurrentScoreById(1,1,400)
+
+UsersGames.addCurrentScoreById(1, 1, 20);
 
 module.exports = app;

@@ -5,11 +5,20 @@ const findByUserAndGameId = require('./findByUserAndGameId')
   .findByUserAndGameId;
 const findNumberOfJoinedPlayers = require('./findNumberOfJoinedPlayers')
   .findNumberOfPlayersJoined;
+const findCurrentScoreById = require('./findCurrentScoreById')
+  .findCurrentScoreById;
+const addCurrentScoreById = require('./addCurrentScoreById')
+  .addCurrentScoreById;
+const changeCurrentScoreById = require('./changeCurrentScoreById')
+  .changeCurrentScoreById;
 
 module.exports = {
   create,
   findByUserId,
   findByGameId,
   findByUserAndGameId,
-  findNumberOfJoinedPlayers
+  findNumberOfJoinedPlayers,
+  findCurrentScoreById,
+  addCurrentScoreById,
+  changeCurrentScoreById
 };
