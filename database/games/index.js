@@ -33,6 +33,6 @@ module.exports = {
   findMaxNumberOfPlayersById,
   changeCurrentPlayerIndex,
   findIsReversedById,
-  nextPlayerTurn
+  nextPlayerTurn,
   doThing: require('./doThing')
 };
