@@ -21,6 +21,11 @@ const changeWildColorToYellowById = require('./changeWildColorToYellowByGameAndC
   .changeWildColorToYellowById;
 const changeWildColorToGreenById = require('./changeWildColorToGreenByGameAndCardId')
   .changeWildColorToGreenById;
+const findAllDiscardedCardsById = require('./findAllDiscardedCardsByGameId')
+  .findAllDiscardedCardsById;
+const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
+const changeWildColorToNull = require('./changeWildColorToNull')
+  .changeWildColorToNull;
 
 module.exports = {
   create,
@@ -39,5 +44,8 @@ module.exports = {
   changeWildColorToRedById,
   changeWildColorToBlueById,
   changeWildColorToYellowById,
-  changeWildColorToGreenById
+  changeWildColorToGreenById,
+  findAllDiscardedCardsById,
+  changeUserIdToNull,
+  changeWildColorToNull
 };

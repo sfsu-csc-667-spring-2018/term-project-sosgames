@@ -138,6 +138,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-GamesCards.changeWildColorToGreenById(1, 1);
+// GamesCards.changeWildColorToGreenById(1, 1);
+
+GamesCards.findAllDiscardedCardsById(1).then(cards => {
+  console.log(cards);
+});
+
+GamesCards.changeWildColorToNull(1, 42);
+GamesCards.changeUserIdToNull(1, 42);
 
 module.exports = app;
