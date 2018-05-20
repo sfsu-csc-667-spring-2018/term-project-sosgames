@@ -16,18 +16,16 @@
     <div class="container">
       <!-- PLAYERS LIST -->
       <div class="row card game-players flex-row">
-        <% if( typeof players != "undefined") { %>
-
-          <% players.forEach(( player ) => { %>
+        <% if (typeof players != "undefined") { %>
+          <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">
-              <img class="rounded-circle" src="<%= player.profile_path %>"
-                    alt="player image">
-              <div class="player-name"><%= player.username %> </div>
+              <img class="rounded-circle" src="<%= player.profile_path %>" alt="player image">
+              <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
               <div class="player-points">Score: <%= player.current_score %></div>
-              <div class="player-num-cards">Cards: <%= player.number_of_cards %></div>
+              <div class="player-num-cards">Cards: <%=player.number_of_cards%></div>
             </div>
-          <% }); %>
-        <% } %>       
+          <% } %>
+        <% } %>
       </div>
 
       <!-- PLAYERS LIST ENDS -->
@@ -35,15 +33,19 @@
       <!-- CARD DECKS -->
       <div class="row flex-row">
         <div class="col text-center">
-          <button type="button" class="btn btn-primary btn-lg <% if (!isPlayer || isPlayer == null) {%> hide <% } %>" id="start-btn">START GAME</button>
+          <button type="button" class="btn btn-primary btn-lg <% if (typeof isStarted == "undefined" || isStarted) {%> hide <% } %>" id="start-btn">START GAME</button>
         </div>
       </div>
         <!-- CARD DECKS ENDS -->
 
       <!-- CARD DECKS -->
-      <div class="row card game-card-deck flex-row hide">
+      <div class="row card game-card-deck flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <div class="col">
-          <div class="centered sprite" id="card-on-top" data-card-value=""></div>
+          <% if (typeof cardOnTop != "undefined") { %>
+            <div class="centered sprite" id="card-on-top" data-card-value="<%= cardOnTop.color%>-<%= cardOnTop.value%>"></div>
+            <% } else { %>
+            <div class="centered sprite" id="card-on-top" data-card-value=""></div>
+          <% } %>
         </div>
         <div class="col text-center">
           <!-- TODO: add logic for current player's turn to switch 'disabled' -->
@@ -56,9 +58,7 @@
 
       <!-- PLAYER'S HAND -->
       <div class="row card player-hand flex-row hide">
-        <% if ( typeof isPlayer !== "undefined" && isPlayer) { %>
-          <input id="userId" name="userId" type="hidden" value="<%= userId %>">
-        <% } %>
+        <input id="userId" name="userId" type="hidden" value="<%= userId %>">
 
         <!-- Play Button -->
         <div class="col play-btn text-center">

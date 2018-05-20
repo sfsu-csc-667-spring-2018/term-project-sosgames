@@ -48,90 +48,42 @@ router.get(
     let gameId = request.params.gameId;
     let user = request.user;
 
-    // DEBUG - If we can get all of this data PER user in one array, we can display all players
-    // in players in player div
-    let testObject = {
-      username: request.user.username,
-      current_score: '100',
-      number_of_cards: '4',
-      currentPlayer: true,
-      profile_path: request.user.profile_picture_path
-    };
-    let testPlayerArray = [];
-    for (var i = 0; i < 10; i++) {
-      testPlayerArray.push(testObject);
-    }
+    Games.verifyUserAndGame(gameId, user)
+      .then(data => {
+        console.log('verify done bois');
+        console.log(data);
+        let username = data.username;
+        let userId = data.id;
+        console.log(gameId);
+        let renderData = {
+          title: `UNO - Game ${gameId}`,
+          username: username,
+          userId: userId,
+          isStarted: false
+        };
 
-    // Games.doThing(gameId, user)
-    //   .then(({ game, user }) => {
-    //     response.render('game')
-    //   })
-    //   .catch( error => {
-    //     response.redirect('lobby')
-    //   })
-
-    Games.findById(gameId)
-      .then(game => {
-        // Find existing user in game
-        UsersGames.findUserByUserIdAndGameId(user.id, game.id)
-          .then(userGameData => {
-            response.render('gameRoom', {
-              title: `UNO - Game ${game.id}`,
-              isPlayer: true,
-              username: user.username,
-              userId: user.id,
-              // DEBUG
-              players: testPlayerArray
-            });
-          })
-          .catch(error => {
-            UsersGames.findByGameId(gameId)
-              .then(usersGamesData => {
-                let numberOfPlayers = usersGamesData.length + 1;
-
-                if (
-                  numberOfPlayers >= 1 &&
-                  numberOfPlayers <= game.max_number_of_players
-                ) {
-                  // Create new player for a game
-                  UsersGames.create(user.id, gameId).then(userInGame => {
-                    response.render('gameRoom', {
-                      title: `UNO - Game ${gameId}`,
-                      username: user.username,
-                      userId: user.id,
-                      isPlayer: true,
-                      // DEBUG
-                      players: testPlayerArray
-                    });
-                  });
-                } else {
-                  request.flash(
-                    'error',
-                    `Game Room ${game.name} is already full.`
-                  );
-                  response.redirect('/lobby');
+        Games.findById(gameId)
+          .then(gameData => {
+            console.log(gameData);
+            Games.getGameStateAndAPlayerHand(gameId, userId)
+              .then(data => {
+                console.log('get game state doneee');
+                console.log(data);
+                if (gameData.current_player_index !== -1) {
+                  renderData.isStarted = true;
+                  renderData.cardOnTop = data.cardOnTop;
+                  renderData.playerHand = data.playerHand;
+                  console.log('game started');
                 }
+                renderData.players = data.players;
+                console.log(renderData);
+                response.render('gameRoom', renderData);
               })
               .catch(error => {
-                // Create new player for a game
-                UsersGames.create(user.id, gameId)
-                  .then(userInGame => {
-                    response.render('gameRoom', {
-                      title: `UNO - Game ${gameId}`,
-                      username: user.username,
-                      userId: user.id,
-                      isPlayer: true,
-                      // DEBUG
-                      players: testPlayerArray
-                    });
-                  })
-                  .catch(error => {
-                    console.log(error);
-                    response.redirect('/lobby');
-                  });
+                console.log(error);
+                console.log('oh well');
               });
-          });
-      })
+          })
       .catch(error => {
         request.flash('error', 'Game does not exist.');
         response.redirect('/lobby');
