@@ -3,16 +3,34 @@ const findByUserId = require('./findByUserId').findByUserId;
 const findByGameId = require('./findByGameId').findByGameId;
 const findByUserAndGameId = require('./findByUserAndGameId')
   .findByUserAndGameId;
-const findUserByUserIdAndGameId = require('./findUserByUserIdAndGameId')
-  .findUserByUserIdAndGameId;
 const findNumberOfJoinedPlayers = require('./findNumberOfJoinedPlayers')
-  .findNumberOfPlayersJoined;
+  .findNumberOfJoinedPlayers;
+const findCurrentScoreById = require('./findCurrentScoreById')
+  .findCurrentScoreById;
+const addCurrentScoreById = require('./addCurrentScoreById')
+  .addCurrentScoreById;
+const changeCurrentScoreById = require('./changeCurrentScoreById')
+  .changeCurrentScoreById;
+const findNumberOfCardsById = require('./findNumberOfCardsById')
+  .findNumberOfCardsById;
+const changeNumberOfCardsById = require('./changeNumberOfCardsById')
+  .changeNumberOfCardsById;
+const incrementNumberOfCardsById = require('./incrementNumberOfCardsById')
+  .incrementNumberOfCardsById;
+const decrementNumberOfCardsById = require('./decrementNumberOfCardsById')
+  .decrementNumberOfCardsById;
 
 module.exports = {
   create,
   findByUserId,
   findByGameId,
   findByUserAndGameId,
-  findUserByUserIdAndGameId,
-  findNumberOfJoinedPlayers
+  findNumberOfJoinedPlayers,
+  findCurrentScoreById,
+  addCurrentScoreById,
+  changeCurrentScoreById,
+  findNumberOfCardsById,
+  changeNumberOfCardsById,
+  incrementNumberOfCardsById,
+  decrementNumberOfCardsById
 };
