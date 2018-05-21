@@ -6,8 +6,10 @@ const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
 const changeInDeck = require('./changeInDeck').changeInDeck;
 const changeInHand = require('./changeInHand').changeInHand;
 const changeOnTop = require('./changeOnTop').changeOnTop;
+const decrementNumberOfCardsById = require('../usersGames/decrementNumberOfCardsById')
+  .decrementNumberOfCardsById;
 
-const playCard = (gameId, cardId) => {
+const playCard = (gameId, cardId, userId) => {
   findTopCardByGameId(gameId)
     .then(topCard => {
       Promise.all([
@@ -15,6 +17,7 @@ const playCard = (gameId, cardId) => {
         changeInDeck(false, gameId, cardId),
         changeInHand(false, gameId, cardId),
         changeOnTop(true, gameId, cardId),
+        decrementNumberOfCardsById(userId, gameId),
         changeUserIdToNull(gameId, cardId)
       ]);
     })

@@ -194,6 +194,6 @@ app.use(function(err, req, res, next) {
 
 // GamesCards.resetDeck(1);
 
-GamesCards.playCard(1, 1);
+// GamesCards.playCard(1, 11, 1);
 
 module.exports = app;
