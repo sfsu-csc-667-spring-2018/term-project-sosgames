@@ -48,7 +48,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
@@ -137,61 +137,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// GamesCards.changeWildColorToGreenById(1, 1);
-
-// GamesCards.findAllDiscardedCardsById(1).then(cards => {
-//   console.log(cards);
-// });
-
-// GamesCards.changeWildColorToNull(1, 42);
-// GamesCards.changeUserIdToNull(1, 42);
-
-// UsersGames.findByUserId(1)
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
-
-// UsersGames.findCurrentScoreById(1,1)
-//   .then(data => {
-//     console.log(data);
-//   })
-
-// Games.nextPlayerTurn(1)
-//   .then(data => {
-//     console.log(data);
-//   })
-
-// UsersGames.addCurrentScoreById(1,1)
-
-// UsersGames.changeCurrentScoreById(1,1,400)
-
-// UsersGames.addCurrentScoreById(1, 1, 20);
-
-// UsersGames.findNumberOfCardsById(1,1)
-//   .then(cards => {
-//     console.log(cards)
-//   })
-
-// UsersGames.changeNumberOfCardsById(1,1,4)
-
-// UsersGames.incrementNumberOfCardsById(1,1)
-
-// UsersGames.decrementNumberOfCardsById(1,1)
-
-// GamesCards.draw(1, 1, 2)
-//   .then(cards => {
-//     console.log(cards);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
-
-// UsersGames.incrementNumberOfCardsById(1,1)
-
-// GamesCards.resetDeck(1);
 
 module.exports = app;
