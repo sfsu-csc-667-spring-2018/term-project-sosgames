@@ -13,6 +13,20 @@ const getNumberCardInDeck = require('./getNumberCardInDeck')
 const flipTopCard = require('./flipTopCard').flipTopCard;
 const findTopCardByGameId = require('./findTopCardByGameId')
   .findTopCardByGameId;
+const changeWildColorToRedById = require('./changeWildColorToRedByGameAndCardId')
+  .changeWildColorToRedById;
+const changeWildColorToBlueById = require('./changeWildColorToBlueByGameAndCardId')
+  .changeWildColorToBlueById;
+const changeWildColorToYellowById = require('./changeWildColorToYellowByGameAndCardId')
+  .changeWildColorToYellowById;
+const changeWildColorToGreenById = require('./changeWildColorToGreenByGameAndCardId')
+  .changeWildColorToGreenById;
+const findAllDiscardedCardsById = require('./findAllDiscardedCardsByGameId')
+  .findAllDiscardedCardsById;
+const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
+const changeWildColorToNull = require('./changeWildColorToNull')
+  .changeWildColorToNull;
+const resetDeck = require('./resetDeck').resetDeck;
 
 module.exports = {
   create,
@@ -28,5 +42,13 @@ module.exports = {
   getNumberCardInDeck,
   flipTopCard,
   findTopCardByGameId,
-  dealCards: require('./dealCards')
+  dealCards: require('./dealCards'),
+  changeWildColorToRedById,
+  changeWildColorToBlueById,
+  changeWildColorToYellowById,
+  changeWildColorToGreenById,
+  findAllDiscardedCardsById,
+  changeUserIdToNull,
+  changeWildColorToNull,
+  resetDeck
 };
