@@ -38,7 +38,7 @@ startButton.addEventListener('click', event => {
     headers: new Headers({ 'Content-Type': 'application/json' })
   })
     .then(data => {
-      console.log('fetch start done');
+      console.log('START: fetch done');
     })
     .catch(error => {
       console.log(error);
@@ -53,6 +53,8 @@ cardsInHand.addEventListener('click', event => {
   let playerCard = event.target;
   if (playerCard.dataset.cardId) {
     const cardId = playerCard.dataset.cardId;
+
+    // TODO: display color picker if wild card, then send this info back as well
     fetch(`/game/${gameId}/play`, {
       body: JSON.stringify({ cardId }),
       credentials: 'include',
@@ -62,7 +64,7 @@ cardsInHand.addEventListener('click', event => {
       })
     })
       .then(data => {
-        console.log('fetch done');
+        console.log('PLAY: fetch done');
       })
       .catch(error => {
         console.log(error);
