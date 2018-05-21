@@ -161,8 +161,10 @@ router.post('/:gameId/play', function(request, response, next) {
   // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id)
     .then(newCardOnTop => {
-      Games.playAndResolve(gameId)
-        .then(newGameStateData => {
+      Games.play(gameId)
+        .then(data => {
+          console.log(data);
+          console.log('after play');
           // TODO: get new game state, emit to gameroom and private socket accordingly
         })
         .catch(error => {});

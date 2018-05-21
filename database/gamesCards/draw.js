@@ -12,9 +12,16 @@ const draw = (gameId, userId, numberOfCardsToDraw = 1) => {
   return incrementNumberOfCardsById(userId, gameId, numberOfCardsToDraw).then(
     () => {
       return getCardInDeck(gameId, numberOfCardsToDraw).then(cards => {
+        console.log('num cards to draw: ');
+        console.log(numberOfCardsToDraw);
+        console.log('userid to draw cards to');
+        console.log(userId);
+
         return database.task(databaseTask => {
           let queries = [];
+          console.log('drawing cards below:');
           cards.forEach(card => {
+            console.log(card);
             queries.push(
               Promise.all([
                 changeInDeck(false, gameId, card.card_id),

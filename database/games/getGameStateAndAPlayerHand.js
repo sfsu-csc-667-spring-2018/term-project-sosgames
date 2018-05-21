@@ -33,6 +33,7 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
         yourIndex = index;
       }
     }
+    console.log(playerHand);
 
     for (const card of playerHand) {
       if (
