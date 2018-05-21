@@ -3,15 +3,12 @@ const selectCardOnTop = cards => {
 
   // Check if card is a numbered card
   while (isNaN(+cards[cardIndex].value)) {
-    // Remove the not numbered card
-    cards.splice(cardIndex, 1);
-
     // Pick another card
     cardIndex = pickRandomIndex(cards.length);
   }
 
-  cards[cardIndex].onTop = true;
-  return cards[cardIndex];
+  cards[cardIndex].on_top = true;
+  return [cardIndex, cards[cardIndex]];
 };
 
 const pickRandomIndex = length => {

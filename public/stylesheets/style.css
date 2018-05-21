@@ -253,7 +253,8 @@ td.external-chat-message {
 }
 
 .game-card-deck div.col,
-.player-hand div.col {
+.player-hand div.col,
+#cards-in-hand {
   padding: 1rem;
 }
 
@@ -276,6 +277,12 @@ td.external-chat-message {
 
 .player-card {
   cursor: pointer;
+}
+
+/* Greys out card, makes unclickable */
+.disabled-card {
+  filter: grayscale(100%);
+  pointer-events: none;
 }
 
 /* UNO CARDS SPRITES */

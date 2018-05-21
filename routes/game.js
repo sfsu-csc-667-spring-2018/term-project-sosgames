@@ -9,10 +9,6 @@ const GameEngine = require('../gameEngine');
  */
 // GET /game -- Go to create game page
 router.get('/', auth.requireAuthentication, function(request, response, next) {
-  // DEBUG
-  // gameLogic.draw();
-  // gameLogic.draw2();
-
   response.render('createGame', {
     title: 'UNO - Create Game'
   });
@@ -21,10 +17,17 @@ router.get('/', auth.requireAuthentication, function(request, response, next) {
 // POST /game -- Create a new game
 router.post('/', auth.requireAuthentication, (request, response, next) => {
   const { gameName, numberOfPlayers } = request.body;
+  let user = request.user;
 
   Games.create(gameName, numberOfPlayers)
     .then(gameData => {
-      response.redirect(`/game/${gameData.id}`);
+      GamesCards.create(gameData.id)
+        .then(() => {
+          response.redirect(`/game/${gameData.id}`);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     })
     .catch(error => {
       response.render('createGame', {
@@ -44,43 +47,43 @@ router.get(
   (request, response, next) => {
     let gameId = request.params.gameId;
     let user = request.user;
-    let isPlayer = false;
 
-    Games.findById(gameId)
-      .then(game => {
-        UsersGames.findUserByUserIdAndGameId(user.id, game.id)
-          .then(user => {
-            isPlayer = true;
+    Games.verifyUserAndGame(gameId, user)
+      .then(userAndGameData => {
+        let game = userAndGameData.game;
+
+        let playerInGame = userAndGameData.playerInGame;
+        let username = playerInGame.username;
+        let userId = playerInGame.id;
+
+        let renderData = {
+          title: `UNO - Game ${gameId}`,
+          username: username,
+          userId: userId,
+          isStarted: false
+        };
+
+        Games.getGameStateAndAPlayerHand(gameId, userId)
+          .then(gameStateData => {
+            if (game.current_player_index !== -1) {
+              renderData.isStarted = true;
+              renderData.cardOnTop = gameStateData.cardOnTop;
+              renderData.playerHand = gameStateData.playerHand;
+            }
+            renderData.game = game;
+            renderData.players = gameStateData.players;
+            response.render('gameRoom', renderData);
           })
-          .catch(error => {});
-
-        response.render('gameRoom', {
-          title: `UNO - Game ${game.id}`,
-          isPlayer: isPlayer,
-          username: user.username,
-          userId: user.id
-        });
+          .catch(error => {
+            console.log(error);
+          });
       })
       .catch(error => {
-        request.flash('error', 'Game does not exist.');
+        request.flash('error', 'Cannot enter game.');
         response.redirect('/lobby');
       });
   }
 );
-
-// POST /game/:gameId -- A new player joins a specific game room
-router.post('/:gameId', (request, response, next) => {
-  let gameId = request.params.gameId;
-
-  // add the new player to users_games table
-  // - UsersGames.create(user.id, game.id);
-
-  response.render('gameRoom', {
-    title: `UNO - Game ${game.id}`,
-    username: user.username,
-    isPlayer: true
-  });
-});
 
 /**
  * GAME LOGIC
@@ -89,113 +92,55 @@ router.post('/:gameId', (request, response, next) => {
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
   let { clientSocketId, privateRoom } = request.body;
-  // TODO: get privateRooms somehow...
-  // maybe do sth like io.users[idInSameNamespace]
 
   let readyToStart = false;
+  let numberOfPlayers = 0,
+    maxNumberOfPlayers = 0;
+  let players = [];
 
-  // Find user.id and current number of players in users_games
-  // - UsersGames.findByGameId(gameId)
-  let numberOfPlayers = 2;
-  let players = [
-    { id: 1, username: 'test username 1' },
-    { id: 2, username: 'test username 2' },
-    { id: 3, username: 'test username 3' }
-  ];
+  Games.isValidToStart(gameId)
+    .then(gameData => {
+      Games.getStartGameState(gameId)
+        .then(startGameStateData => {
+          let cardOnTop = startGameStateData.cardOnTop;
+          let playersHands = startGameStateData.playersHands;
 
-  // Check if 2 <= number of players <= max_number_of_players in games table
-  // - Games.findById(gameId)
-  let maxNumberOfPlayers = 5;
-  if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
-    readyToStart = true;
-  }
+          // Get players' private rooms in the same game
+          let rooms = request.app.io.sockets.adapter.rooms;
+          let playersRooms = [];
+          Object.keys(rooms).forEach(function(room) {
+            if (room.includes(`/game/${gameId}/`)) {
+              let userId = room.split('/')[3];
+              let playerInRoom = {};
 
-  // If not valid --> app.io.emit('not ready')
+              playerInRoom.room = room;
+              playerInRoom.userId = userId;
+              playersRooms.push(playerInRoom);
+            }
+          });
 
-  // Else --> start dealing
-  // - GamesCards.findById(gameId)
-  // Pick randomly 7 cards for each player by updating games_cards table
-  // -- GamesCards.dealToUser(gameId, user.id, card.id) --> set in_hand = true
-  // Pick randomly 1 numbered card for on top from games_cards table
-  // -- GamesCards.pickOnTop(gameId) --> set on_top = true
+          // Send game state to game room
+          request.app.io
+            .of(`/game/${gameId}`)
+            .emit('ready to start game', cardOnTop);
 
-  if (readyToStart) {
-    // - cardsInGame = GamesCards.findCardsByGameId(gameId) + Cards.getCards()
-    let cardsInGame = [
-      {
-        id: 1,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '2',
-        color: 'red'
-      },
-      {
-        id: 2,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '5',
-        color: 'blue'
-      },
-      {
-        id: 3,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: 'wild',
-        color: 'wild'
-      },
-      {
-        id: 4,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: 'reverse',
-        color: 'yellow'
-      },
-      {
-        id: 5,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '1',
-        color: 'yellow'
-      },
-      {
-        id: 6,
-        inHand: false,
-        inDeck: false,
-        onTop: false,
-        value: '4',
-        color: 'green'
-      }
-    ];
-
-    // Pick 1 card on top
-    let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
-    // TODO: Update games_cards table
-
-    // Send game state to game room
-    request.app.io.of(`/game/${gameId}`).emit('ready to start game', cardOnTop);
-
-    let rooms = request.app.io.sockets.adapter.rooms;
-    let playersHands = [];
-    Object.keys(rooms).forEach(function(room) {
-      if (room.includes(`/game/${gameId}/`)) {
-        playersHands.push(room);
-      }
+          // Send cards to each hand
+          for (const playerRoom of playersRooms) {
+            let cardsInPlayerHand = playersHands[playerRoom.userId];
+            request.app.io
+              .to(playerRoom.room)
+              .emit('update hand', cardsInPlayerHand);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          console.log('what now');
+        });
+    })
+    .catch(error => {
+      console.log(error);
+      request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
     });
-
-    // TODO: deal card for each player
-    playersHands.forEach(function(playerHand) {
-      request.app.io
-        .to(playerHand)
-        .emit('yo', { hello: `${clientSocketId} in room ${playerHand}` });
-    });
-  } else {
-    request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
-  }
 
   response.sendStatus(200);
 });
@@ -231,8 +176,6 @@ router.post('/:gameId/chat', (request, response, next) => {
   let user = request.user.username;
 
   let gameId = request.params.gameId;
-  // console.log('recieved chat message : ' + message);
-
   request.app.io.of(`/game/${gameId}`).emit('message', {
     gameId,
     message,

@@ -15,7 +15,7 @@ router.post('/', (request, response, next) => {
     renderErrors(response, formErrors);
   } else {
     const { username, email, password } = request.body;
-    const photo_path = 'images/no_profile_pic.png';
+    const photo_path = '../images/no_profile_pic.png';
 
     User.create(username, email, password, photo_path).then(errors => {
       if (errors) {

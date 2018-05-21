@@ -7,10 +7,9 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
-const flash = require('connect-flash'); // Might delete
-// const LocalStrategy = require('passport-local').Strategy;
+const flash = require('connect-flash');
 
-const { Cards, Games, UsersGames, GamesCards } = require('./database');
+const { User, Cards, Games, UsersGames, GamesCards } = require('./database');
 
 // Make use of environment variables defined in .env
 if (
@@ -138,37 +137,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// GamesCards.removeAllById(1);
-// Games.create('another game', 5);
-
-// Games.findNumberOfGames()
-//   .then(numberOfGames => {
-//     console.log(numberOfGames.count);
-//   })
-
-// UsersGames.create(2,1)
-
-// UsersGames.findNumberOfJoinedPlayers(1).then(numberOfPlayers => {
-//   console.log(numberOfPlayers.count);
-// });
-
-// GamesCards.create(3);
-
-// GamesCards.findAllCardsInGame(2)
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error);
-//   });
-
-// boolean, gameid, cardid
-// GamesCards.changeInDeck(true, 1, 100);
-
-// GamesCards.changeInHand(true, 1, 100);
-// GamesCards.changeUserId(1, 1, 100);
-
-// GamesCards.changeOnTop(true, 1, 100);
 
 module.exports = app;
