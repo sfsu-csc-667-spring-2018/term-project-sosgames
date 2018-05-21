@@ -119,7 +119,6 @@ privateSocket.on('update hand', cards => {
   const cardOnTopColor = cardOnTopValues[0];
   const cardOnTopNumber = cardOnTopValues[1];
 
-  // console.log( playerHand);
   for (const card of cards) {
     let cardData = card.value.includes('wild')
       ? `${card.value}`
@@ -131,12 +130,7 @@ privateSocket.on('update hand', cards => {
     let innerDiv = document.createElement('div');
     innerDiv.className = 'player-card centered sprite';
 
-    // Testing
-    if (
-      !card.color.includes(cardOnTopColor) &&
-      !card.value.includes(cardOnTopNumber) &&
-      !card.value.includes('wild')
-    ) {
+    if (card.disabled) {
       innerDiv.className += ' disabled-card';
     }
 
