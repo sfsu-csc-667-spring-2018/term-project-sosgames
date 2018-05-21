@@ -1,5 +1,6 @@
 const socket = io('/lobby');
 const messageList = document.querySelector('#message-list');
+const gameTable = document.querySelector('#games-table');
 
 document
   .querySelector('#chat-message-form')
@@ -39,4 +40,29 @@ socket.on('message', ({ user, message }) => {
   messageList.appendChild(tr);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
+});
+
+socket.on('games', ({ id, name, max_number_of_players }) => {
+  let row = document.createElement('tr');
+  row.setAttribute('style', 'margin: 3px');
+
+  let nameTD = document.createElement('td');
+  nameTD.innerText = name;
+
+  let maxPlayersTD = document.createElement('td');
+  maxPlayersTD.innerText = max_number_of_players;
+
+  let linkTD = document.createElement('td');
+  let link = document.createElement('a');
+  link.setAttribute('href', '/game/' + id);
+  link.setAttribute('class', 'btn btn-md btn-success btn-block');
+  link.setAttribute('role', 'button');
+  link.innerText = 'Join';
+  linkTD.appendChild(link);
+
+  row.appendChild(nameTD);
+  row.appendChild(maxPlayersTD);
+  row.appendChild(linkTD);
+
+  gameTable.appendChild(row);
 });

@@ -23,6 +23,11 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
     .then(gameData => {
       GamesCards.create(gameData.id)
         .then(() => {
+          request.app.io.of('lobby').emit('games', {
+            id: gameData.id,
+            name: gameData.name,
+            max_number_of_players: gameData.max_number_of_players
+          });
           response.redirect(`/game/${gameData.id}`);
         })
         .catch(error => {

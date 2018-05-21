@@ -19,12 +19,11 @@
 
     <!-- Login Form Errors -->
     <%if( (typeof error != "undefined" ? error : false) ) { %>
-      <%= error %>
-      <%# error.forEach(( error ) => { %>
-        <!-- <div class="notice error"> -->
-          <!-- <div class="alert alert-danger"><%#= error %></div> -->
-        <!-- </div> -->
-      <%# }); %>
+      <% error.forEach(( error ) => { %>
+        <div class="notice error">
+          <div class="alert alert-danger"><%= error %></div>
+        </div>
+      <% }); %>
     <% } %>
 
     <!-- Signup Form Errors -->
