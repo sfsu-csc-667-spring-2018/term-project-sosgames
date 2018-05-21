@@ -151,25 +151,26 @@ router.post('/:gameId/draw', (request, response, next) => {
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
-  let { cardId } = request.body;
+  let { cardId, cardOnTopId } = request.body;
 
   // this should update cards in games stuff
-  Games.playCard(gameId, user.id, cardId)
+  Games.playCard(gameId, user.id, cardId, cardOnTopId)
     .then(newGameStateData => {
       console.log(newGameStateData);
       console.log('yep dude');
+      let newCardOnTop = newGameStateData.newCardOnTop;
+      console.log(newCardOnTop);
 
       // TODO: get new game state, emit to gameroom and private socket accordingly
+      request.app.io.of(`/game/${gameId}`).emit('update', {
+        gameId,
+        newCardOnTop
+      });
     })
     .catch(error => {
       console.log(error);
       console.log('so alright');
     });
-
-  request.app.io.of(`/game/${gameId}`).emit('update', {
-    gameId,
-    cardId
-  });
 
   response.sendStatus(200);
 });

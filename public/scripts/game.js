@@ -53,10 +53,11 @@ cardsInHand.addEventListener('click', event => {
   let playerCard = event.target;
   if (playerCard.dataset.cardId) {
     const cardId = playerCard.dataset.cardId;
+    const cardOnTopId = cardOnTop.dataset.cardId;
 
     // TODO: display color picker if wild card, then send this info back as well
     fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({ cardId }),
+      body: JSON.stringify({ cardId, cardOnTopId }),
       credentials: 'include',
       method: 'POST',
       headers: new Headers({
@@ -144,6 +145,7 @@ socket.on('ready to start game', card => {
   startButton.classList.toggle('hide');
   gameDeck.classList.toggle('hide');
   cardOnTop.dataset.cardValue = card.color + '-' + card.value;
+  cardOnTop.dataset.cardId = card.id;
   playerHand.classList.toggle('hide');
 });
 
@@ -151,8 +153,9 @@ socket.on('not ready to start game', () => {
   alert('Not ready to start game!');
 });
 
-socket.on('update', data => {
-  console.log(data);
+socket.on('update', ({ gameId, cardOnTop }) => {
+  // cardOnTop.dataset.cardId = card;
+  console.log(cardOnTop);
 });
 
 // CHAT in game room

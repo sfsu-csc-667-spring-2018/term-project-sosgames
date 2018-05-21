@@ -192,6 +192,6 @@ app.use(function(err, req, res, next) {
 
 // UsersGames.incrementNumberOfCardsById(1,1)
 
-GamesCards.resetDeck(1);
+// GamesCards.resetDeck(1);
 
 module.exports = app;
