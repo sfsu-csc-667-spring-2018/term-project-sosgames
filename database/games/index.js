@@ -36,5 +36,6 @@ module.exports = {
   nextPlayerTurn,
   verifyUserAndGame: require('./verifyUserAndGame'),
   getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand'),
-  isValidToStart: require('./isValidToStart')
+  isValidToStart: require('./isValidToStart'),
+  getStartGameState: require('./getStartGameState')
 };
