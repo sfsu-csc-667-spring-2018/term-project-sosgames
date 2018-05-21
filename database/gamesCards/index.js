@@ -42,6 +42,7 @@ module.exports = {
   getNumberCardInDeck,
   flipTopCard,
   findTopCardByGameId,
+  dealCards: require('./dealCards'),
   changeWildColorToRedById,
   changeWildColorToBlueById,
   changeWildColorToYellowById,

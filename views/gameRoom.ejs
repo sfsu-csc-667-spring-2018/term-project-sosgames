@@ -50,7 +50,7 @@
       <!-- CARD DECKS -->
       <div class="row card game-card-deck flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <div class="col">
-          <% if (typeof cardOnTop != "undefined") { %>
+          <% if (typeof cardOnTop != "undefined" && cardOnTop != null) { %>
             <div class="centered sprite" id="card-on-top" data-card-value="<%= cardOnTop.color%>-<%= cardOnTop.value%>"></div>
             <% } else { %>
             <div class="centered sprite" id="card-on-top" data-card-value=""></div>
