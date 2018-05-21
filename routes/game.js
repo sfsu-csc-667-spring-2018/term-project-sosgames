@@ -101,6 +101,9 @@ router.post('/:gameId/start', (request, response, next) => {
     .then(gameData => {
       Games.getStartGameState(gameId)
         .then(startGameStateData => {
+          // Figure out who's current player from startGameStateData
+          console.log(startGameStateData);
+
           let cardOnTop = startGameStateData.cardOnTop;
           let playersHands = startGameStateData.playersHands;
 

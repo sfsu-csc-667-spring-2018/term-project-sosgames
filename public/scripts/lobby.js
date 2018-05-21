@@ -1,6 +1,10 @@
 const socket = io('/lobby');
 const messageList = document.querySelector('#message-list');
 const gameTable = document.querySelector('#games-table');
+const noGames = document.querySelector('.no-games');
+const gameName = document.querySelector('#gameName');
+const totalPlayers = document.querySelector('#totalPlayers');
+const joinGame = document.querySelector('#joinGame');
 
 document
   .querySelector('#chat-message-form')
@@ -43,6 +47,13 @@ socket.on('message', ({ user, message }) => {
 });
 
 socket.on('games', ({ id, name, max_number_of_players }) => {
+  if (!noGames.classList.contains('hide')) {
+    noGames.classList.toggle('hide');
+    gameName.classList.toggle('hide');
+    totalPlayers.classList.toggle('hide');
+    joinGame.classList.toggle('hide');
+  }
+
   let row = document.createElement('tr');
   row.setAttribute('style', 'margin: 3px');
 
