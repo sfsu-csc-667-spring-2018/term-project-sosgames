@@ -32,19 +32,13 @@ startButton.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
 
-  let clientSocketId = socket.id;
-  const privateSocketId = privateSocket.id;
-  const privateRoomName = `/game/${gameId}/${privateSocketId}`;
-
   fetch(`/game/${gameId}/start`, {
-    // TODO: pass user.id from cookie for auth reason?
-    body: JSON.stringify({ clientSocketId, privateRoomName }),
     credentials: 'include',
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' })
   })
     .then(data => {
-      console.log('fetch start done');
+      console.log('START: fetch done');
     })
     .catch(error => {
       console.log(error);
@@ -53,27 +47,32 @@ startButton.addEventListener('click', event => {
 
 // Player clicks on a card in their hand to play
 cardsInHand.addEventListener('click', event => {
-  let playerCard = event.target;
   event.stopPropagation();
   event.preventDefault();
 
-  let clientSocketId = socketId(socket.id);
+  let playerCard = event.target;
+  if (playerCard.dataset.cardId) {
+    const cardId = playerCard.dataset.cardId;
+    const cardOnTopId = cardOnTop.dataset.cardId;
 
-  const cardValue = playerCard.dataset.card;
-  fetch(`/game/${gameId}/play`, {
-    body: JSON.stringify({ cardValue, clientSocketId }),
-    credentials: 'include',
-    method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json'
+    // TODO: display color picker if wild card, then send this info back as well
+    fetch(`/game/${gameId}/play`, {
+      body: JSON.stringify({ cardId, cardOnTopId }),
+      credentials: 'include',
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
     })
-  })
-    .then(data => {
-      console.log('fetch done');
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      .then(data => {
+        console.log('PLAY: fetch done');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  } else {
+    alert("You can't play that card!");
+  }
 });
 
 // A user submits a chat message
@@ -82,8 +81,6 @@ message_form.addEventListener('submit', event => {
   event.preventDefault();
 
   const message = document.querySelector('#message').value;
-  // console.log('fetch sending: ' + message);
-  // console.log(JSON.stringify({ message }));
   fetch(`/game/${gameId}/chat`, {
     body: JSON.stringify({
       message
@@ -95,7 +92,6 @@ message_form.addEventListener('submit', event => {
     })
   })
     .then(data => {
-      // console.log('fetch done');
       document.getElementById('chat-message-form').reset();
     })
     .catch(error => {
@@ -120,6 +116,8 @@ privateSocket.on('update hand', cards => {
   const cardOnTopNumber = cardOnTopValues[1];
 
   for (const card of cards) {
+    console.log(card);
+
     let cardData = card.value.includes('wild')
       ? `${card.value}`
       : `${card.color}-${card.value}`;
@@ -135,6 +133,7 @@ privateSocket.on('update hand', cards => {
     }
 
     innerDiv.setAttribute('data-card-value', cardData);
+    innerDiv.setAttribute('data-card-id', card.id);
 
     div.appendChild(innerDiv);
     cardsInHand.appendChild(div);
@@ -146,31 +145,29 @@ socket.on('ready to start game', card => {
   startButton.classList.toggle('hide');
   gameDeck.classList.toggle('hide');
   cardOnTop.dataset.cardValue = card.color + '-' + card.value;
+  cardOnTop.dataset.cardId = card.id;
   playerHand.classList.toggle('hide');
 });
 
 socket.on('not ready to start game', () => {
   alert('Not ready to start game!');
 });
-socket.on('update', () => {
-  alert('stuff');
+
+socket.on('update', ({ gameId, cardOnTop }) => {
+  // cardOnTop.dataset.cardId = card;
+  console.log(cardOnTop);
 });
 
 // CHAT in game room
 socket.on('message', ({ gameId, message, user }) => {
-  // console.log('test message frontend');
-  // console.log(`Received ${message}`, user);
   const tr = document.createElement('tr');
   const td = document.createElement('td');
 
   // logic for styling based on the sender
-  // if (user = this.user){ self message}
-  //  else td.className = 'external-chat-message';
   td.className = 'self-chat-message';
   td.innerText = user + ' : ' + message;
   tr.appendChild(td);
 
-  // console.log(tr);
   messageList.appendChild(tr);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;

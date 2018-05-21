@@ -91,12 +91,6 @@ router.get(
 // POST /game/:gameId/start -- Player requests to start the game
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
-  let { clientSocketId, privateRoom } = request.body;
-
-  let readyToStart = false;
-  let numberOfPlayers = 0,
-    maxNumberOfPlayers = 0;
-  let players = [];
 
   Games.isValidToStart(gameId)
     .then(gameData => {
@@ -134,7 +128,6 @@ router.post('/:gameId/start', (request, response, next) => {
         })
         .catch(error => {
           console.log(error);
-          console.log('what now');
         });
     })
     .catch(error => {
@@ -157,12 +150,27 @@ router.post('/:gameId/draw', (request, response, next) => {
 // POST /game/:gameId/play -- Player plays a card from their hand
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
-  let { cardValue, clientSocketId } = request.body;
-  // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  request.app.io.of(`/game/${gameId}`).emit('update', {
-    gameId,
-    cardValue
-  });
+  let user = request.user;
+  let { cardId, cardOnTopId } = request.body;
+
+  // this should update cards in games stuff
+  Games.playCard(gameId, user.id, cardId, cardOnTopId)
+    .then(newGameStateData => {
+      console.log(newGameStateData);
+      console.log('yep dude');
+      let newCardOnTop = newGameStateData.newCardOnTop;
+      console.log(newCardOnTop);
+
+      // TODO: get new game state, emit to gameroom and private socket accordingly
+      request.app.io.of(`/game/${gameId}`).emit('update', {
+        gameId,
+        newCardOnTop
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      console.log('so alright');
+    });
 
   response.sendStatus(200);
 });
