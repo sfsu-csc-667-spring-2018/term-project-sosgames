@@ -279,6 +279,12 @@ td.external-chat-message {
   cursor: pointer;
 }
 
+/* Greys out card, makes unclickable */
+.disabled-card {
+  filter: grayscale(100%);
+  pointer-events: none;
+}
+
 /* UNO CARDS SPRITES */
 div.sprite {
   background: transparent url('../images/uno_cards_deck.png') no-repeat;
