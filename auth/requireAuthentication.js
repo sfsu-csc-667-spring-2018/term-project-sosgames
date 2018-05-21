@@ -11,6 +11,7 @@ const indexAuthentication = (request, response, next) => {
   if (request.isAuthenticated()) {
     response.redirect('/lobby');
   } else {
+    //DEBUG ADDED
     return next();
   }
 };

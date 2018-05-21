@@ -48,7 +48,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(cookieParser(process.env.COOKIE_SECRET)); // DEBUG - Set secret to encrypt cookie
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Express Session
