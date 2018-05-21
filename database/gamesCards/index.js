@@ -26,6 +26,7 @@ const findAllDiscardedCardsById = require('./findAllDiscardedCardsByGameId')
 const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
 const changeWildColorToNull = require('./changeWildColorToNull')
   .changeWildColorToNull;
+const resetDeck = require('./resetDeck').resetDeck;
 
 module.exports = {
   create,
@@ -47,5 +48,6 @@ module.exports = {
   changeWildColorToGreenById,
   findAllDiscardedCardsById,
   changeUserIdToNull,
-  changeWildColorToNull
+  changeWildColorToNull,
+  resetDeck
 };

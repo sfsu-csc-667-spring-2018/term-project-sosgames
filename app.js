@@ -182,14 +182,16 @@ app.use(function(err, req, res, next) {
 
 // UsersGames.decrementNumberOfCardsById(1,1)
 
-GamesCards.draw(1, 1, 2)
-  .then(cards => {
-    console.log(cards);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+// GamesCards.draw(1, 1, 2)
+//   .then(cards => {
+//     console.log(cards);
+//   })
+//   .catch(error => {
+//     console.log(error);
+//   });
 
 // UsersGames.incrementNumberOfCardsById(1,1)
+
+GamesCards.resetDeck(1);
 
 module.exports = app;
