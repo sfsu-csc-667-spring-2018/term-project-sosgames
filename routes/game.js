@@ -161,10 +161,13 @@ router.post('/:gameId/play', function(request, response, next) {
   // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id)
     .then(newCardOnTop => {
-      console.log('yep dude');
-      console.log(newCardOnTop);
+      Games.playAndResolve(gameId)
+        .then(newGameStateData => {
+          // TODO: get new game state, emit to gameroom and private socket accordingly
+        })
+        .catch(error => {});
 
-      // TODO: get new game state, emit to gameroom and private socket accordingly
+      // Send general common state -- new card on top, which player's turn, their cards count
       request.app.io.of(`/game/${gameId}`).emit('update', {
         gameId,
         newCardOnTop
