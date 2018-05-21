@@ -21,17 +21,13 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
 
   Games.create(gameName, numberOfPlayers)
     .then(gameData => {
-      // Changing return of Games.Create to get ALL data
       GamesCards.create(gameData.id)
         .then(() => {
-          // Debug
-          console.log('Printing Game Data ' + JSON.stringify(gameData));
           request.app.io.of('lobby').emit('games', {
             id: gameData.id,
             name: gameData.name,
             max_number_of_players: gameData.max_number_of_players
           });
-          console.log('Socket emitted');
           response.redirect(`/game/${gameData.id}`);
         })
         .catch(error => {
