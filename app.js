@@ -196,4 +196,14 @@ app.use(function(err, req, res, next) {
 
 // GamesCards.playCard(1, 11, 1);
 
+// GamesCards.findAllCardsInHandsById(1)
+//   .then(cards => {
+//     console.log(cards);
+//   })
+
+// for(let index = 0; index <= 108; index++){
+//   GamesCards.changeInHand(false,1,index);
+// }
+
+GamesCards.sumAllCardsPointValuesInHands(1);
 module.exports = app;
