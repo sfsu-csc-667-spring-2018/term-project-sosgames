@@ -10,16 +10,20 @@ const decrementNumberOfCardsById = require('../usersGames/decrementNumberOfCards
   .decrementNumberOfCardsById;
 
 const playCard = (gameId, cardId, userId) => {
-  findTopCardByGameId(gameId)
+  return findTopCardByGameId(gameId)
     .then(topCard => {
-      Promise.all([
+      return Promise.all([
         changeOnTop(false, gameId, topCard.card_id),
+
         changeInDeck(false, gameId, cardId),
         changeInHand(false, gameId, cardId),
         changeOnTop(true, gameId, cardId),
-        decrementNumberOfCardsById(userId, gameId),
-        changeUserIdToNull(gameId, cardId)
-      ]);
+        changeUserIdToNull(gameId, cardId),
+
+        decrementNumberOfCardsById(userId, gameId)
+      ]).then(() => {
+        return findTopCardByGameId(gameId);
+      });
     })
     .catch(error => {
       console.log(error);
