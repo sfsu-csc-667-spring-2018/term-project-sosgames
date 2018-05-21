@@ -27,5 +27,6 @@ module.exports = {
   findCardById,
   getNumberCardInDeck,
   flipTopCard,
-  findTopCardByGameId
+  findTopCardByGameId,
+  dealCards: require('./dealCards')
 };

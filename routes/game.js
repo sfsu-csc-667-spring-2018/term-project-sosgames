@@ -99,10 +99,21 @@ router.post('/:gameId/start', (request, response, next) => {
   let players = [];
 
   Games.isValidToStart(gameId)
-    .then(gameData => {})
+    .then(gameData => {
+      // todo: Games.getGameState --> inside call dealcards and other stuff
+      GamesCards.dealCards(gameId)
+        .then(gamesCardsData => {
+          console.log('dude\n');
+          console.log(gamesCardsData);
+          console.log('\ndone?');
+        })
+        .catch(error => {
+          console.log(error);
+          console.log('ok why tho');
+        });
+    })
     .catch(error => {
       console.log(error);
-      console.log('welp');
       request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
     });
 
