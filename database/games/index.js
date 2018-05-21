@@ -35,5 +35,6 @@ module.exports = {
   findIsReversedById,
   nextPlayerTurn,
   verifyUserAndGame: require('./verifyUserAndGame'),
-  getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand')
+  getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand'),
+  isValidToStart: require('./isValidToStart')
 };

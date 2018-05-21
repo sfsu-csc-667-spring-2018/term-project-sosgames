@@ -98,76 +98,84 @@ router.post('/:gameId/start', (request, response, next) => {
     maxNumberOfPlayers = 0;
   let players = [];
 
-  Games.findById(gameId).then(gameData => {
-    maxNumberOfPlayers = gameData.max_number_of_players;
-
-    UsersGames.findByGameId(gameId).then(usersGamesData => {
-      // Check if valid number of players to start
-      numberOfPlayers = usersGamesData.length;
-      if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
-        readyToStart = true;
-      }
-
-      if (readyToStart) {
-        // Get all players' ids in game
-        for (const userGame of usersGamesData) {
-          let player = {
-            userId: userGame.user_id,
-            numberOfCards: userGame.number_of_cards
-          };
-          players.push(player);
-        }
-
-        // Get players' private rooms in the same game
-        let rooms = request.app.io.sockets.adapter.rooms;
-        let playersRooms = [];
-        Object.keys(rooms).forEach(function(room) {
-          if (room.includes(`/game/${gameId}/`)) {
-            let userId = room.split('/')[3];
-            let playerInRoom = {};
-
-            playerInRoom.room = room;
-            playerInRoom.userId = userId;
-            playersRooms.push(playerInRoom);
-          }
-        });
-
-        GamesCards.findAllCardsInGame(gameId)
-          .then(cardsInGame => {
-            // Pick 1 card on top
-            let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
-            cardsInGame.splice(cardOnTop[0], 1);
-            // Update games_cards (gameId, cardOnTop.card_id, cardOnTop.on_top)
-
-            // Send game state to game room
-            request.app.io
-              .of(`/game/${gameId}`)
-              .emit('ready to start game', cardOnTop[1]);
-
-            // Deal cards
-            let cardsInHands = GameEngine.dealCards(
-              cardsInGame,
-              usersGamesData
-            );
-
-            // Send cards to each hand
-            for (const playerRoom of playersRooms) {
-              let cardsInPlayerHand = cardsInHands[playerRoom.userId];
-              request.app.io
-                .to(playerRoom.room)
-                .emit('update hand', cardsInPlayerHand.cards);
-            }
-
-            // TODO: Update users_games(number_of_cards=7) and games_cards(on_top, in_hand, user_id) tables
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      } else {
-        request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
-      }
+  Games.isValidToStart(gameId)
+    .then(gameData => {})
+    .catch(error => {
+      console.log(error);
+      console.log('welp');
+      request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
     });
-  });
+
+  // Games.findById(gameId).then(gameData => {
+  //   maxNumberOfPlayers = gameData.max_number_of_players;
+
+  //   UsersGames.findByGameId(gameId).then(usersGamesData => {
+  //     // Check if valid number of players to start
+  //     numberOfPlayers = usersGamesData.length;
+  //     if (numberOfPlayers >= 2 && numberOfPlayers <= maxNumberOfPlayers) {
+  //       readyToStart = true;
+  //     }
+
+  //     if (readyToStart) {
+  //       // Get all players' ids in game
+  //       for (const userGame of usersGamesData) {
+  //         let player = {
+  //           userId: userGame.user_id,
+  //           numberOfCards: userGame.number_of_cards
+  //         };
+  //         players.push(player);
+  //       }
+
+  //       // Get players' private rooms in the same game
+  //       let rooms = request.app.io.sockets.adapter.rooms;
+  //       let playersRooms = [];
+  //       Object.keys(rooms).forEach(function(room) {
+  //         if (room.includes(`/game/${gameId}/`)) {
+  //           let userId = room.split('/')[3];
+  //           let playerInRoom = {};
+
+  //           playerInRoom.room = room;
+  //           playerInRoom.userId = userId;
+  //           playersRooms.push(playerInRoom);
+  //         }
+  //       });
+
+  //       GamesCards.findAllCardsInGame(gameId)
+  //         .then(cardsInGame => {
+  //           // Pick 1 card on top
+  //           let cardOnTop = GameEngine.selectCardOnTop(cardsInGame);
+  //           cardsInGame.splice(cardOnTop[0], 1);
+  //           // Update games_cards (gameId, cardOnTop.card_id, cardOnTop.on_top)
+
+  //           // Send game state to game room
+  //           request.app.io
+  //             .of(`/game/${gameId}`)
+  //             .emit('ready to start game', cardOnTop[1]);
+
+  //           // Deal cards
+  //           let cardsInHands = GameEngine.dealCards(
+  //             cardsInGame,
+  //             usersGamesData
+  //           );
+
+  //           // Send cards to each hand
+  //           for (const playerRoom of playersRooms) {
+  //             let cardsInPlayerHand = cardsInHands[playerRoom.userId];
+  //             request.app.io
+  //               .to(playerRoom.room)
+  //               .emit('update hand', cardsInPlayerHand.cards);
+  //           }
+
+  //           // TODO: Update users_games(number_of_cards=7) and games_cards(on_top, in_hand, user_id) tables
+  //         })
+  //         .catch(error => {
+  //           console.log(error);
+  //         });
+  //     } else {
+  //       request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
+  //     }
+  //   });
+  // });
 
   response.sendStatus(200);
 });
