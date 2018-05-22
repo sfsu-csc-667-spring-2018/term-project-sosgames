@@ -141,8 +141,6 @@ message_form.addEventListener('submit', event => {
 privateSocket.on('connect', () => {
   let userId = userIdInput.value;
   privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
-  console.log('on emit-- ' + privateSocket.id);
-  console.log('on connect-- ' + privateSocket.id);
 });
 
 // Client side event for a hand update
@@ -265,19 +263,24 @@ socket.on('update', ({ gameId, newCardOnTop }) => {
   cardOnTop.dataset.cardValue = cardValue;
 });
 
-// CHAT in game room
-socket.on('message', ({ gameId, message, user }) => {
-  const row = document.createElement('tr');
-  const messageTD = document.createElement('td');
+socket.on('update which active player', ({ players }) => {
+  let currentPlayerId = -1;
+  for (const player of players) {
+    if (player.currentPlayer) {
+      currentPlayerId = player.user_id;
+    }
+  }
 
-  messageTD.className = 'self-chat-message';
-  messageTD.innerHTML = user + ' : ' + message;
-
-  row.appendChild(messageTD);
-
-  messageList.appendChild(row);
-  var elem = document.getElementById('chat-window');
-  elem.scrollTop = elem.scrollHeight;
+  for (const playerDiv of playerView.children) {
+    if (
+      (+playerDiv.dataset.userId != currentPlayerId &&
+        playerDiv.classList.contains('player-active')) ||
+      (+playerDiv.dataset.userId == currentPlayerId &&
+        !playerDiv.classList.contains('player-active'))
+    ) {
+      playerDiv.classList.toggle('player-active');
+    }
+  }
 });
 
 socket.on('player view update', ({ players }) => {
@@ -315,4 +318,19 @@ socket.on('player view update', ({ players }) => {
 
     playerView.appendChild(newPlayerDiv);
   }
+});
+
+// CHAT in game room
+socket.on('message', ({ gameId, message, user }) => {
+  const row = document.createElement('tr');
+  const messageTD = document.createElement('td');
+
+  messageTD.className = 'self-chat-message';
+  messageTD.innerHTML = user + ' : ' + message;
+
+  row.appendChild(messageTD);
+
+  messageList.appendChild(row);
+  var elem = document.getElementById('chat-window');
+  elem.scrollTop = elem.scrollHeight;
 });

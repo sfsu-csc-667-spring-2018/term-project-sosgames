@@ -110,11 +110,9 @@ router.post('/:gameId/start', (request, response, next) => {
     .then(gameData => {
       Games.getStartGameState(gameId)
         .then(startGameStateData => {
-          // Figure out who's current player from startGameStateData
-          console.log(startGameStateData);
-
           let cardOnTop = startGameStateData.cardOnTop;
           let playersHands = startGameStateData.playersHands;
+          let players = startGameStateData.players;
 
           // Get players' private rooms in the same game
           let rooms = request.app.io.sockets.adapter.rooms;
@@ -134,6 +132,11 @@ router.post('/:gameId/start', (request, response, next) => {
           request.app.io
             .of(`/game/${gameId}`)
             .emit('ready to start game', cardOnTop);
+
+          // Update game room which players and whose turn
+          request.app.io
+            .of(`/game/${gameId}`)
+            .emit('update which active player', { players });
 
           // Send cards to each hand
           for (const playerRoom of playersRooms) {
@@ -169,10 +172,6 @@ router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
   let { cardId, wildColor } = request.body;
-  // console.log('wild color man:');
-  // console.log(wildColor);
-  // console.log('card id man:');
-  // console.log(cardId);
 
   // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id)
@@ -197,6 +196,11 @@ router.post('/:gameId/play', function(request, response, next) {
                   playersRooms.push(playerInRoom);
                 }
               });
+
+              // Update game room which players and whose turn
+              request.app.io
+                .of(`/game/${gameId}`)
+                .emit('update which active player', { players });
 
               // Send cards to each hand
               for (const playerRoom of playersRooms) {
