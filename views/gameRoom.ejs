@@ -65,6 +65,27 @@
       </div>
       <!-- CARD DECKS ENDS -->
 
+      <!-- COLOR PICKER -->
+      <div class="row color-picker card hide">
+        <div class="container-fluid text-center">
+          <h4><span class="badge badge-pill badge-light">Please choose a color</span></h4>
+          <div class="row">
+            <div class="col text-center">
+              <button class="btn btn-primary btn-lrg" data-wild-color="blue">Blue</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-success btn-lrg" data-wild-color="green">Green</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-danger btn-lrg" data-wild-color="red">Red</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-warning btn-lrg" data-wild-color="yellow">Yellow</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- PLAYER'S HAND -->
       <div id="cards-in-hand" class="row card player-hand flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <input id="userId" name="userId" type="hidden" value="<%= userId %>">

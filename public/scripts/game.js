@@ -242,7 +242,8 @@ socket.on('player view update', ({ players }) => {
     profile_picture.className = 'rounded-circle';
     profile_picture.setAttribute(
       'src',
-      players[players.length - 1].profile_picture_path
+      '../images/profile_pic_green.png'
+      // players[players.length - 1].profile_picture_path
     );
     profile_picture.setAttribute('alt', 'player image');
 

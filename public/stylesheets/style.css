@@ -151,7 +151,7 @@ body {
   animation-name: slide-right;
 } */
 
-@keyframes slide-right {
+@keyframes fade-in {
   from {
     /* margin-left: 100%;
     width: 200%; */
@@ -179,7 +179,7 @@ body {
 
 td.self-chat-message {
   animation-duration: 0.7s;
-  animation-name: slide-right;
+  animation-name: fade-in;
   background-color: beige;
   /* float: right; */
   border-radius: 25px;
@@ -190,7 +190,7 @@ td.self-chat-message {
 td.external-chat-message {
   animation-duration: 0.7s;
 
-  animation-name: slide-left;
+  animation-name: fade-in;
   background-color: lightblue;
   /* float: left; */
   border-radius: 25px;
@@ -219,6 +219,16 @@ td.external-chat-message {
   transition: all 0.1s ease-in-out;
   padding: 10px;
   margin: 0px 0px 15px 0px;
+}
+
+/* COLOR PICKER */
+.color-picker {
+  animation-duration: 0.7s;
+  animation-name: fade-in;
+}
+
+.color-picker .btn {
+  width: 100%;
 }
 
 /*endGamePage*/
