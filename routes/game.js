@@ -182,6 +182,13 @@ router.post('/:gameId/play', function(request, response, next) {
             .then(newGameStateData => {
               let players = newGameStateData.players;
               let playersHands = newGameStateData.playersHands;
+              // console.log('PLAYERS HAND');
+              // console.log( JSON.stringify(playersHands));
+
+              // for (let hand of playersHands) {
+              //   console.log( JSON.stringify(hand));
+              //   console.log('\n');
+              // }
 
               // Get players' private rooms in the same game
               let rooms = request.app.io.sockets.adapter.rooms;

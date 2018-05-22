@@ -166,6 +166,11 @@ privateSocket.on('update hand after play', cards => {
     newsCards[card.id] = card;
   }
 
+  console.log('oldhand:');
+  console.log(oldHand.length);
+  console.log('newcards:');
+  console.log(cards.length);
+
   if (oldHand.length > cards.length) {
     console.log('remove stuff');
 
@@ -188,6 +193,8 @@ privateSocket.on('update hand after play', cards => {
     // Add new card if new card doesn't exist in current hand
     for (const [cardId, card] of Object.entries(newsCards)) {
       if (!(+cardId in oldCards)) {
+        console.log('NEW CARD:');
+        console.log(card);
         addNewCard(card);
       }
     }

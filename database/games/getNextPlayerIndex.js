@@ -51,7 +51,6 @@ const getNextPlayerIndex = (gameId, isSpecialCase = false) => {
         numberOfTurnsToSkip) %
       numberOfPlayers.count;
 
-    console.log('newCurrentPlayerIndex=' + newCurrentPlayerIndex);
     return newCurrentPlayerIndex;
   });
 };

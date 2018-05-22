@@ -7,7 +7,7 @@ module.exports = {
     let actions = ['draw-two'];
     // let wild_cards = ['wild', 'wild-draw-four'];
 
-    cards.push(createColoredCards(createNumeredArray(0, 1), colors));
+    cards.push(createColoredCards(createNumeredArray(0, 5), colors));
 
     cards.push(createColoredCards(actions, colors, 20));
     cards.push(createColoredCards(actions, colors, 20));
