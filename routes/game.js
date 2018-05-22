@@ -70,6 +70,8 @@ router.get(
 
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
+            console.log(gameStateData.players);
+
             if (game.current_player_index !== -1) {
               renderData.isStarted = true;
               renderData.cardOnTop = gameStateData.cardOnTop;

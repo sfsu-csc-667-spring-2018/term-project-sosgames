@@ -46,9 +46,6 @@ const getNextPlayerIndex = gameId => {
         numberOfTurnsToSkip) %
       numberOfPlayers.count;
 
-    console.log('dude man why tho');
-
-    console.log(newCurrentPlayerIndex);
     return newCurrentPlayerIndex;
   });
 };
