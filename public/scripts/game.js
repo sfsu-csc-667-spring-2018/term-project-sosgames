@@ -53,9 +53,8 @@ cardsInHand.addEventListener('click', event => {
   event.preventDefault();
 
   let playerCard = event.target;
-  if (playerCard.dataset.cardId) {
+  if (playerCard.dataset.cardValue) {
     const cardId = playerCard.dataset.cardId;
-    // const cardOnTopId = cardOnTop.dataset.cardId;
 
     // TODO: display color picker if wild card, then send this info back as well
     fetch(`/game/${gameId}/play`, {
