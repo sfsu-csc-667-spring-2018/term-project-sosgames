@@ -169,10 +169,6 @@ router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
   let { cardId, wildColor } = request.body;
-  // console.log('wild color man:');
-  // console.log(wildColor);
-  // console.log('card id man:');
-  // console.log(cardId);
 
   // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id)
@@ -197,6 +193,11 @@ router.post('/:gameId/play', function(request, response, next) {
                   playersRooms.push(playerInRoom);
                 }
               });
+
+              // Update game room which players and whose turn
+              request.app.io
+                .of(`/game/${gameId}`)
+                .emit('update which active player', { players });
 
               // Send cards to each hand
               for (const playerRoom of playersRooms) {
