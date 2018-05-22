@@ -101,21 +101,18 @@ message_form.addEventListener('submit', event => {
 
 // PRIVATE SOCKET for a specific client
 privateSocket.on('connect', () => {
-  if (!startButton.classList.contains('hide')) {
-    let userId = userIdInput.value;
-    privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
-    console.log('on emit-- ' + privateSocket.id);
-  }
+  let userId = userIdInput.value;
+  privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
+  console.log('on emit-- ' + privateSocket.id);
   console.log('on connect-- ' + privateSocket.id);
 });
 
 // Client side event for a hand update
 privateSocket.on('update hand', cards => {
-  const cardOnTopValues = cardOnTop.getAttribute('data-card-value').split('-');
-  const cardOnTopColor = cardOnTopValues[0];
-  const cardOnTopNumber = cardOnTopValues[1];
+  console.log('update hand got called');
 
   for (const card of cards) {
+    console.log('NEW CARDS:');
     console.log(card);
 
     let cardData = card.value.includes('wild')
@@ -123,7 +120,7 @@ privateSocket.on('update hand', cards => {
       : `${card.color}-${card.value}`;
 
     let div = document.createElement('div');
-    div.className = 'col';
+    div.className = 'col player-card-div';
 
     let innerDiv = document.createElement('div');
     innerDiv.className = 'player-card centered sprite';
@@ -137,6 +134,44 @@ privateSocket.on('update hand', cards => {
 
     div.appendChild(innerDiv);
     cardsInHand.appendChild(div);
+    console.log('please work');
+  }
+});
+
+// Client side event for a hand update -- appending new cards after each turn
+privateSocket.on('update hand after play', cards => {
+  console.log('!!!update hand after play got called');
+
+  for (const card of cards) {
+    console.log('NEW CARD:');
+    console.log(card);
+
+    let cardData = card.value.includes('wild')
+      ? `${card.value}`
+      : `${card.color}-${card.value}`;
+
+    let div = document.createElement('div');
+    div.className = 'col player-card-div';
+
+    let innerDiv = document.createElement('div');
+    innerDiv.className = 'player-card centered sprite';
+
+    if (card.disabled) {
+      innerDiv.className += ' disabled-card';
+    }
+
+    innerDiv.setAttribute('data-card-value', cardData);
+    innerDiv.setAttribute('data-card-id', card.id);
+
+    div.appendChild(innerDiv);
+    cardsInHand.appendChild(div);
+    console.log('please work');
+  }
+
+  for (let childElement of cardsInHand.children) {
+    if (childElement.classList.contains('player-card-div')) {
+      // remove dupes: if length == 2 -> remove one of them
+    }
   }
 });
 

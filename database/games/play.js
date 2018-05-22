@@ -33,14 +33,17 @@ const play = gameId => {
     usersGames.findByGameId(gameId),
     findCurrentPlayerIndexById(gameId)
   ]).then(([cardOnTop, hands, cardsInDeck, players, index]) => {
+    // Basic case
+    return nextPlayerTurn(gameId);
+
     // Game logic - check cardOnTop
     // - next turn
     // - direction
     // - number of cards for next person (+ next next person???)
 
-    return changeGameDirection(gameId).then(() => {
-      return nextPlayerTurn(gameId);
-    });
+    // return changeGameDirection(gameId).then(() => {
+    //   return nextPlayerTurn(gameId);
+    // });
     // switch (cardOnTop.value) {
     //   case 'reverse':
     //     return changeGameDirection(gameId)

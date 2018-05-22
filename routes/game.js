@@ -167,7 +167,45 @@ router.post('/:gameId/play', function(request, response, next) {
         .then(data => {
           console.log(data);
           console.log('after play');
+
           // TODO: get new game state, emit to gameroom and private socket accordingly
+          Games.getGameState(gameId)
+            .then(newGameStateData => {
+              console.log('NEW GAME STATE DATA:');
+              console.log(newGameStateData);
+              let players = newGameStateData.players;
+              let playersHands = newGameStateData.playersHands;
+
+              // Get players' private rooms in the same game
+              let rooms = request.app.io.sockets.adapter.rooms;
+              console.log('ROOMS:');
+              console.log(rooms);
+
+              let playersRooms = [];
+              Object.keys(rooms).forEach(function(room) {
+                if (room.includes(`/game/${gameId}/`)) {
+                  let userId = room.split('/')[3];
+                  let playerInRoom = {};
+
+                  playerInRoom.room = room;
+                  playerInRoom.userId = userId;
+                  playersRooms.push(playerInRoom);
+                }
+              });
+              console.log('\nPLAYERS ROOMS:');
+              console.log(playersRooms);
+
+              // Send cards to each hand
+              for (const playerRoom of playersRooms) {
+                let cardsInPlayerHand = playersHands[playerRoom.userId];
+                console.log('DUDEEEEEEE');
+                console.log(cardsInPlayerHand);
+                request.app.io
+                  .to(playerRoom.room)
+                  .emit('update hand after play', cardsInPlayerHand);
+              }
+            })
+            .catch(error => {});
         })
         .catch(error => {});
 
