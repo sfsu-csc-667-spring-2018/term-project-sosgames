@@ -34,45 +34,42 @@ const play = gameId => {
     findCurrentPlayerIndexById(gameId)
   ]).then(([cardOnTop, hands, cardsInDeck, players, index]) => {
     // Basic case
-    return nextPlayerTurn(gameId);
+    // return nextPlayerTurn(gameId);
 
     // Game logic - check cardOnTop
     // - next turn
     // - direction
     // - number of cards for next person (+ next next person???)
+    console.log('CARDONTOPVALUE:');
+    console.log(cardOnTop);
+    switch (cardOnTop.value) {
+      case 'reverse':
+        return changeGameDirection(gameId).then(() => {
+          return nextPlayerTurn(gameId);
+        });
+        break;
 
-    // return changeGameDirection(gameId).then(() => {
-    //   return nextPlayerTurn(gameId);
-    // });
-    // switch (cardOnTop.value) {
-    //   case 'reverse':
-    //     return changeGameDirection(gameId)
-    //     .then(() => {
-    //       return nextPlayerTurn(gameId);
-    //     });
-    //     break;
+      // case 'draw-two':
+      //   if (cardsInDeck.length > 2) {
+      //     return drawCardsAndSkip(gameId, players, 2);
+      //   } else {
+      //     return gamesCards.resetDeck(gameId)
+      //       .then(() => {
+      //         return drawCardsAndSkip(gameId, players, 2);
+      //       });
+      //   }
+      //   break;
 
-    //   case 'draw-two':
-    //     if (cardsInDeck.length > 2) {
-    //       return drawCardsAndSkip(gameId, players, 2);
-    //     } else {
-    //       return gamesCards.resetDeck(gameId)
-    //         .then(() => {
-    //           return drawCardsAndSkip(gameId, players, 2);
-    //         });
-    //     }
-    //     break;
+      // case 'wild':
+      // case 'wild-draw-four':
+      // break;
 
-    //   case 'wild':
-    //   case 'wild-draw-four':
-    //   break;
-
-    //   default:
-    //     return nextPlayerTurn(gameId);
-    //     break;
-    // }
-
-    // return players;
+      default:
+        // normal case + skip
+        console.log('NORMAL OR SKIP');
+        return nextPlayerTurn(gameId);
+        break;
+    }
   });
 };
 
