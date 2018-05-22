@@ -222,12 +222,12 @@ td.external-chat-message {
 }
 
 /* COLOR PICKER */
-.color-picker {
+#color-picker {
   animation-duration: 0.7s;
   animation-name: fade-in;
 }
 
-.color-picker .btn {
+#color-picker .btn {
   width: 100%;
 }
 

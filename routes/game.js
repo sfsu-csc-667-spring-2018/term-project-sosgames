@@ -168,7 +168,11 @@ router.post('/:gameId/draw', (request, response, next) => {
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
-  let { cardId } = request.body;
+  let { cardId, wildColor } = request.body;
+  // console.log('wild color man:');
+  // console.log(wildColor);
+  // console.log('card id man:');
+  // console.log(cardId);
 
   // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id)
