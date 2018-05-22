@@ -1,4 +1,5 @@
 const database = require('../connection');
+
 const findNumberOfJoinedPlayers = require('../usersGames/findNumberOfJoinedPlayers')
   .findNumberOfJoinedPlayers;
 const findCurrentPlayerIndex = require('../games/findCurrentPlayerIndexByGameId')
@@ -25,7 +26,7 @@ const parseCardValue = cardValue => {
   }
 };
 
-const getNextPlayerIndex = gameId => {
+const getNextPlayerIndex = (gameId, isSpecialCase = false) => {
   return Promise.all([
     findNumberOfJoinedPlayers(gameId),
     findCurrentPlayerIndex(gameId),
@@ -33,6 +34,10 @@ const getNextPlayerIndex = gameId => {
     findIsReversedById(gameId)
   ]).then(([numberOfPlayers, game, topCard, gameStatus]) => {
     let numberOfTurnsToSkip = parseCardValue(topCard.value);
+
+    if (isSpecialCase) {
+      numberOfTurnsToSkip = 1;
+    }
 
     // if game is reversed go backwards
     if (gameStatus.is_reversed) {
