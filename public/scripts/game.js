@@ -162,24 +162,21 @@ socket.on('update', ({ gameId, cardOnTop }) => {
 
 // CHAT in game room
 socket.on('message', ({ gameId, message, user }) => {
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
+  const row = document.createElement('tr');
+  const messageTD = document.createElement('td');
 
-  td.className = 'self-chat-message';
-  td.innerText = user + ' : ' + message;
-  tr.appendChild(td);
+  messageTD.className = 'self-chat-message';
+  messageTD.innerHTML = user + ' : ' + message;
 
-  messageList.appendChild(tr);
+  row.appendChild(messageTD);
+
+  messageList.appendChild(row);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
 
-// Update Player View
 socket.on('player view update', ({ players }) => {
   if (playersInGame.length != players.length) {
-    // Find Players from backend that don't exist in frontend
-    // for( var i = 0; i < players.length; i++ ) {
-    //   if( (playersInGame.innerText == players[ players.length -1 ].username  )) {
     let newPlayerDiv = document.createElement('div');
     newPlayerDiv.className = 'text-center col-md-2 player-avatar';
 
@@ -211,7 +208,5 @@ socket.on('player view update', ({ players }) => {
     newPlayerDiv.appendChild(playerNumCards);
 
     playerView.appendChild(newPlayerDiv);
-    // }
-    // }
   }
 });

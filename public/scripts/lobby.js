@@ -28,14 +28,15 @@ document
   });
 
 socket.on('message', ({ user, message }) => {
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
+  const row = document.createElement('tr');
+  const messageTD = document.createElement('td');
 
-  td.className = 'self-chat-message';
-  td.innerText = user + ' : ' + message;
-  tr.appendChild(td);
+  messageTD.className = 'self-chat-message';
+  messageTD.innerHTML = user.username + ' : ' + message;
 
-  messageList.appendChild(tr);
+  row.appendChild(messageTD);
+
+  messageList.appendChild(row);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
