@@ -28,8 +28,9 @@ const playCardOrDraw = (gameId, userId) => {
                 card[0].color === topCard.wild_color
               ) {
                 //can play card after draw
-                console.log('play card');
-                return playCard(gameId, card[0].card_id, userId);
+                return playCard(gameId, card[0].card_id, userId).then(() => {
+                  return nextPlayerTurn(gameId, true);
+                });
               } else {
                 //skipped turn
                 return nextPlayerTurn(gameId, true);

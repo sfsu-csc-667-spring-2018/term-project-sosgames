@@ -155,9 +155,9 @@ app.use(function(err, req, res, next) {
 //   console.log(cards);
 // })
 
-GamesCards.playCardOrDraw(1, 1).then(data => {
-  console.log(data);
-});
+// GamesCards.playCardOrDraw(1, 1).then(data => {
+//   console.log(data);
+// });
 
 // GamesCards.resetAllCardsById(1)
 //   .then(data => {
