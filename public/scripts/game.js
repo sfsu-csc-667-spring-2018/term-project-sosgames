@@ -171,10 +171,7 @@ privateSocket.on('update hand after play', cards => {
 
     // Remove cards
     for (const oldCard of oldHand) {
-      console.log('oldcard:');
-      console.log(oldCard);
       if (!(+oldCard.dataset.cardId in newsCards)) {
-        console.log('remove this ^^^');
         cardsInHand.removeChild(oldCard);
       }
     }

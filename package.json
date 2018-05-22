@@ -58,8 +58,6 @@
     "postinstall": "sequelize db:migrate",
     "db:seed:create": "sequelize seed:create --name",
     "db:seed": "sequelize db:seed --seed",
-    "db:seed:new":
-      "sequelize db:seed --seed 20180428210951-users.js && sequelize db:seed --seed 20180428220808-games.js",
     "db:seed:all": "sequelize db:seed:all",
     "db:seed:undo": "sequelize db:seed:undo --seed",
     "db:seed:rollback": "sequelize db:seed:undo:all",
