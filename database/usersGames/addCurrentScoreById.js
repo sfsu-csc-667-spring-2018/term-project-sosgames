@@ -6,8 +6,8 @@ const changeCurrentScoreById = require('./changeCurrentScoreById')
   .changeCurrentScoreById;
 
 const addCurrentScoreById = (userId, gameId, scoreToBeAdded) => {
-  findCurrentScoreById(userId, gameId).then(usersGames => {
-    changeCurrentScoreById(
+  return findCurrentScoreById(userId, gameId).then(usersGames => {
+    return changeCurrentScoreById(
       userId,
       gameId,
       usersGames.current_score + scoreToBeAdded
