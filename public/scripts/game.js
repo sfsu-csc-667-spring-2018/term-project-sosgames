@@ -109,39 +109,13 @@ privateSocket.on('connect', () => {
 
 // Client side event for a hand update
 privateSocket.on('update hand', cards => {
-  console.log('update hand got called');
-
   for (const card of cards) {
-    console.log('NEW CARDS:');
-    console.log(card);
-
-    let cardData = card.value.includes('wild')
-      ? `${card.value}`
-      : `${card.color}-${card.value}`;
-
-    let div = document.createElement('div');
-    div.className = 'col player-card-div';
-
-    let innerDiv = document.createElement('div');
-    innerDiv.className = 'player-card centered sprite';
-
-    if (card.disabled) {
-      innerDiv.className += ' disabled-card';
-    }
-
-    innerDiv.setAttribute('data-card-value', cardData);
-    innerDiv.setAttribute('data-card-id', card.id);
-
-    div.appendChild(innerDiv);
-    cardsInHand.appendChild(div);
-    console.log('please work');
+    addNewCard(card);
   }
 });
 
 // Client side event for a hand update -- appending new cards after each turn
 privateSocket.on('update hand after play', cards => {
-  console.log('!!!update hand after play got called');
-
   let oldHand = [];
   let oldCards = {};
   for (let childElement of cardsInHand.children) {
@@ -171,25 +145,7 @@ privateSocket.on('update hand after play', cards => {
     // Add new card if new card doesn't exist in current hand
     for (const [cardId, card] of Object.entries(newsCards)) {
       if (!(+cardId in oldCards)) {
-        let cardData = card.value.includes('wild')
-          ? `${card.value}`
-          : `${card.color}-${card.value}`;
-
-        let div = document.createElement('div');
-        div.className = 'col player-card-div';
-
-        let innerDiv = document.createElement('div');
-        innerDiv.className = 'player-card centered sprite';
-
-        if (card.disabled) {
-          innerDiv.className += ' disabled-card';
-        }
-
-        innerDiv.setAttribute('data-card-value', cardData);
-        innerDiv.setAttribute('data-card-id', card.id);
-
-        div.appendChild(innerDiv);
-        cardsInHand.appendChild(div);
+        addNewCard(card);
       }
     }
   } else {
@@ -198,7 +154,29 @@ privateSocket.on('update hand after play', cards => {
   }
 });
 
-// Helper method
+// HELPER METHODS
+function addNewCard(card) {
+  let cardData = card.value.includes('wild')
+    ? `${card.value}`
+    : `${card.color}-${card.value}`;
+
+  let div = document.createElement('div');
+  div.className = 'col player-card-div';
+
+  let innerDiv = document.createElement('div');
+  innerDiv.className = 'player-card centered sprite';
+
+  if (card.disabled) {
+    innerDiv.className += ' disabled-card';
+  }
+
+  innerDiv.setAttribute('data-card-value', cardData);
+  innerDiv.setAttribute('data-card-id', card.id);
+
+  div.appendChild(innerDiv);
+  cardsInHand.appendChild(div);
+}
+
 function updateDisabledStateOfHand(oldHand, cards) {
   for (const oldCard of oldHand) {
     for (const card of cards) {
