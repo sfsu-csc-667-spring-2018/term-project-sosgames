@@ -28,7 +28,8 @@
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">
-              <img class="rounded-circle" src="../<%= player.profile_picture_path %>" alt="player image">
+              <img class="rounded-circle" src="../images/profile_pic_green.png" alt="player image">
+              <!-- <img class="rounded-circle" src="../<%#= player.profile_picture_path %>" alt="player image"> -->
               <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
               <div class="player-points">Score: <%= player.current_score %></div>
               <div class="player-num-cards">Cards: <%=player.number_of_cards%></div>
@@ -63,6 +64,27 @@
         </div>
       </div>
       <!-- CARD DECKS ENDS -->
+
+      <!-- COLOR PICKER -->
+      <div class="row card hide" id="color-picker">
+        <div class="container-fluid text-center">
+          <h4><span class="badge badge-pill badge-light">Please choose a color</span></h4>
+          <div class="row">
+            <div class="col text-center">
+              <button class="btn btn-primary btn-lrg" data-wild-color="blue">Blue</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-success btn-lrg" data-wild-color="green">Green</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-danger btn-lrg" data-wild-color="red">Red</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-warning btn-lrg" data-wild-color="yellow">Yellow</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- PLAYER'S HAND -->
       <div id="cards-in-hand" class="row card player-hand flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">

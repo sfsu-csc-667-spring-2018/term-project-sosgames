@@ -17,6 +17,8 @@ const drawButton = document.querySelector('#draw-btn');
 const gameDeck = document.querySelector('.game-card-deck');
 const cardOnTop = document.querySelector('#card-on-top');
 
+const colorPicker = document.querySelector('#color-picker');
+
 const playerHand = document.querySelector('.player-hand');
 const cardsInHand = document.querySelector('#cards-in-hand');
 const playerCards = document.querySelectorAll('.player-card');
@@ -27,6 +29,9 @@ const message_form = document.querySelector('#chat-message-form');
 const messageList = document.querySelector('#message-list');
 
 const userIdInput = document.querySelector('#userId');
+
+// SPECIAL WILD CARD VALUES
+let wildCardId = -1;
 
 // USER'S EVENTS
 // Player clicks on the start button
@@ -53,28 +58,59 @@ cardsInHand.addEventListener('click', event => {
   event.preventDefault();
 
   let playerCard = event.target;
-  if (playerCard.dataset.cardId) {
+  let cardValue = playerCard.dataset.cardValue;
+  if (cardValue) {
     const cardId = playerCard.dataset.cardId;
-    // const cardOnTopId = cardOnTop.dataset.cardId;
+    let wildColor = '';
 
-    // TODO: display color picker if wild card, then send this info back as well
-    fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({ cardId }),
-      credentials: 'include',
-      method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json'
+    if (cardValue.includes('wild')) {
+      wildCardId = cardId;
+      colorPicker.classList.toggle('hide');
+    } else {
+      fetch(`/game/${gameId}/play`, {
+        body: JSON.stringify({ cardId, wildColor }),
+        credentials: 'include',
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
       })
-    })
-      .then(data => {
-        console.log('PLAY: fetch done');
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        .then(data => {
+          console.log('PLAY: fetch done');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   } else {
     alert("You can't play that card!");
   }
+});
+
+// Color picker
+colorPicker.addEventListener('click', event => {
+  event.stopPropagation();
+  event.preventDefault();
+
+  let cardId = wildCardId;
+  let colorPickerButton = event.target;
+  wildColor = colorPickerButton.dataset.wildColor;
+
+  fetch(`/game/${gameId}/play`, {
+    body: JSON.stringify({ cardId, wildColor }),
+    credentials: 'include',
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+    .then(data => {
+      console.log('PLAY: fetch wild done');
+      colorPicker.classList.toggle('hide');
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // A user submits a chat message
@@ -133,14 +169,21 @@ privateSocket.on('update hand after play', cards => {
   }
 
   if (oldHand.length > cards.length) {
+    console.log('remove stuff');
+
     // Remove cards
     for (const oldCard of oldHand) {
+      console.log('oldcard:');
+      console.log(oldCard);
       if (!(+oldCard.dataset.cardId in newsCards)) {
+        console.log('remove this ^^^');
         cardsInHand.removeChild(oldCard);
       }
     }
     updateDisabledStateOfHand(oldHand, cards);
   } else if (oldHand.length < cards.length) {
+    console.log('add new stuff');
+
     // Append new cards
     updateDisabledStateOfHand(oldHand, cards);
 
@@ -151,6 +194,8 @@ privateSocket.on('update hand after play', cards => {
       }
     }
   } else {
+    console.log('same stuff');
+
     // same number of cards
     updateDisabledStateOfHand(oldHand, cards);
   }
@@ -164,6 +209,7 @@ function addNewCard(card) {
 
   let div = document.createElement('div');
   div.className = 'col player-card-div';
+  div.setAttribute('data-card-id', card.id);
 
   let innerDiv = document.createElement('div');
   innerDiv.className = 'player-card centered sprite';
@@ -243,7 +289,8 @@ socket.on('player view update', ({ players }) => {
     profile_picture.className = 'rounded-circle';
     profile_picture.setAttribute(
       'src',
-      players[players.length - 1].profile_picture_path
+      '../images/profile_pic_green.png'
+      // players[players.length - 1].profile_picture_path
     );
     profile_picture.setAttribute('alt', 'player image');
 
