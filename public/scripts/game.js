@@ -142,35 +142,119 @@ privateSocket.on('update hand', cards => {
 privateSocket.on('update hand after play', cards => {
   console.log('!!!update hand after play got called');
 
-  for (const card of cards) {
-    console.log('NEW CARD:');
-    console.log(card);
-
-    let cardData = card.value.includes('wild')
-      ? `${card.value}`
-      : `${card.color}-${card.value}`;
-
-    let div = document.createElement('div');
-    div.className = 'col player-card-div';
-
-    let innerDiv = document.createElement('div');
-    innerDiv.className = 'player-card centered sprite';
-
-    if (card.disabled) {
-      innerDiv.className += ' disabled-card';
-    }
-
-    innerDiv.setAttribute('data-card-value', cardData);
-    innerDiv.setAttribute('data-card-id', card.id);
-
-    div.appendChild(innerDiv);
-    cardsInHand.appendChild(div);
-    console.log('please work');
-  }
-
+  let oldHand = [];
+  let oldCards = {};
   for (let childElement of cardsInHand.children) {
     if (childElement.classList.contains('player-card-div')) {
-      // remove dupes: if length == 2 -> remove one of them
+      oldHand.push(childElement);
+      oldCards[childElement.dataset.cardId] = childElement;
+    }
+  }
+
+  let newsCards = {};
+  for (const card of cards) {
+    newsCards[card.id] = card;
+  }
+  // for (const [key, value] of Object.entries(newsCards)) {
+  //   console.log(key);
+  // }
+
+  // Remove cards
+  if (oldHand.length > cards.length) {
+    for (const oldCard of oldHand) {
+      if (!(+oldCard.dataset.cardId in newsCards)) {
+        cardsInHand.removeChild(oldCard);
+      } else {
+        for (const card of cards) {
+          if (
+            card.id == oldCard.dataset.cardId &&
+            card.disabled &&
+            !oldCard.firstElementChild.classList.contains('disabled-card')
+          ) {
+            oldCard.firstElementChild.classList.add('disabled-card');
+          } else if (
+            card.id == oldCard.dataset.cardId &&
+            !card.disabled &&
+            oldCard.firstElementChild.classList.contains('disabled-card')
+          ) {
+            oldCard.firstElementChild.classList.remove('disabled-card');
+          }
+        }
+      }
+    }
+  } else if (oldHand.length < cards.length) {
+    // Append new cards
+    for (const oldCard of oldHand) {
+      for (const card of cards) {
+        if (
+          card.id == oldCard.dataset.cardId &&
+          card.disabled &&
+          !oldCard.firstElementChild.classList.contains('disabled-card')
+        ) {
+          console.log('add disabled');
+          oldCard.firstElementChild.classList.add('disabled-card');
+          console.log(oldCard.firstElementChild);
+        } else if (
+          card.id == oldCard.dataset.cardId &&
+          !card.disabled &&
+          oldCard.firstElementChild.classList.contains('disabled-card')
+        ) {
+          console.log('remove disabled');
+          oldCard.firstElementChild.classList.remove('disabled-card');
+          console.log(oldCard.firstElementChild);
+        }
+      }
+    }
+    // check if new card exist?
+    for (const [key, value] of Object.entries(newsCards)) {
+      if (!(+key in oldCards)) {
+        console.log('key not exist in oldcards');
+        console.log(key);
+        console.log(value);
+        console.log('\n');
+        // let cardData = card.value.includes('wild')
+        //   ? `${card.value}`
+        //   : `${card.color}-${card.value}`;
+
+        // let div = document.createElement('div');
+        // div.className = 'col player-card-div';
+
+        // let innerDiv = document.createElement('div');
+        // innerDiv.className = 'player-card centered sprite';
+
+        // if (card.disabled) {
+        //   innerDiv.className += ' disabled-card';
+        // }
+
+        // innerDiv.setAttribute('data-card-value', cardData);
+        // innerDiv.setAttribute('data-card-id', card.id);
+
+        // div.appendChild(innerDiv);
+        // cardsInHand.appendChild(div);
+      }
+    }
+  } else {
+    // same number of cards
+    for (const oldCard of oldHand) {
+      for (const card of cards) {
+        if (
+          card.id == oldCard.dataset.cardId &&
+          card.disabled &&
+          !oldCard.firstElementChild.classList.contains('disabled-card')
+        ) {
+          console.log('add disabled');
+          oldCard.firstElementChild.classList.add('disabled-card');
+          console.log(oldCard.firstElementChild);
+        } else if (
+          card.id == oldCard.dataset.cardId &&
+          !card.disabled &&
+          oldCard.firstElementChild.classList.contains('disabled-card')
+        ) {
+          console.log('remove disabled');
+          oldCard.firstElementChild.classList.remove('disabled-card');
+          console.log(oldCard.firstElementChild);
+        }
+      }
     }
   }
 });
