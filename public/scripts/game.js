@@ -155,109 +155,69 @@ privateSocket.on('update hand after play', cards => {
   for (const card of cards) {
     newsCards[card.id] = card;
   }
-  // for (const [key, value] of Object.entries(newsCards)) {
-  //   console.log(key);
-  // }
 
-  // Remove cards
   if (oldHand.length > cards.length) {
+    // Remove cards
     for (const oldCard of oldHand) {
       if (!(+oldCard.dataset.cardId in newsCards)) {
         cardsInHand.removeChild(oldCard);
-      } else {
-        for (const card of cards) {
-          if (
-            card.id == oldCard.dataset.cardId &&
-            card.disabled &&
-            !oldCard.firstElementChild.classList.contains('disabled-card')
-          ) {
-            oldCard.firstElementChild.classList.add('disabled-card');
-          } else if (
-            card.id == oldCard.dataset.cardId &&
-            !card.disabled &&
-            oldCard.firstElementChild.classList.contains('disabled-card')
-          ) {
-            oldCard.firstElementChild.classList.remove('disabled-card');
-          }
-        }
       }
     }
+    updateDisabledStateOfHand(oldHand, cards);
   } else if (oldHand.length < cards.length) {
     // Append new cards
-    for (const oldCard of oldHand) {
-      for (const card of cards) {
-        if (
-          card.id == oldCard.dataset.cardId &&
-          card.disabled &&
-          !oldCard.firstElementChild.classList.contains('disabled-card')
-        ) {
-          console.log('add disabled');
-          oldCard.firstElementChild.classList.add('disabled-card');
-          console.log(oldCard.firstElementChild);
-        } else if (
-          card.id == oldCard.dataset.cardId &&
-          !card.disabled &&
-          oldCard.firstElementChild.classList.contains('disabled-card')
-        ) {
-          console.log('remove disabled');
-          oldCard.firstElementChild.classList.remove('disabled-card');
-          console.log(oldCard.firstElementChild);
+    updateDisabledStateOfHand(oldHand, cards);
+
+    // Add new card if new card doesn't exist in current hand
+    for (const [cardId, card] of Object.entries(newsCards)) {
+      if (!(+cardId in oldCards)) {
+        let cardData = card.value.includes('wild')
+          ? `${card.value}`
+          : `${card.color}-${card.value}`;
+
+        let div = document.createElement('div');
+        div.className = 'col player-card-div';
+
+        let innerDiv = document.createElement('div');
+        innerDiv.className = 'player-card centered sprite';
+
+        if (card.disabled) {
+          innerDiv.className += ' disabled-card';
         }
-      }
-    }
-    // check if new card exist?
-    for (const [key, value] of Object.entries(newsCards)) {
-      if (!(+key in oldCards)) {
-        console.log('key not exist in oldcards');
-        console.log(key);
-        console.log(value);
-        console.log('\n');
-        // let cardData = card.value.includes('wild')
-        //   ? `${card.value}`
-        //   : `${card.color}-${card.value}`;
 
-        // let div = document.createElement('div');
-        // div.className = 'col player-card-div';
+        innerDiv.setAttribute('data-card-value', cardData);
+        innerDiv.setAttribute('data-card-id', card.id);
 
-        // let innerDiv = document.createElement('div');
-        // innerDiv.className = 'player-card centered sprite';
-
-        // if (card.disabled) {
-        //   innerDiv.className += ' disabled-card';
-        // }
-
-        // innerDiv.setAttribute('data-card-value', cardData);
-        // innerDiv.setAttribute('data-card-id', card.id);
-
-        // div.appendChild(innerDiv);
-        // cardsInHand.appendChild(div);
+        div.appendChild(innerDiv);
+        cardsInHand.appendChild(div);
       }
     }
   } else {
     // same number of cards
-    for (const oldCard of oldHand) {
-      for (const card of cards) {
-        if (
-          card.id == oldCard.dataset.cardId &&
-          card.disabled &&
-          !oldCard.firstElementChild.classList.contains('disabled-card')
-        ) {
-          console.log('add disabled');
-          oldCard.firstElementChild.classList.add('disabled-card');
-          console.log(oldCard.firstElementChild);
-        } else if (
-          card.id == oldCard.dataset.cardId &&
-          !card.disabled &&
-          oldCard.firstElementChild.classList.contains('disabled-card')
-        ) {
-          console.log('remove disabled');
-          oldCard.firstElementChild.classList.remove('disabled-card');
-          console.log(oldCard.firstElementChild);
-        }
+    updateDisabledStateOfHand(oldHand, cards);
+  }
+});
+
+// Helper method
+function updateDisabledStateOfHand(oldHand, cards) {
+  for (const oldCard of oldHand) {
+    for (const card of cards) {
+      if (
+        card.id == oldCard.dataset.cardId &&
+        card.disabled &&
+        !oldCard.firstElementChild.classList.contains('disabled-card')
+      ) {
+        oldCard.firstElementChild.classList.add('disabled-card');
+      } else if (
+        card.id == oldCard.dataset.cardId &&
+        !card.disabled &&
+        oldCard.firstElementChild.classList.contains('disabled-card')
+      ) {
+        oldCard.firstElementChild.classList.remove('disabled-card');
       }
     }
   }
-});
+}
 
 // GAME ROOM specific sockets
 socket.on('ready to start game', card => {
