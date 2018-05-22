@@ -24,7 +24,7 @@
   <section class="game-room game-room-play col-lg-8">
     <div class="container">
       <!-- PLAYERS LIST -->
-      <div class="row card game-players flex-row">
+      <div id="player-view" class="row card game-players flex-row">
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">
@@ -70,11 +70,11 @@
         <!-- Cards in Hand -->
         <% if(typeof playerHand != "undefined") { %>
           <% for (card of playerHand) { %>
-            <div class="col">
+            <div class="col player-card-div">
               <% if (card.color.includes('wild') ) { %>
-                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>"></div>
+                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>" data-card-id="<%= card.id %>"></div>
               <% } else { %>
-                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>-<%= card.value %>"></div>
+                <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>-<%= card.value %>" data-card-id="<%= card.id %>"></div>
               <% } %>
             </div>
             <% } %>

@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../database');
+const colors = [
+  'green',
+  'grey',
+  'magenta',
+  'orange',
+  'pink',
+  'purple',
+  'red',
+  'teal',
+  'yellow'
+];
 
 router.get('/', (request, response, next) => {
   response.render('signup', {
@@ -15,7 +26,8 @@ router.post('/', (request, response, next) => {
     renderErrors(response, formErrors);
   } else {
     const { username, email, password } = request.body;
-    const photo_path = '../images/no_profile_pic.png';
+    const color = colors[Math.floor(Math.random() * 9)];
+    const photo_path = '../images/profile_pic_' + color + '.png';
 
     User.create(username, email, password, photo_path).then(errors => {
       if (errors) {

@@ -27,6 +27,11 @@ const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
 const changeWildColorToNull = require('./changeWildColorToNull')
   .changeWildColorToNull;
 const resetDeck = require('./resetDeck').resetDeck;
+const playCard = require('./playCard').playCard;
+const findAllCardsInHandsById = require('./findAllCardsInHandsByGameId')
+  .findAllCardsInHandById;
+const sumAllCardsPointValuesInHands = require('./sumAllCardsPointValuesInHands')
+  .sumAllCardsPointValuesInHands;
 
 module.exports = {
   create,
@@ -50,5 +55,9 @@ module.exports = {
   findAllDiscardedCardsById,
   changeUserIdToNull,
   changeWildColorToNull,
-  resetDeck
+  resetDeck,
+  playCard,
+  findAllCardsInHandsById,
+  sumAllCardsPointValuesInHands,
+  findAllCardsInDeckById: require('./findAllCardsInDeckById')
 };

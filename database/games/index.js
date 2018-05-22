@@ -37,5 +37,8 @@ module.exports = {
   verifyUserAndGame: require('./verifyUserAndGame'),
   getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand'),
   isValidToStart: require('./isValidToStart'),
-  getStartGameState: require('./getStartGameState')
+  getStartGameState: require('./getStartGameState'),
+  play: require('./play'),
+  getNextPlayerIndex: require('./getNextPlayerIndex'),
+  getGameState: require('./getGameState')
 };

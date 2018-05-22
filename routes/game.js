@@ -23,6 +23,11 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
     .then(gameData => {
       GamesCards.create(gameData.id)
         .then(() => {
+          request.app.io.of('lobby').emit('games', {
+            id: gameData.id,
+            name: gameData.name,
+            max_number_of_players: gameData.max_number_of_players
+          });
           response.redirect(`/game/${gameData.id}`);
         })
         .catch(error => {
@@ -65,6 +70,8 @@ router.get(
 
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
+            console.log(gameStateData.players);
+
             if (game.current_player_index !== -1) {
               renderData.isStarted = true;
               renderData.cardOnTop = gameStateData.cardOnTop;
@@ -72,6 +79,13 @@ router.get(
             }
             renderData.game = game;
             renderData.players = gameStateData.players;
+
+            // io.emit new player for gameroom namespace: /game/:gameId
+            // I AM HERE
+            request.app.io.of(`/game/${gameId}`).emit('player view update', {
+              players: gameStateData.players
+            });
+
             response.render('gameRoom', renderData);
           })
           .catch(error => {
@@ -91,17 +105,14 @@ router.get(
 // POST /game/:gameId/start -- Player requests to start the game
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
-  let { clientSocketId, privateRoom } = request.body;
-
-  let readyToStart = false;
-  let numberOfPlayers = 0,
-    maxNumberOfPlayers = 0;
-  let players = [];
 
   Games.isValidToStart(gameId)
     .then(gameData => {
       Games.getStartGameState(gameId)
         .then(startGameStateData => {
+          // Figure out who's current player from startGameStateData
+          console.log(startGameStateData);
+
           let cardOnTop = startGameStateData.cardOnTop;
           let playersHands = startGameStateData.playersHands;
 
@@ -134,7 +145,6 @@ router.post('/:gameId/start', (request, response, next) => {
         })
         .catch(error => {
           console.log(error);
-          console.log('what now');
         });
     })
     .catch(error => {
@@ -157,12 +167,68 @@ router.post('/:gameId/draw', (request, response, next) => {
 // POST /game/:gameId/play -- Player plays a card from their hand
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
-  let { cardValue, clientSocketId } = request.body;
-  // TODO: Game.validateMove(stuff).then(io stuff).catch(err)
-  request.app.io.of(`/game/${gameId}`).emit('update', {
-    gameId,
-    cardValue
-  });
+  let user = request.user;
+  let { cardId } = request.body;
+
+  // this should update cards in games stuff
+  GamesCards.playCard(gameId, cardId, user.id)
+    .then(newCardOnTop => {
+      Games.play(gameId)
+        .then(data => {
+          console.log(data);
+          console.log('after play');
+
+          // TODO: get new game state, emit to gameroom and private socket accordingly
+          Games.getGameState(gameId)
+            .then(newGameStateData => {
+              console.log('NEW GAME STATE DATA:');
+              console.log(newGameStateData);
+              let players = newGameStateData.players;
+              let playersHands = newGameStateData.playersHands;
+
+              // Get players' private rooms in the same game
+              let rooms = request.app.io.sockets.adapter.rooms;
+              console.log('ROOMS:');
+              console.log(rooms);
+
+              let playersRooms = [];
+              Object.keys(rooms).forEach(function(room) {
+                if (room.includes(`/game/${gameId}/`)) {
+                  let userId = room.split('/')[3];
+                  let playerInRoom = {};
+
+                  playerInRoom.room = room;
+                  playerInRoom.userId = userId;
+                  playersRooms.push(playerInRoom);
+                }
+              });
+              console.log('\nPLAYERS ROOMS:');
+              console.log(playersRooms);
+
+              // Send cards to each hand
+              for (const playerRoom of playersRooms) {
+                let cardsInPlayerHand = playersHands[playerRoom.userId];
+                console.log('DUDEEEEEEE');
+                console.log(cardsInPlayerHand);
+                request.app.io
+                  .to(playerRoom.room)
+                  .emit('update hand after play', cardsInPlayerHand);
+              }
+            })
+            .catch(error => {});
+        })
+        .catch(error => {});
+
+      // Send general common state -- new card on top, which player's turn, their cards count
+      request.app.io.of(`/game/${gameId}`).emit('update', {
+        gameId,
+        newCardOnTop
+      });
+    })
+    .catch(error => {
+      console.log(error);
+      console.log('so alright');
+    });
 
   response.sendStatus(200);
 });
