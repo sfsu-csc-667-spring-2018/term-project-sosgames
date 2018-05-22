@@ -58,5 +58,7 @@ module.exports = {
   resetDeck,
   playCard,
   findAllCardsInHandsById,
-  sumAllCardsPointValuesInHands
+  sumAllCardsPointValuesInHands,
+  findAllPlayableCardsBy: require('./findAllPlayableCardsByGameAndUserId'),
+  playCardOrDraw: require('./playCardOrDraw')
 };
