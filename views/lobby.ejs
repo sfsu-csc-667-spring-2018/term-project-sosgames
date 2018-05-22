@@ -11,27 +11,30 @@
         <h3>Current Games</h3>
         <div class="table-responsive">
           <table id="games-table" style="width:100%" class="text-center">
+
             <% if( typeof games != "undefined") { %>
-              <tr>
-                <th>Game Name</th>
-                <th>Total Players</th>
-                <th>Join Game</th>
-              </tr>
+              <thead>
+                <th class="has-games">Game Name</th>
+                <th class="has-games">Total Players</th>
+                <th class="has-games">Join Game</th>
+              </thead>
               <% games.forEach(( game ) => { %>
                 <tr style="margin: 3px">
                   <td><%= game.name %></td>
                   <td><%= game.max_number_of_players %></td>
                   <td><a href="/game/<%= game.id %>" class="btn btn-md btn-success btn-block" role="button">Join</a></td>
-                  <!-- <td><a href="/game/<%= game.id %>" class="btn btn-sm btn-warning btn-block" role="button">Spectate</button></td> -->
                 </tr>
-              <% }); %>
+              <% });  %>
             <% } else { %>
-              <tr><h3>No Current Games.</h3></tr>
-              <tr><h3>Please create a game to play.</h3></tr>
+              <thead>
+                <th class="no-games">No Current Games. Please create a game to play.</th>
+                <th id="gameName" class="hide">Game Name</th>
+                <th id="totalPlayers" class="hide">Total Players</th>
+                <th id="joinGame" class="hide">Join Game</th>
+              </thead>
             <% } %>
           </table>
         </div>
-
 
         <h3>Top 10 Scores</h3>
 
@@ -49,7 +52,7 @@
                 </tr>
               <% }); %>
             <% } else { %>
-              <tr><h3>No Scores.</h3></tr>
+              <tr><p>No Scores.</p></tr>
             <% } %>
           </table>
         </div>

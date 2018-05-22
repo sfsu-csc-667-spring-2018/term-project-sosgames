@@ -4,7 +4,7 @@ const auth = require('../auth/requireAuthentication');
 
 router.post('/', (request, response, next) => {
   const { message } = request.body;
-  const user = request.user.username;
+  const user = request.user;
 
   request.app.io.of('lobby').emit('message', { user, message });
 

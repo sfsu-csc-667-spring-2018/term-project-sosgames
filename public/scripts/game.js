@@ -20,6 +20,8 @@ const cardOnTop = document.querySelector('#card-on-top');
 const playerHand = document.querySelector('.player-hand');
 const cardsInHand = document.querySelector('#cards-in-hand');
 const playerCards = document.querySelectorAll('.player-card');
+const playersInGame = document.querySelectorAll('.player-name');
+const playerView = document.querySelector('#player-view');
 
 const message_form = document.querySelector('#chat-message-form');
 const messageList = document.querySelector('#message-list');
@@ -160,15 +162,51 @@ socket.on('update', ({ gameId, cardOnTop }) => {
 
 // CHAT in game room
 socket.on('message', ({ gameId, message, user }) => {
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
+  const row = document.createElement('tr');
+  const messageTD = document.createElement('td');
 
-  // logic for styling based on the sender
-  td.className = 'self-chat-message';
-  td.innerText = user + ' : ' + message;
-  tr.appendChild(td);
+  messageTD.className = 'self-chat-message';
+  messageTD.innerHTML = user + ' : ' + message;
 
-  messageList.appendChild(tr);
+  row.appendChild(messageTD);
+
+  messageList.appendChild(row);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
+});
+
+socket.on('player view update', ({ players }) => {
+  if (playersInGame.length != players.length) {
+    let newPlayerDiv = document.createElement('div');
+    newPlayerDiv.className = 'text-center col-md-2 player-avatar';
+
+    const profile_picture = document.createElement('img');
+    profile_picture.className = 'rounded-circle';
+    profile_picture.setAttribute(
+      'src',
+      players[players.length - 1].profile_picture_path
+    );
+    profile_picture.setAttribute('alt', 'player image');
+
+    const playerName = document.createElement('div');
+    playerName.className = 'player-name';
+    playerName.innerText = 'Player ' + players[players.length - 1].username;
+
+    const playerPoints = document.createElement('div');
+    playerPoints.className = 'player-points';
+    playerPoints.innerText =
+      'Score: ' + players[players.length - 1].current_score;
+
+    const playerNumCards = document.createElement('div');
+    playerNumCards.className = 'player-num-cards';
+    playerNumCards.innerText =
+      'Cards: ' + players[players.length - 1].number_of_cards;
+
+    newPlayerDiv.appendChild(profile_picture);
+    newPlayerDiv.appendChild(playerName);
+    newPlayerDiv.appendChild(playerPoints);
+    newPlayerDiv.appendChild(playerNumCards);
+
+    playerView.appendChild(newPlayerDiv);
+  }
 });

@@ -1,6 +1,11 @@
 const socket = io('/lobby');
 const messageList = document.querySelector('#message-list');
 const gameTable = document.querySelector('#games-table');
+const noGames = document.querySelector('.no-games');
+const gameName = document.querySelector('#gameName');
+const totalPlayers = document.querySelector('#totalPlayers');
+const joinGame = document.querySelector('#joinGame');
+const privateSocket = io();
 
 document
   .querySelector('#chat-message-form')
@@ -23,26 +28,28 @@ document
   });
 
 socket.on('message', ({ user, message }) => {
-  // console.log(`Received ${message}`, user);
-  const tr = document.createElement('tr');
-  const td = document.createElement('td');
+  const row = document.createElement('tr');
+  const messageTD = document.createElement('td');
 
-  // logic for styling based on the sender
-  // if ((user == request.cookies.user)) {
-  //   td.className = 'self-chat-message';
-  // } else {
-  //   td.className = 'external-chat-message';
-  // }
-  td.className = 'self-chat-message';
-  td.innerText = user + ' : ' + message;
-  tr.appendChild(td);
+  messageTD.className = 'self-chat-message';
+  messageTD.innerHTML = user.username + ' : ' + message;
 
-  messageList.appendChild(tr);
+  row.appendChild(messageTD);
+
+  messageList.appendChild(row);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
 
 socket.on('games', ({ id, name, max_number_of_players }) => {
+  if (noGames !== null) {
+    hasNoGames = false;
+    noGames.classList.toggle('hide');
+    gameName.classList.toggle('hide');
+    totalPlayers.classList.toggle('hide');
+    joinGame.classList.toggle('hide');
+  }
+
   let row = document.createElement('tr');
   row.setAttribute('style', 'margin: 3px');
 

@@ -77,6 +77,13 @@ router.get(
             }
             renderData.game = game;
             renderData.players = gameStateData.players;
+
+            // io.emit new player for gameroom namespace: /game/:gameId
+            // I AM HERE
+            request.app.io.of(`/game/${gameId}`).emit('player view update', {
+              players: gameStateData.players
+            });
+
             response.render('gameRoom', renderData);
           })
           .catch(error => {
@@ -101,6 +108,9 @@ router.post('/:gameId/start', (request, response, next) => {
     .then(gameData => {
       Games.getStartGameState(gameId)
         .then(startGameStateData => {
+          // Figure out who's current player from startGameStateData
+          console.log(startGameStateData);
+
           let cardOnTop = startGameStateData.cardOnTop;
           let playersHands = startGameStateData.playersHands;
 
