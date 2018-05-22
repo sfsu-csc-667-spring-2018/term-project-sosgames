@@ -141,8 +141,6 @@ message_form.addEventListener('submit', event => {
 privateSocket.on('connect', () => {
   let userId = userIdInput.value;
   privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
-  console.log('on emit-- ' + privateSocket.id);
-  console.log('on connect-- ' + privateSocket.id);
 });
 
 // Client side event for a hand update

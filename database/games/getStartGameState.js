@@ -15,6 +15,12 @@ const getStartGameState = gameId => {
     let playersHands = {};
 
     for (const [index, player] of players.entries()) {
+      if (index === currentPlayerIndex) {
+        player.currentPlayer = true;
+      }
+    }
+
+    for (const [index, player] of players.entries()) {
       let hand = [];
       for (const card of hands) {
         if (player.user_id === card.user_id) {
@@ -32,7 +38,7 @@ const getStartGameState = gameId => {
       playersHands[player.user_id] = hand;
     }
 
-    return { cardOnTop, playersHands };
+    return { cardOnTop, playersHands, players };
   });
 };
 
