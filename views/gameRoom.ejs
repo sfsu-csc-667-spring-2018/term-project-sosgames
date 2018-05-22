@@ -70,7 +70,7 @@
         <!-- Cards in Hand -->
         <% if(typeof playerHand != "undefined") { %>
           <% for (card of playerHand) { %>
-            <div class="col">
+            <div class="col player-card-div">
               <% if (card.color.includes('wild') ) { %>
                 <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>" data-card-id="<%= card.id %>"></div>
               <% } else { %>

@@ -10,16 +10,23 @@ const changeWildColorToNull = require('./changeWildColorToNull')
   .changeWildColorToNull;
 
 const resetDeck = gameId => {
-  findAllDiscardedCardsById(gameId).then(cards => {
-    cards.forEach(card => {
-      console.log(card);
-      Promise.all([
-        changeInDeck(true, gameId, card.card_id),
-        changeInHand(false, gameId, card.card_id),
-        changeOnTop(false, gameId, card.card_id),
-        changeUserIdToNull(gameId, card.card_id),
-        changeWildColorToNull(gameId, card.card_id)
-      ]);
+  return findAllDiscardedCardsById(gameId).then(cards => {
+    return database.task(dbTask => {
+      let queries = [];
+
+      cards.forEach(card => {
+        queries.push(
+          Promise.all([
+            changeInDeck(true, gameId, card.card_id),
+            changeInHand(false, gameId, card.card_id),
+            changeOnTop(false, gameId, card.card_id),
+            changeUserIdToNull(gameId, card.card_id),
+            changeWildColorToNull(gameId, card.card_id)
+          ])
+        );
+      });
+
+      return dbTask.batch(queries);
     });
   });
 };

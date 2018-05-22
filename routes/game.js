@@ -70,6 +70,8 @@ router.get(
 
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
+            console.log(gameStateData.players);
+
             if (game.current_player_index !== -1) {
               renderData.isStarted = true;
               renderData.cardOnTop = gameStateData.cardOnTop;
@@ -166,17 +168,58 @@ router.post('/:gameId/draw', (request, response, next) => {
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
-  let { cardId, cardOnTopId } = request.body;
+  let { cardId } = request.body;
 
   // this should update cards in games stuff
-  Games.playCard(gameId, user.id, cardId, cardOnTopId)
-    .then(newGameStateData => {
-      console.log(newGameStateData);
-      console.log('yep dude');
-      let newCardOnTop = newGameStateData.newCardOnTop;
-      console.log(newCardOnTop);
+  GamesCards.playCard(gameId, cardId, user.id)
+    .then(newCardOnTop => {
+      Games.play(gameId)
+        .then(data => {
+          console.log(data);
+          console.log('after play');
 
-      // TODO: get new game state, emit to gameroom and private socket accordingly
+          // TODO: get new game state, emit to gameroom and private socket accordingly
+          Games.getGameState(gameId)
+            .then(newGameStateData => {
+              console.log('NEW GAME STATE DATA:');
+              console.log(newGameStateData);
+              let players = newGameStateData.players;
+              let playersHands = newGameStateData.playersHands;
+
+              // Get players' private rooms in the same game
+              let rooms = request.app.io.sockets.adapter.rooms;
+              console.log('ROOMS:');
+              console.log(rooms);
+
+              let playersRooms = [];
+              Object.keys(rooms).forEach(function(room) {
+                if (room.includes(`/game/${gameId}/`)) {
+                  let userId = room.split('/')[3];
+                  let playerInRoom = {};
+
+                  playerInRoom.room = room;
+                  playerInRoom.userId = userId;
+                  playersRooms.push(playerInRoom);
+                }
+              });
+              console.log('\nPLAYERS ROOMS:');
+              console.log(playersRooms);
+
+              // Send cards to each hand
+              for (const playerRoom of playersRooms) {
+                let cardsInPlayerHand = playersHands[playerRoom.userId];
+                console.log('DUDEEEEEEE');
+                console.log(cardsInPlayerHand);
+                request.app.io
+                  .to(playerRoom.room)
+                  .emit('update hand after play', cardsInPlayerHand);
+              }
+            })
+            .catch(error => {});
+        })
+        .catch(error => {});
+
+      // Send general common state -- new card on top, which player's turn, their cards count
       request.app.io.of(`/game/${gameId}`).emit('update', {
         gameId,
         newCardOnTop

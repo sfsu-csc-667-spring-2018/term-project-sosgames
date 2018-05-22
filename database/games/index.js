@@ -38,5 +38,7 @@ module.exports = {
   getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand'),
   isValidToStart: require('./isValidToStart'),
   getStartGameState: require('./getStartGameState'),
-  playCard: require('./playCard')
+  play: require('./play'),
+  getNextPlayerIndex: require('./getNextPlayerIndex'),
+  getGameState: require('./getGameState')
 };
