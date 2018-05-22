@@ -173,7 +173,6 @@ router.post('/:gameId/play', function(request, response, next) {
   let user = request.user;
   let { cardId, wildColor } = request.body;
 
-  // this should update cards in games stuff
   GamesCards.playCard(gameId, cardId, user.id, wildColor)
     .then(newCardOnTop => {
       Games.play(gameId)

@@ -16,20 +16,6 @@ const getGameState = gameId => {
     let currentPlayerIndex = currentIndex.current_player_index;
     let currentUserId = -1;
     let playersHands = {};
-    // console.log('---GAME');
-    // console.log(game);
-
-    // console.log('\n---CARD ON TOP');
-    // console.log(cardOnTop);
-
-    // console.log('\n---CURRENT INDEX');
-    // console.log(currentIndex);
-
-    // console.log('\n---PLAYERS');
-    // console.log(players);
-
-    // console.log('\n---HANDS');
-    // console.log(hands);
 
     for (const [index, player] of players.entries()) {
       if (index === currentPlayerIndex) {

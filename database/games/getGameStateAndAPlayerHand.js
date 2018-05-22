@@ -23,10 +23,6 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     database.any(GET_PLAYER_HAND, [gameId, userId])
   ]).then(([game, playerIndex, cardOnTop, players, playerHand]) => {
     let currentPlayerIndex = playerIndex.current_player_index;
-    console.log('currentPlayerIndex:');
-    console.log(currentPlayerIndex);
-    console.log('\n');
-
     let yourIndex = -1;
 
     for (const [index, player] of players.entries()) {

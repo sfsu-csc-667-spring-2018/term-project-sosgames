@@ -4,9 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     let cards = [];
     let colors = ['red', 'yellow', 'green', 'blue'];
-    // let actions = ['draw-two'];
-    let wild_cards = ['wild'];
-    // let wild_cards = ['wild', 'wild-draw-four'];
+    let wild_cards = ['wild-draw-four'];
 
     cards.push(createColoredCards(createNumeredArray(0, 5), colors));
 

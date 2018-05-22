@@ -32,13 +32,6 @@ const play = gameId => {
     usersGames.findByGameId(gameId),
     findCurrentPlayerIndexById(gameId)
   ]).then(([cardOnTop, hands, cardsInDeck, players, index]) => {
-    // Basic case
-    // return nextPlayerTurn(gameId);
-
-    // Game logic - check cardOnTop
-    // - next turn
-    // - direction
-    // - number of cards for next person (+ next next person???)
     switch (cardOnTop.value) {
       case 'reverse':
         return changeGameDirection(gameId).then(() => {
@@ -48,18 +41,25 @@ const play = gameId => {
 
       case 'draw-two':
         if (cardsInDeck.length > 2) {
-          console.log('deck>2');
           return drawCardsAndSkip(gameId, players, 2);
         } else {
-          console.log('deck<1');
           return gamesCards.resetDeck(gameId).then(() => {
             return drawCardsAndSkip(gameId, players, 2);
           });
         }
         break;
 
-      // case 'wild-draw-four':
-      // break;
+      case 'wild-draw-four':
+        if (cardsInDeck.length > 4) {
+          console.log('deck>2 wd4');
+          return drawCardsAndSkip(gameId, players, 4);
+        } else {
+          console.log('deck<1 wd4');
+          return gamesCards.resetDeck(gameId).then(() => {
+            return drawCardsAndSkip(gameId, players, 4);
+          });
+        }
+        break;
 
       default:
         // normal case + skip + wild

@@ -166,20 +166,12 @@ privateSocket.on('update hand after play', cards => {
     newsCards[card.id] = card;
   }
 
-  console.log('oldhand:');
-  console.log(oldHand.length);
-  console.log('newcards:');
-  console.log(cards.length);
-
   if (oldHand.length > cards.length) {
     console.log('remove stuff');
 
     // Remove cards
     for (const oldCard of oldHand) {
-      console.log('oldcard:');
-      console.log(oldCard);
       if (!(+oldCard.dataset.cardId in newsCards)) {
-        console.log('remove this ^^^');
         cardsInHand.removeChild(oldCard);
       }
     }
@@ -193,8 +185,6 @@ privateSocket.on('update hand after play', cards => {
     // Add new card if new card doesn't exist in current hand
     for (const [cardId, card] of Object.entries(newsCards)) {
       if (!(+cardId in oldCards)) {
-        console.log('NEW CARD:');
-        console.log(card);
         addNewCard(card);
       }
     }
@@ -232,27 +222,19 @@ function addNewCard(card) {
 
 function updateDisabledStateOfHand(oldHand, cards) {
   for (const oldCard of oldHand) {
-    console.log('OLD CARD:');
-    console.log(oldCard);
     for (const card of cards) {
-      console.log('NEWCARD:');
-      console.log(card);
       if (
         card.id == oldCard.dataset.cardId &&
         card.disabled &&
         !oldCard.firstElementChild.classList.contains('disabled-card')
       ) {
-        console.log('disable:');
         oldCard.firstElementChild.classList.add('disabled-card');
-        console.log(oldCard);
       } else if (
         card.id == oldCard.dataset.cardId &&
         !card.disabled &&
         oldCard.firstElementChild.classList.contains('disabled-card')
       ) {
-        console.log('enabled:');
         oldCard.firstElementChild.classList.remove('disabled-card');
-        console.log(oldCard);
       }
     }
   }
