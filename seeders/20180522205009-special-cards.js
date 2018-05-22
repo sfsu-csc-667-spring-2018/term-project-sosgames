@@ -4,15 +4,16 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     let cards = [];
     let colors = ['red', 'yellow', 'green', 'blue'];
-    let actions = ['draw-two'];
+    // let actions = ['draw-two'];
+    let wild_cards = ['wild'];
     // let wild_cards = ['wild', 'wild-draw-four'];
 
     cards.push(createColoredCards(createNumeredArray(0, 5), colors));
 
-    cards.push(createColoredCards(actions, colors, 20));
-    cards.push(createColoredCards(actions, colors, 20));
+    // cards.push(createColoredCards(actions, colors, 20));
+    // cards.push(createColoredCards(actions, colors, 20));
 
-    // cards.push(createWildCards(wild_cards, 4));
+    cards.push(createWildCards(wild_cards, 10));
 
     cards = [].concat(...cards);
     return queryInterface.bulkInsert('cards', cards, {});

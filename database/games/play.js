@@ -39,8 +39,6 @@ const play = gameId => {
     // - next turn
     // - direction
     // - number of cards for next person (+ next next person???)
-    console.log('CARDONTOPVALUE:');
-    console.log(cardOnTop);
     switch (cardOnTop.value) {
       case 'reverse':
         return changeGameDirection(gameId).then(() => {
@@ -60,13 +58,11 @@ const play = gameId => {
         }
         break;
 
-      // case 'wild':
       // case 'wild-draw-four':
       // break;
 
       default:
-        // normal case + skip
-        console.log('NORMAL OR SKIP');
+        // normal case + skip + wild
         return nextPlayerTurn(gameId);
         break;
     }

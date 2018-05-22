@@ -40,13 +40,27 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     }
 
     for (const card of playerHand) {
-      if (
-        yourIndex !== currentPlayerIndex ||
-        (!card.color.includes(cardOnTop.color) &&
-          !card.value.includes(cardOnTop.value) &&
-          !card.value.includes('wild'))
-      ) {
+      if (yourIndex !== currentPlayerIndex) {
         card.disabled = true;
+      } else {
+        if (cardOnTop.value.includes('wild')) {
+          // cardontop=wild
+          if (
+            card.color != cardOnTop.wild_color &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        } else {
+          // cardontop != wild
+          if (
+            card.color != cardOnTop.color &&
+            card.value != cardOnTop.value &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        }
       }
     }
 

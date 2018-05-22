@@ -40,19 +40,31 @@ const getGameState = gameId => {
     }
 
     for (const card of hands) {
-      if (
-        card.user_id !== currentUserId ||
-        (!card.color.includes(cardOnTop.color) &&
-          !card.value.includes(cardOnTop.value) &&
-          !card.value.includes('wild'))
-      ) {
+      if (card.user_id !== currentUserId) {
         card.disabled = true;
+      } else {
+        if (cardOnTop.value.includes('wild')) {
+          // cardontop=wild
+          if (
+            card.color != cardOnTop.wild_color &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        } else {
+          // cardontop != wild
+          if (
+            card.color != cardOnTop.color &&
+            card.value != cardOnTop.value &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        }
       }
+
       playersHands[card.user_id].push(card);
     }
-
-    // console.log('\n---PLAYERS HANDS---');
-    // console.log(playersHands);
 
     return Promise.resolve({ game, players, playersHands });
   });
