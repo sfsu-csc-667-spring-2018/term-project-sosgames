@@ -32,5 +32,6 @@ module.exports = {
   findNumberOfCardsById,
   changeNumberOfCardsById,
   incrementNumberOfCardsById,
-  decrementNumberOfCardsById
+  decrementNumberOfCardsById,
+  incrementWinnerCurrentScoreById: require('./incrementWinnerCurrentScoreByUserAndGameId')
 };
