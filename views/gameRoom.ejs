@@ -5,7 +5,7 @@
       <span class="badge badge-primary">Round <%= game.round_number %></span>
     </h1>
     <h5>
-      <span class="badge badge-pill badge-light">
+      <span class="badge badge-pill badge-light" id="direction-span">
         <% if (game.is_reversed) { %>
           Direction is right to left.
         <% } else { %>
@@ -27,8 +27,9 @@
       <div id="player-view" class="row card game-players flex-row">
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
-            <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">
-              <img class="rounded-circle" src="../<%= player.profile_picture_path %>" alt="player image">
+            <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>" data-user-id="<%=player.user_id%>">
+              <img class="rounded-circle" src="../images/profile_pic_green.png" alt="player image">
+              <!-- <img class="rounded-circle" src="../<%#= player.profile_picture_path %>" alt="player image"> -->
               <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
               <div class="player-points">Score: <%= player.current_score %></div>
               <div class="player-num-cards">Cards: <%=player.number_of_cards%></div>
@@ -51,7 +52,8 @@
       <div class="row card game-card-deck flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <div class="col">
           <% if (typeof cardOnTop != "undefined" && cardOnTop != null) { %>
-            <div class="centered sprite" id="card-on-top" data-card-value="<%= cardOnTop.color%>-<%= cardOnTop.value%>"></div>
+            <% let cardValue = (cardOnTop.value.includes('wild')) ? cardOnTop.value : cardOnTop.color + '-' + cardOnTop.value ;%>
+            <div class="centered sprite" id="card-on-top" data-card-value="<%= cardValue %>"></div>
             <% } else { %>
             <div class="centered sprite" id="card-on-top" data-card-value=""></div>
           <% } %>
@@ -63,6 +65,27 @@
       </div>
       <!-- CARD DECKS ENDS -->
 
+      <!-- COLOR PICKER -->
+      <div class="row card hide" id="color-picker">
+        <div class="container-fluid text-center">
+          <h4><span class="badge badge-pill badge-light">Please choose a color</span></h4>
+          <div class="row">
+            <div class="col text-center">
+              <button class="btn btn-primary btn-lrg" data-wild-color="blue">Blue</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-success btn-lrg" data-wild-color="green">Green</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-danger btn-lrg" data-wild-color="red">Red</button>
+            </div>
+            <div class="col text-center">
+              <button class="btn btn-warning btn-lrg" data-wild-color="yellow">Yellow</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- PLAYER'S HAND -->
       <div id="cards-in-hand" class="row card player-hand flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <input id="userId" name="userId" type="hidden" value="<%= userId %>">
@@ -70,7 +93,7 @@
         <!-- Cards in Hand -->
         <% if(typeof playerHand != "undefined") { %>
           <% for (card of playerHand) { %>
-            <div class="col player-card-div">
+            <div class="col player-card-div" data-card-id="<%= card.id %>">
               <% if (card.color.includes('wild') ) { %>
                 <div class="player-card centered sprite <%if(card.disabled){%>disabled-card<%}%>" data-card-value="<%= card.color %>" data-card-id="<%= card.id %>"></div>
               <% } else { %>

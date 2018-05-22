@@ -10,7 +10,7 @@ const changeGameDirection = require('./changeGameDirection')
 const getNextPlayerIndex = require('./getNextPlayerIndex');
 
 const drawCardsAndSkip = (gameId, players, numberOfCardsToDraw) => {
-  return getNextPlayerIndex(gameId).then(nextIndex => {
+  return getNextPlayerIndex(gameId, true).then(nextIndex => {
     let nextUserId = -1;
     for (const [index, player] of players.entries()) {
       if (index === nextIndex) {
@@ -18,10 +18,9 @@ const drawCardsAndSkip = (gameId, players, numberOfCardsToDraw) => {
       }
     }
 
-    return Promise.all([
-      gamesCards.draw(gameId, nextUserId, numberOfCardsToDraw),
-      nextPlayerTurn(gameId)
-    ]);
+    return gamesCards.draw(gameId, nextUserId, numberOfCardsToDraw).then(() => {
+      return nextPlayerTurn(gameId);
+    });
   });
 };
 
@@ -33,46 +32,40 @@ const play = gameId => {
     usersGames.findByGameId(gameId),
     findCurrentPlayerIndexById(gameId)
   ]).then(([cardOnTop, hands, cardsInDeck, players, index]) => {
-    // Basic case
-    return nextPlayerTurn(gameId);
+    switch (cardOnTop.value) {
+      case 'reverse':
+        return changeGameDirection(gameId).then(() => {
+          return nextPlayerTurn(gameId);
+        });
+        break;
 
-    // Game logic - check cardOnTop
-    // - next turn
-    // - direction
-    // - number of cards for next person (+ next next person???)
+      case 'draw-two':
+        if (cardsInDeck.length > 2) {
+          return drawCardsAndSkip(gameId, players, 2);
+        } else {
+          return gamesCards.resetDeck(gameId).then(() => {
+            return drawCardsAndSkip(gameId, players, 2);
+          });
+        }
+        break;
 
-    // return changeGameDirection(gameId).then(() => {
-    //   return nextPlayerTurn(gameId);
-    // });
-    // switch (cardOnTop.value) {
-    //   case 'reverse':
-    //     return changeGameDirection(gameId)
-    //     .then(() => {
-    //       return nextPlayerTurn(gameId);
-    //     });
-    //     break;
+      case 'wild-draw-four':
+        if (cardsInDeck.length > 4) {
+          console.log('deck>2 wd4');
+          return drawCardsAndSkip(gameId, players, 4);
+        } else {
+          console.log('deck<1 wd4');
+          return gamesCards.resetDeck(gameId).then(() => {
+            return drawCardsAndSkip(gameId, players, 4);
+          });
+        }
+        break;
 
-    //   case 'draw-two':
-    //     if (cardsInDeck.length > 2) {
-    //       return drawCardsAndSkip(gameId, players, 2);
-    //     } else {
-    //       return gamesCards.resetDeck(gameId)
-    //         .then(() => {
-    //           return drawCardsAndSkip(gameId, players, 2);
-    //         });
-    //     }
-    //     break;
-
-    //   case 'wild':
-    //   case 'wild-draw-four':
-    //   break;
-
-    //   default:
-    //     return nextPlayerTurn(gameId);
-    //     break;
-    // }
-
-    // return players;
+      default:
+        // normal case + skip + wild
+        return nextPlayerTurn(gameId);
+        break;
+    }
   });
 };
 
