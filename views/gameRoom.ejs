@@ -24,7 +24,7 @@
   <section class="game-room game-room-play col-lg-8">
     <div class="container">
       <!-- PLAYERS LIST -->
-      <div class="row card game-players flex-row">
+      <div id="player-view" class="row card game-players flex-row">
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>">

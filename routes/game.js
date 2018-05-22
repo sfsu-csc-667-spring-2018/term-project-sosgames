@@ -77,6 +77,13 @@ router.get(
             }
             renderData.game = game;
             renderData.players = gameStateData.players;
+
+            // io.emit new player for gameroom namespace: /game/:gameId
+            // I AM HERE
+            request.app.io.of(`/game/${gameId}`).emit('player view update', {
+              players: gameStateData.players
+            });
+
             response.render('gameRoom', renderData);
           })
           .catch(error => {
