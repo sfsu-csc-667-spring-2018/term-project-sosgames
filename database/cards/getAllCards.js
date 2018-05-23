@@ -6,6 +6,4 @@ const getAll = () => {
   return database.many(GET_ALL_CARDS_QUERY);
 };
 
-module.exports = {
-  getAll
-};
+module.exports = getAll;

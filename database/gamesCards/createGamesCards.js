@@ -1,5 +1,6 @@
 const database = require('../connection');
-const getAllCards = require('../cards/getAllCards').getAll;
+
+const getAllCards = require('../cards/getAllCards');
 
 const CREATE_GAME_CARD_QUERY = `INSERT INTO games_cards (game_id, card_id) VALUES ($1, $2)`;
 
@@ -19,6 +20,4 @@ const create = gameId => {
     });
 };
 
-module.exports = {
-  create
-};
+module.exports = create;

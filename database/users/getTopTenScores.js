@@ -6,6 +6,4 @@ const getTopTenScores = () => {
   return db.many(GET_TOP_TEN);
 };
 
-module.exports = {
-  getTopTenScores
-};
+module.exports = getTopTenScores;

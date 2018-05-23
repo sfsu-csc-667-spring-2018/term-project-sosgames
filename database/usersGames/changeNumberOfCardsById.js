@@ -10,6 +10,4 @@ const changeNumberOfCardsById = (userId, gameId, newNumberOfCards) => {
   ]);
 };
 
-module.exports = {
-  changeNumberOfCardsById
-};
+module.exports = changeNumberOfCardsById;

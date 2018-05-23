@@ -1,11 +1,10 @@
 const database = require('../connection');
 
-const findTopCardByGameId = require('./findTopCardByGameId')
-  .findTopCardByGameId;
+const findTopCardByGameId = require('./findTopCardByGameId');
 const findAllPlayableCardsById = require('./findAllPlayableCardsByGameAndUserId');
-const draw = require('./draw').draw;
-const playCard = require('./playCard').playCard;
-const nextPlayerTurn = require('../games/nextPlayerTurn').nextPlayerTurn;
+const draw = require('./draw');
+const playCard = require('./playCard');
+const nextPlayerTurn = require('../games/nextPlayerTurn');
 
 const playCardOrDraw = (gameId, userId) => {
   return findTopCardByGameId(gameId)
@@ -17,7 +16,6 @@ const playCardOrDraw = (gameId, userId) => {
         topCard.color
       ).then(playableCards => {
         if (playableCards.length === 0) {
-          //cannot play any card from hand
           return draw(gameId, userId)
             .then(card => {
               if (
@@ -26,27 +24,20 @@ const playCardOrDraw = (gameId, userId) => {
                 card[0].point_value === 50 ||
                 card[0].color === topCard.wild_color
               ) {
-                //can play card after draw
                 return playCard(gameId, card[0].card_id, userId).then(() => {
                   return nextPlayerTurn(gameId, true);
                 });
               } else {
-                //skipped turn
                 return nextPlayerTurn(gameId, true);
               }
             })
-            .catch(error => {
-              console.log(error);
-            });
+            .catch(error => {});
         } else {
-          //have card that can be played
           return { canPlayCard: true };
         }
       });
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch(error => {});
 };
 
 module.exports = playCardOrDraw;

@@ -1,6 +1,5 @@
 const pgp = require('pg-promise')();
 
-// Make use of environment variables defined in .env
 if (
   process.env.NODE_ENV === 'development' ||
   process.env.NODE_ENV === 'production'

@@ -6,6 +6,4 @@ const changeInDeck = (inDeck, gameId, cardId) => {
   return database.none(UPDATE_IN_DECK_QUERY, [inDeck, gameId, cardId]);
 };
 
-module.exports = {
-  changeInDeck
-};
+module.exports = changeInDeck;

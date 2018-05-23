@@ -6,6 +6,4 @@ const getUserData = username => {
   return db.oneOrNone(GET_USER_DATA, [username]);
 };
 
-module.exports = {
-  getUserData
-};
+module.exports = getUserData;

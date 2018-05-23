@@ -6,6 +6,4 @@ const findNumberOfJoinedPlayers = gameId => {
   return database.one(FIND_CURRENT_NUMBER_OF_PLAYERS_JOINED_QUERY, [gameId]);
 };
 
-module.exports = {
-  findNumberOfJoinedPlayers
-};
+module.exports = findNumberOfJoinedPlayers;

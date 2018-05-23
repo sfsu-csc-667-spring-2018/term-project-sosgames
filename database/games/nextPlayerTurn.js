@@ -13,6 +13,4 @@ const nextPlayerTurn = (gameId, isSpecialCase = false) => {
     });
 };
 
-module.exports = {
-  nextPlayerTurn
-};
+module.exports = nextPlayerTurn;

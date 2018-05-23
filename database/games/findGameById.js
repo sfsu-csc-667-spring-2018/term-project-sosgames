@@ -6,6 +6,4 @@ const findById = gameId => {
   return database.oneOrNone(FIND_GAME_BY_ID_QUERY, [gameId]);
 };
 
-module.exports = {
-  findById
-};
+module.exports = findById;

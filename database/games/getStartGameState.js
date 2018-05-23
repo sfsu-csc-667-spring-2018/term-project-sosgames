@@ -1,7 +1,9 @@
 const database = require('../connection');
+
 const changeCurrentPlayerIndex = require('./changeCurrentPlayerIndex');
 const gamesCards = require('../gamesCards');
 const usersGames = require('../usersGames');
+
 const INITIAL_PLAYER_INDEX = 0;
 
 const getStartGameState = gameId => {

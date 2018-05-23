@@ -1,9 +1,7 @@
 const database = require('../connection');
 
-const findNumberOfCardsById = require('./findNumberOfCardsById')
-  .findNumberOfCardsById;
-const changeNumberOfCardsById = require('./changeNumberOfCardsById')
-  .changeNumberOfCardsById;
+const findNumberOfCardsById = require('./findNumberOfCardsById');
+const changeNumberOfCardsById = require('./changeNumberOfCardsById');
 
 const decrementNumberOfCardsById = (
   userId,
@@ -19,6 +17,4 @@ const decrementNumberOfCardsById = (
   });
 };
 
-module.exports = {
-  decrementNumberOfCardsById
-};
+module.exports = decrementNumberOfCardsById;

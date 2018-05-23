@@ -1,15 +1,9 @@
 const database = require('../connection');
-const addUserToGame = require('../usersGames').create;
-const getUserDataById = require('../users').getUserDataById;
-const findGameById = require('./findGameById').findById;
 
-// old stuff man ignore plz
-// 1. I am a user trying to enter a game that has space and has not started
-const IN_PROGRESS_GAMES_WITH_PLAYER_COUNT =
-  'SELECT *, (SELECT COUNT(*) FROM users_games WHERE users_games.game_id=$1) AS current_player_count FROM games WHERE games.id=$1 AND games.current_player_index<>-1';
-// 2. I am already a user in the game
+const addUserToGame = require('../usersGames/createUsersGames');
+const getUserDataById = require('../users/getUserDataById');
+const findGameById = require('./findGameById');
 
-// WORKING STUFF
 const IS_USER_IN_GAME =
   'SELECT * FROM users_games WHERE user_id=$1 AND game_id=$2';
 
@@ -37,18 +31,15 @@ const verifyUserAndGame = (gameId, user) => {
       playersCount,
       maxPlayersCount
     ]) => {
-      // If user is in game
       if (isUserInGame) {
         return getUserDataById(isUserInGame.user_id).then(playerInGame => {
           return { game, playerInGame };
         });
       } else {
-        // If user is NOT in game
         if (
           currentPlayerIndexData.current_player_index === -1 &&
           +playersCount.count < maxPlayersCount.max_number_of_players
         ) {
-          // If game has not started and game has space
           return addUserToGame(user.id, gameId).then(usersGamesData => {
             return getUserDataById(usersGamesData.user_id).then(
               playerInGame => {
@@ -57,8 +48,6 @@ const verifyUserAndGame = (gameId, user) => {
             );
           });
         } else {
-          // If game does not have space, no matter if it started already or not
-          // kick out to lobby
           throw 'You may not join that game -- Game already started.';
         }
       }

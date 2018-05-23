@@ -1,12 +1,11 @@
 const database = require('../connection');
 
-const findAllCardsInGame = require('./findAllCardsInGame').findAllCardsInGame;
-const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
-const changeInDeck = require('./changeInDeck').changeInDeck;
-const changeInHand = require('./changeInHand').changeInHand;
-const changeOnTop = require('./changeOnTop').changeOnTop;
-const changeWildColorToNull = require('./changeWildColorToNull')
-  .changeWildColorToNull;
+const findAllCardsInGame = require('./findAllCardsInGame');
+const changeUserIdToNull = require('./changeUserIdToNull');
+const changeInDeck = require('./changeInDeck');
+const changeInHand = require('./changeInHand');
+const changeOnTop = require('./changeOnTop');
+const changeWildColorToNull = require('./changeWildColorToNull');
 
 const resetAllCardsById = gameId => {
   return findAllCardsInGame(gameId).then(cards => {

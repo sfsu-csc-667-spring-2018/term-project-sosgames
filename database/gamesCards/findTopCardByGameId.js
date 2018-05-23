@@ -6,6 +6,4 @@ const findTopCardByGameId = gameId => {
   return database.one(FIND_TOP_CARD_BY_GAME_ID_QUERY, [gameId]);
 };
 
-module.exports = {
-  findTopCardByGameId
-};
+module.exports = findTopCardByGameId;

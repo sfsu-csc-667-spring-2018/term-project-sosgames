@@ -6,6 +6,4 @@ const changeWinnerId = (gameId, winnerId) => {
   return database.none(UPDATE_WINNER_ID_QUERY, [winnerId, gameId]);
 };
 
-module.exports = {
-  changeWinnerId
-};
+module.exports = changeWinnerId;

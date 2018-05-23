@@ -10,6 +10,4 @@ const changeCurrentScoreById = (userId, gameId, newCurrentScore) => {
   ]);
 };
 
-module.exports = {
-  changeCurrentScoreById
-};
+module.exports = changeCurrentScoreById;

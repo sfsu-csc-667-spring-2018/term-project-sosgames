@@ -6,6 +6,4 @@ const findCardById = (cardId, gameId) => {
   return database.one(FIND_CARD_BY_ID_QUERY, [gameId, cardId]);
 };
 
-module.exports = {
-  findCardById
-};
+module.exports = findCardById;

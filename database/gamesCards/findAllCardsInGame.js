@@ -6,6 +6,4 @@ const findAllCardsInGame = gameId => {
   return database.many(FIND_ALL_CARDS_IN_GAME_QUERY, [gameId]);
 };
 
-module.exports = {
-  findAllCardsInGame
-};
+module.exports = findAllCardsInGame;

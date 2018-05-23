@@ -1,8 +1,8 @@
 const db = require('../connection');
 const bcrypt = require('bcrypt');
-const isEmailInUse = require('./isEmailInUse').isEmailInUse;
-const isUserNameInUse = require('./isUserNameInUse').isUserNameInUse;
-const createUser = require('./createUser').createUser;
+const isEmailInUse = require('./isEmailInUse');
+const isUserNameInUse = require('./isUserNameInUse');
+const createUser = require('./createUser');
 
 const create = (username, email, password, photo_path) => {
   return Promise.all([isEmailInUse(email), isUserNameInUse(username)]).then(
@@ -30,6 +30,4 @@ const create = (username, email, password, photo_path) => {
   );
 };
 
-module.exports = {
-  create
-};
+module.exports = create;
