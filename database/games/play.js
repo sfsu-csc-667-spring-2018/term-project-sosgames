@@ -51,10 +51,8 @@ const play = gameId => {
 
       case 'wild-draw-four':
         if (cardsInDeck.length > 4) {
-          console.log('deck>2 wd4');
           return drawCardsAndSkip(gameId, players, 4);
         } else {
-          console.log('deck<1 wd4');
           return gamesCards.resetDeck(gameId).then(() => {
             return drawCardsAndSkip(gameId, players, 4);
           });

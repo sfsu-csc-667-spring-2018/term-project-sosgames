@@ -4,15 +4,15 @@
     <h1>
       <span class="badge badge-primary">Round <%= game.round_number %></span>
     </h1>
-    <h5>
+    <!-- <h5>
       <span class="badge badge-pill badge-light" id="direction-span">
-        <% if (game.is_reversed) { %>
+        <%# if (game.is_reversed) { %>
           Direction is right to left.
-        <% } else { %>
+        <%# } else { %>
           Direction is left to right.
-        <% } %>
+        <%# } %>
       </span>
-    </h5>
+    </h5> -->
   </div>
 </div>
 <!-- ROUND NUMBER ENDS -->
@@ -31,8 +31,8 @@
               <img class="rounded-circle" src="../images/profile_pic_green.png" alt="player image">
               <!-- <img class="rounded-circle" src="../<%#= player.profile_picture_path %>" alt="player image"> -->
               <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
-              <div class="player-points">Score: <%= player.current_score %></div>
-              <div class="player-num-cards">Cards: <%=player.number_of_cards%></div>
+              <!-- <div class="player-points">Score: <%#= player.current_score %></div> -->
+              <!-- <div class="player-num-cards">Cards: <%#=player.number_of_cards%></div> -->
             </div>
           <% } %>
         <% } %>
@@ -58,10 +58,10 @@
             <div class="centered sprite" id="card-on-top" data-card-value=""></div>
           <% } %>
         </div>
-        <div class="col text-center">
+        <!-- <div class="col text-center">
           <div class="centered uno-black-card"></div>
           <button type="button" class="btn btn-outline-dark" id="draw-btn">Draw</button>
-        </div>
+        </div> -->
       </div>
       <!-- CARD DECKS ENDS -->
 

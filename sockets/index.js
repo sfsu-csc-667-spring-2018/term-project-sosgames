@@ -13,11 +13,9 @@ io.on('connection', socket => {
 
     // Init namespace for game room by gameId
     [require('./game')].forEach(fn => fn(io, gameId, socket));
-    console.log('new socket: ' + socket.id);
 
     socket.on('join', function(room) {
       socket.join(room);
-      console.log('after socket join... ' + socket.id + ' -- room: ' + room);
     });
   }
 });

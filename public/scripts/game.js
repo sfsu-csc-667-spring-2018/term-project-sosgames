@@ -269,6 +269,7 @@ socket.on('update which active player', ({ players }) => {
   }
 
   for (const playerDiv of playerView.children) {
+    console.log(playerDiv);
     if (
       (+playerDiv.dataset.userId != currentPlayerId &&
         playerDiv.classList.contains('player-active')) ||
@@ -281,39 +282,34 @@ socket.on('update which active player', ({ players }) => {
 });
 
 socket.on('player view update', ({ players }) => {
-  if (playersInGame.length != players.length) {
-    let newPlayerDiv = document.createElement('div');
-    newPlayerDiv.className = 'text-center col-md-2 player-avatar';
+  let playersDivs = {};
+  for (const playerDiv of playerView.children) {
+    playersDivs[playerDiv.dataset.userId] = playerDiv;
+  }
 
-    const profile_picture = document.createElement('img');
-    profile_picture.className = 'rounded-circle';
-    profile_picture.setAttribute(
-      'src',
-      '../images/profile_pic_green.png'
-      // players[players.length - 1].profile_picture_path
-    );
-    profile_picture.setAttribute('alt', 'player image');
+  for (const player of players) {
+    if (!(+player.user_id in playersDivs)) {
+      let newPlayerDiv = document.createElement('div');
+      newPlayerDiv.className = 'text-center col-md-2 player-avatar';
+      newPlayerDiv.setAttribute('data-user-id', player.user_id);
 
-    const playerName = document.createElement('div');
-    playerName.className = 'player-name';
-    playerName.innerText = 'Player ' + players[players.length - 1].username;
+      const profile_picture = document.createElement('img');
+      profile_picture.className = 'rounded-circle';
+      profile_picture.setAttribute(
+        'src',
+        '../images/profile_pic_green.png'
+        // players[players.length - 1].profile_picture_path
+      );
+      profile_picture.setAttribute('alt', 'player image');
 
-    const playerPoints = document.createElement('div');
-    playerPoints.className = 'player-points';
-    playerPoints.innerText =
-      'Score: ' + players[players.length - 1].current_score;
+      const playerName = document.createElement('div');
+      playerName.className = 'player-name';
+      playerName.innerText = 'Player ' + players[players.length - 1].username;
 
-    const playerNumCards = document.createElement('div');
-    playerNumCards.className = 'player-num-cards';
-    playerNumCards.innerText =
-      'Cards: ' + players[players.length - 1].number_of_cards;
-
-    newPlayerDiv.appendChild(profile_picture);
-    newPlayerDiv.appendChild(playerName);
-    newPlayerDiv.appendChild(playerPoints);
-    newPlayerDiv.appendChild(playerNumCards);
-
-    playerView.appendChild(newPlayerDiv);
+      newPlayerDiv.appendChild(profile_picture);
+      newPlayerDiv.appendChild(playerName);
+      playerView.appendChild(newPlayerDiv);
+    }
   }
 });
 
