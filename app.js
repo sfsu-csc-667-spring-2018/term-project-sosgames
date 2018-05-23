@@ -9,8 +9,6 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const { User, Cards, Games, UsersGames, GamesCards } = require('./database'); //remove
-
 if (
   process.env.NODE_ENV === 'development' ||
   process.env.NODE_ENV === 'production'
