@@ -9,8 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  session.associate = function(models) {
-    // associations can be defined here
-  };
+  session.associate = function(models) {};
   return session;
 };

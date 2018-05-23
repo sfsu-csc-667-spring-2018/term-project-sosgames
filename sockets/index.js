@@ -6,12 +6,10 @@ io.on('connection', socket => {
   let referer = socket.handshake.headers.referer;
 
   if (referer.includes('/lobby')) {
-    // Init namespace for lobby
     [require('./lobby')].forEach(fn => fn(io));
   } else if (referer.includes('/game/')) {
     let gameId = extractRoute(referer);
 
-    // Init namespace for game room by gameId
     [require('./game')].forEach(fn => fn(io, gameId, socket));
 
     socket.on('join', function(room) {
@@ -21,7 +19,6 @@ io.on('connection', socket => {
 });
 
 const extractRoute = referer => {
-  // Strip query params
   if (referer.includes('?')) {
     referer = referer.substring(0, referer.indexOf('?'));
   }

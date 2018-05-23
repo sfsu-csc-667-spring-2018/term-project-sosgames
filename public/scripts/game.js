@@ -1,18 +1,11 @@
-// const { User, Games, UsersGames, Cards, GamesCards } = require('../../../database');
 const pathArray = window.location.pathname.split('/');
 const gameId = pathArray[pathArray.length - 1];
+let wildCardId = -1;
 
 const socket = io(`/game/${gameId}`);
-const socketId = id => {
-  return id.split('#')[1];
-};
-
 const privateSocket = io();
 
-// DOM ELEMENTS
 const startButton = document.querySelector('#start-btn');
-const playButton = document.querySelector('#play-btn');
-const drawButton = document.querySelector('#draw-btn');
 
 const gameDeck = document.querySelector('.game-card-deck');
 const cardOnTop = document.querySelector('#card-on-top');
@@ -21,20 +14,14 @@ const colorPicker = document.querySelector('#color-picker');
 
 const playerHand = document.querySelector('.player-hand');
 const cardsInHand = document.querySelector('#cards-in-hand');
-const playerCards = document.querySelectorAll('.player-card');
-const playersInGame = document.querySelectorAll('.player-name');
 const playerView = document.querySelector('#player-view');
 
-const message_form = document.querySelector('#chat-message-form');
+const messageForm = document.querySelector('#chat-message-form');
 const messageList = document.querySelector('#message-list');
+const messageInput = document.querySelector('#message');
 
 const userIdInput = document.querySelector('#userId');
 
-// SPECIAL WILD CARD VALUES
-let wildCardId = -1;
-
-// USER'S EVENTS
-// Player clicks on the start button
 startButton.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
@@ -44,15 +31,10 @@ startButton.addEventListener('click', event => {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' })
   })
-    .then(data => {
-      // console.log('START: fetch done');
-    })
-    .catch(error => {
-      // console.log(error);
-    });
+    .then(data => {})
+    .catch(error => {});
 });
 
-// Player clicks on a card in their hand to play
 cardsInHand.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
@@ -75,19 +57,14 @@ cardsInHand.addEventListener('click', event => {
           'Content-Type': 'application/json'
         })
       })
-        .then(data => {
-          // console.log('PLAY: fetch done');
-        })
-        .catch(error => {
-          // console.log(error);
-        });
+        .then(data => {})
+        .catch(error => {});
     }
   } else {
     alert("You can't play that card!");
   }
 });
 
-// Color picker
 colorPicker.addEventListener('click', event => {
   event.stopPropagation();
   event.preventDefault();
@@ -105,24 +82,18 @@ colorPicker.addEventListener('click', event => {
     })
   })
     .then(data => {
-      // console.log('PLAY: fetch wild done');
       colorPicker.classList.toggle('hide');
     })
-    .catch(error => {
-      // console.log(error);
-    });
+    .catch(error => {});
 });
 
-// A user submits a chat message
-message_form.addEventListener('submit', event => {
+messageForm.addEventListener('submit', event => {
   event.stopPropagation();
   event.preventDefault();
 
-  const message = document.querySelector('#message').value;
+  const message = messageInput.value;
   fetch(`/game/${gameId}/chat`, {
-    body: JSON.stringify({
-      message
-    }),
+    body: JSON.stringify({ message }),
     credentials: 'include',
     method: 'POST',
     headers: new Headers({
@@ -130,27 +101,22 @@ message_form.addEventListener('submit', event => {
     })
   })
     .then(data => {
-      document.getElementById('chat-message-form').reset();
+      messageForm.reset();
     })
-    .catch(error => {
-      // console.log(error);
-    });
+    .catch(error => {});
 });
 
-// PRIVATE SOCKET for a specific client
 privateSocket.on('connect', () => {
   let userId = userIdInput.value;
   privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
 });
 
-// Client side event for a hand update
-privateSocket.on('update hand', cards => {
+privateSocket.on('update hand on start', cards => {
   for (const card of cards) {
     addNewCard(card);
   }
 });
 
-// Client side event for a hand update -- appending new cards after each turn
 privateSocket.on('update hand after play', cards => {
   let oldHand = [];
   let oldCards = {};
@@ -167,36 +133,22 @@ privateSocket.on('update hand after play', cards => {
   }
 
   if (oldHand.length > cards.length) {
-    // console.log('remove stuff');
-
-    // Remove cards
     for (const oldCard of oldHand) {
       if (!(+oldCard.dataset.cardId in newsCards)) {
         cardsInHand.removeChild(oldCard);
       }
     }
-    updateDisabledStateOfHand(oldHand, cards);
   } else if (oldHand.length < cards.length) {
-    // console.log('add new stuff');
-
-    // Append new cards
-    updateDisabledStateOfHand(oldHand, cards);
-
-    // Add new card if new card doesn't exist in current hand
     for (const [cardId, card] of Object.entries(newsCards)) {
       if (!(+cardId in oldCards)) {
         addNewCard(card);
       }
     }
-  } else {
-    // console.log('same stuff');
-
-    // same number of cards
-    updateDisabledStateOfHand(oldHand, cards);
   }
+
+  updateDisabledStateOfHand(oldHand, cards);
 });
 
-// HELPER METHODS
 function addNewCard(card) {
   let cardData = card.value.includes('wild')
     ? `${card.value}`
@@ -240,7 +192,6 @@ function updateDisabledStateOfHand(oldHand, cards) {
   }
 }
 
-// GAME ROOM specific sockets
 socket.on('ready to start game', card => {
   startButton.classList.toggle('hide');
   gameDeck.classList.toggle('hide');
@@ -253,7 +204,7 @@ socket.on('not ready to start game', () => {
   alert('Not ready to start game!');
 });
 
-socket.on('update', ({ gameId, newCardOnTop }) => {
+socket.on('update new card on top', ({ gameId, newCardOnTop }) => {
   let cardValue = newCardOnTop.value.includes('wild')
     ? newCardOnTop.value
     : newCardOnTop.color + '-' + newCardOnTop.value;
@@ -280,15 +231,15 @@ socket.on('update which active player', ({ players }) => {
   }
 });
 
-socket.on('player view update', ({ players }) => {
-  let playersDivs = {};
+socket.on('update player view', ({ players }) => {
+  const playersDivs = {};
   for (const playerDiv of playerView.children) {
     playersDivs[playerDiv.dataset.userId] = playerDiv;
   }
 
   for (const player of players) {
     if (!(+player.user_id in playersDivs)) {
-      let newPlayerDiv = document.createElement('div');
+      const newPlayerDiv = document.createElement('div');
       newPlayerDiv.className = 'text-center col-md-2 player-avatar';
       newPlayerDiv.setAttribute('data-user-id', player.user_id);
 
@@ -308,17 +259,15 @@ socket.on('player view update', ({ players }) => {
   }
 });
 
-// CHAT in game room
 socket.on('message', ({ gameId, message, user }) => {
   const row = document.createElement('tr');
   const messageTD = document.createElement('td');
+  const chatWindow = document.getElementById('chat-window');
 
   messageTD.className = 'self-chat-message';
   messageTD.innerHTML = user + ' : ' + message;
 
   row.appendChild(messageTD);
-
   messageList.appendChild(row);
-  var elem = document.getElementById('chat-window');
-  elem.scrollTop = elem.scrollHeight;
+  chatWindow.scrollTop = chatWindow.scrollHeight;
 });

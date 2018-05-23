@@ -8,7 +8,6 @@
       <% }); %>
     <% } %>
 
-    <!-- Authentication Errors  -->
     <%if( (typeof error_msg != "undefined" ? error_msg : false) ) { %>
       <% error_msg.forEach(( error ) => { %>
         <div class="notice error">
@@ -17,7 +16,6 @@
       <% }); %>
     <% } %>
 
-    <!-- Login Form Errors -->
     <%if( (typeof error != "undefined" ? error : false) ) { %>
       <% error.forEach(( error ) => { %>
         <div class="notice error">
@@ -26,7 +24,6 @@
       <% }); %>
     <% } %>
 
-    <!-- Signup Form Errors -->
     <%if( (typeof errors != "undefined" ? errors : false) ) { %>
       <% errors.forEach(( error ) => { %>
         <div class="notice error">

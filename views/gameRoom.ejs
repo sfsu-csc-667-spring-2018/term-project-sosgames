@@ -1,53 +1,32 @@
-<!-- ROUND NUMBER -->
 <div class="row">
   <div class="col text-center">
     <h1>
       <span class="badge badge-primary">Round <%= game.round_number %></span>
     </h1>
-    <!-- <h5>
-      <span class="badge badge-pill badge-light" id="direction-span">
-        <%# if (game.is_reversed) { %>
-          Direction is right to left.
-        <%# } else { %>
-          Direction is left to right.
-        <%# } %>
-      </span>
-    </h5> -->
   </div>
 </div>
-<!-- ROUND NUMBER ENDS -->
 
-<!-- MAIN VIEW -->
 <section class="row">
 
-  <!-- PLAYING VIEW -->
   <section class="game-room game-room-play col-lg-8">
     <div class="container">
-      <!-- PLAYERS LIST -->
       <div id="player-view" class="row card game-players flex-row">
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>" data-user-id="<%=player.user_id%>">
               <img class="rounded-circle" src="../<%= player.profile_picture_path %>" alt="player image">
               <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
-              <!-- <div class="player-points">Score: <%#= player.current_score %></div> -->
-              <!-- <div class="player-num-cards">Cards: <%#=player.number_of_cards%></div> -->
             </div>
           <% } %>
         <% } %>
       </div>
 
-      <!-- PLAYERS LIST ENDS -->
-
-      <!-- CARD DECKS -->
       <div class="row flex-row">
         <div class="col text-center">
           <button type="button" class="btn btn-primary btn-lg <% if (typeof isStarted == "undefined" || isStarted) {%> hide <% } %>" id="start-btn">START GAME</button>
         </div>
       </div>
-        <!-- CARD DECKS ENDS -->
 
-      <!-- CARD DECKS -->
       <div class="row card game-card-deck flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <div class="col">
           <% if (typeof cardOnTop != "undefined" && cardOnTop != null) { %>
@@ -57,14 +36,8 @@
             <div class="centered sprite" id="card-on-top" data-card-value=""></div>
           <% } %>
         </div>
-        <!-- <div class="col text-center">
-          <div class="centered uno-black-card"></div>
-          <button type="button" class="btn btn-outline-dark" id="draw-btn">Draw</button>
-        </div> -->
       </div>
-      <!-- CARD DECKS ENDS -->
 
-      <!-- COLOR PICKER -->
       <div class="row card hide" id="color-picker">
         <div class="container-fluid text-center">
           <h4><span class="badge badge-pill badge-light">Please choose a color</span></h4>
@@ -85,11 +58,8 @@
         </div>
       </div>
 
-      <!-- PLAYER'S HAND -->
       <div id="cards-in-hand" class="row card player-hand flex-row <% if (typeof isStarted != "undefined" && !isStarted) {%> hide <% } %>">
         <input id="userId" name="userId" type="hidden" value="<%= userId %>">
-
-        <!-- Cards in Hand -->
         <% if(typeof playerHand != "undefined") { %>
           <% for (card of playerHand) { %>
             <div class="col player-card-div" data-card-id="<%= card.id %>">
@@ -101,15 +71,11 @@
             </div>
             <% } %>
         <% } %>
-
       </div>
-      <!-- PLAYER'S HAND ENDS -->
 
     </div>
   </section>
-  <!-- PLAYING VIEW ENDS -->
 
-  <!-- CHAT VIEW -->
   <section class="game-room game-room-chat col-lg-4">
     <div class="col">
       <div class="chat">
@@ -128,16 +94,12 @@
               <button class="btn btn-info form">Send</button>
             </form>
           </div>
-
         </div>
       </div>
     </div>
   </section>
-  <!-- CHAT VIEW ENDS -->
 
 </section>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="/scripts/game.js"></script>
-
-<!-- MAIN VIEW ENDS -->

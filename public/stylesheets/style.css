@@ -1,4 +1,3 @@
-/* GENERAL */
 body {
   font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
 }
@@ -19,7 +18,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* GENERAL LAYOUT */
 .flex-row {
   flex-direction: row;
 }
@@ -28,7 +26,6 @@ body {
   margin: 0 auto;
 }
 
-/* HOME PAGE */
 #centerNavLogo {
   width: 25%;
 }
@@ -41,7 +38,6 @@ body {
   background: #343a40;
 }
 
-/* SIGN IN/LOG OUT */
 #logoutButton {
   margin-top: 7px;
 }
@@ -83,7 +79,7 @@ body {
   left: 0;
   display: block;
   width: 100%;
-  margin-bottom: 0; /* Override default `<label>` margin */
+  margin-bottom: 0;
   line-height: 1.5;
   color: #495057;
   border: 1px solid transparent;
@@ -122,9 +118,6 @@ body {
   font-size: 12px;
   color: #777;
 }
-/* lobby */
-
-/* CHAT STYLING */
 
 #chat-submit-button {
   float: right;
@@ -145,34 +138,21 @@ body {
   width: 73%;
   margin-left: 15px;
 }
-/* WIP disabled to fix footer */
-/* p {
-  animation-duration: 1s;
-  animation-name: slide-right;
-} */
 
 @keyframes fade-in {
   from {
-    /* margin-left: 100%;
-    width: 200%; */
     opacity: 0;
   }
   to {
-    /* margin-left: 0%;
-    width: 100%; */
     opacity: 1;
   }
 }
 
 @keyframes slide-left {
   from {
-    /* margin-left: 0%;
-    width: 100%; */
     opacity: 1;
   }
   to {
-    /* margin-left: 100%;
-    width: 200%; */
     opacity: 0;
   }
 }
@@ -181,7 +161,6 @@ td.self-chat-message {
   animation-duration: 0.7s;
   animation-name: fade-in;
   background-color: beige;
-  /* float: right; */
   border-radius: 25px;
   padding: 0.5rem;
   margin: 5px;
@@ -189,10 +168,8 @@ td.self-chat-message {
 
 td.external-chat-message {
   animation-duration: 0.7s;
-
   animation-name: fade-in;
   background-color: lightblue;
-  /* float: left; */
   border-radius: 25px;
   padding: 0.5rem;
 }
@@ -221,7 +198,6 @@ td.external-chat-message {
   margin: 0px 0px 15px 0px;
 }
 
-/* COLOR PICKER */
 #color-picker {
   animation-duration: 0.7s;
   animation-name: fade-in;
@@ -231,14 +207,11 @@ td.external-chat-message {
   width: 100%;
 }
 
-/*endGamePage*/
 .avatar-card {
   max-height: 200px;
   max-width: 200px;
 }
-/*endGamePage*/
 
-/* GAME ROOM */
 .hide {
   display: none;
 }
@@ -268,7 +241,6 @@ td.external-chat-message {
   padding: 1rem;
 }
 
-/* COMPONENTS */
 .uno-black-card {
   background: transparent url('../images/uno_card_black.png') no-repeat;
   background-size: 100%;
@@ -289,20 +261,17 @@ td.external-chat-message {
   cursor: pointer;
 }
 
-/* Greys out card, makes unclickable */
 .disabled-card {
   filter: grayscale(80%);
   pointer-events: none;
 }
 
-/* UNO CARDS SPRITES */
 div.sprite {
   background: transparent url('../images/uno_cards_deck.png') no-repeat;
   height: 215px;
   width: 144px;
 }
 
-/* Red cards */
 div.sprite[data-card-value='red-0'] {
   background-position: 0 0;
 }
@@ -355,7 +324,6 @@ div.sprite[data-card-value='red-draw-two'] {
   background-position: -1713px 0;
 }
 
-/* Yellow Cards */
 div.sprite[data-card-value='yellow-0'] {
   background-position: 0 -214px;
 }
@@ -408,7 +376,6 @@ div.sprite[data-card-value='yellow-draw-two'] {
   background-position: -1713px -214px;
 }
 
-/* Green Cards */
 div.sprite[data-card-value='green-0'] {
   background-position: 0 -428px;
 }
@@ -461,7 +428,6 @@ div.sprite[data-card-value='green-draw-two'] {
   background-position: -1713px -428px;
 }
 
-/* Blue Cards */
 div.sprite[data-card-value='blue-0'] {
   background-position: 0 -642px;
 }
@@ -514,7 +480,6 @@ div.sprite[data-card-value='blue-draw-two'] {
   background-position: -1713px -642px;
 }
 
-/* Wild Cards */
 div.sprite[data-card-value='wild'] {
   background-position: -1856px 0;
 }

@@ -17,7 +17,6 @@ if (
 }
 
 const index = require('./routes/index');
-const users = require('./routes/users');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
@@ -97,7 +96,6 @@ app.use(function(request, response, next) {
 });
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
