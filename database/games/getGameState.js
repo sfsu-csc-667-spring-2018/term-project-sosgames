@@ -1,7 +1,6 @@
 const database = require('../connection');
-const findGameById = require('./findGameById').findById;
-const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId')
-  .findCurrentPlayerIndexById;
+const findGameById = require('./findGameById');
+const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId');
 const gamesCards = require('../gamesCards');
 const usersGames = require('../usersGames');
 
@@ -30,7 +29,6 @@ const getGameState = gameId => {
         card.disabled = true;
       } else {
         if (cardOnTop.value.includes('wild')) {
-          // cardontop=wild
           if (
             card.color != cardOnTop.wild_color &&
             !card.value.includes('wild')
@@ -38,7 +36,6 @@ const getGameState = gameId => {
             card.disabled = true;
           }
         } else {
-          // cardontop != wild
           if (
             card.color != cardOnTop.color &&
             card.value != cardOnTop.value &&

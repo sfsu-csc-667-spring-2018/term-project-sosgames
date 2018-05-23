@@ -11,10 +11,13 @@ const createUser = (
   total_score,
   email
 ) => {
-  // test this plz :D
-  return db.one(CREATE_USER, [username, password, profile_picture_path, 0, email]);
+  return db.one(CREATE_USER, [
+    username,
+    password,
+    profile_picture_path,
+    0,
+    email
+  ]);
 };
 
-module.exports = {
-  createUser
-};
+module.exports = createUser;

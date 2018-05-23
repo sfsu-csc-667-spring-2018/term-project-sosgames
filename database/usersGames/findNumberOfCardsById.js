@@ -5,6 +5,4 @@ const FIND_NUMBER_OF_CARDS_BY_ID_QUERY = `SELECT number_of_cards FROM users_game
 const findNumberOfCardsById = (userId, gameId) =>
   database.one(FIND_NUMBER_OF_CARDS_BY_ID_QUERY, [userId, gameId]);
 
-module.exports = {
-  findNumberOfCardsById
-};
+module.exports = findNumberOfCardsById;

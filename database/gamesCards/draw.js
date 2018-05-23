@@ -1,12 +1,13 @@
 const database = require('../connection');
-const getCardInDeck = require('./getCardInDeck').getCardInDeck;
-const changeInDeck = require('./changeInDeck').changeInDeck;
-const changeInHand = require('./changeInHand').changeInHand;
-const changeOnTop = require('./changeOnTop').changeOnTop;
-const changeUserId = require('./changeUserId').changeUserId;
-const findCardById = require('./findCardById').findCardById;
-const incrementNumberOfCardsById = require('../usersGames/incrementNumberOfCardsById')
-  .incrementNumberOfCardsById;
+
+const getCardInDeck = require('./getCardInDeck');
+const changeInDeck = require('./changeInDeck');
+const changeInHand = require('./changeInHand');
+const changeOnTop = require('./changeOnTop');
+const changeUserId = require('./changeUserId');
+const findCardById = require('./findCardById');
+
+const incrementNumberOfCardsById = require('../usersGames/incrementNumberOfCardsById');
 
 const draw = (gameId, userId, numberOfCardsToDraw = 1) => {
   return incrementNumberOfCardsById(userId, gameId, numberOfCardsToDraw).then(
@@ -33,6 +34,4 @@ const draw = (gameId, userId, numberOfCardsToDraw = 1) => {
   );
 };
 
-module.exports = {
-  draw
-};
+module.exports = draw;

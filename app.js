@@ -9,7 +9,6 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-// Make use of environment variables defined in .env
 if (
   process.env.NODE_ENV === 'development' ||
   process.env.NODE_ENV === 'production'
@@ -17,26 +16,21 @@ if (
   require('dotenv').config();
 }
 
-// Routers
 const index = require('./routes/index');
-const users = require('./routes/users'); // TODO: rm? or use this to include login, logout, signup?
+const users = require('./routes/users');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
 const lobby = require('./routes/lobby');
 const game = require('./routes/game');
-const tests = require('./routes/tests'); // TODO: rm?
 const chat = require('./routes/chat');
 
 const app = express();
 app.io = require('./sockets');
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(expressLayouts);
 
@@ -49,7 +43,6 @@ app.use(bodyParser.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Express Session
 app.enable('trust proxy');
 app.use(
   session({
@@ -61,20 +54,18 @@ app.use(
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       secure: app.get('env') != 'development'
-    } // 30 days
+    }
   })
 );
 
-// Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
-// Helps dynamically create navbar
+
 app.use((request, response, next) => {
   response.locals.isAuthenticated = request.isAuthenticated();
   next();
 });
 
-// Express Validator - Taken from Middleware Options on Github
 app.use(
   expressValidator({
     errorFormatter: function(param, msg, value) {
@@ -95,10 +86,8 @@ app.use(
   })
 );
 
-// Connect Flash
 app.use(flash());
 
-// Global Variables for Flash Messages
 app.use(function(request, response, next) {
   response.locals.success_msg = request.flash('success_msg');
   response.locals.error_msg = request.flash('error_msg');
@@ -107,7 +96,6 @@ app.use(function(request, response, next) {
   next();
 });
 
-// Middleware for routes
 app.use('/', index);
 app.use('/users', users);
 app.use('/login', login);
@@ -116,22 +104,17 @@ app.use('/signup', signup);
 app.use('/lobby', lobby);
 app.use('/game', game);
 app.use('/chat', chat);
-app.use('/tests', tests); // TODO: rm?
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
-// error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

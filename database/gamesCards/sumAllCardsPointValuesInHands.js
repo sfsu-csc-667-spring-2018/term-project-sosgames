@@ -1,7 +1,6 @@
 const database = require('../connection');
 
-const findAllCardsInHandById = require('./findAllCardsInHandsByGameId')
-  .findAllCardsInHandById;
+const findAllCardsInHandById = require('./findAllCardsInHandsByGameId');
 
 const sumAllCardsPointValuesInHands = gameId => {
   return findAllCardsInHandById(gameId).then(cards => {
@@ -14,6 +13,4 @@ const sumAllCardsPointValuesInHands = gameId => {
   });
 };
 
-module.exports = {
-  sumAllCardsPointValuesInHands
-};
+module.exports = sumAllCardsPointValuesInHands;

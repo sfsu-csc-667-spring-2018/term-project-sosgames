@@ -1,20 +1,15 @@
 const database = require('../connection');
 
-const findNumberOfJoinedPlayers = require('../usersGames/findNumberOfJoinedPlayers')
-  .findNumberOfJoinedPlayers;
-const findCurrentPlayerIndex = require('../games/findCurrentPlayerIndexByGameId')
-  .findCurrentPlayerIndexById;
-const findTopCard = require('../gamesCards/findTopCardByGameId')
-  .findTopCardByGameId;
-const findIsReversedById = require('../games/findIsReversedByGameId')
-  .findIsReversedById;
-const findMaxNumberOfPlayersById = require('./findMaxNumberOfPlayersByGameId')
-  .findMaxNumberOfPlayersById;
+const findNumberOfJoinedPlayers = require('../usersGames/findNumberOfJoinedPlayers');
+
+const findCurrentPlayerIndex = require('../games/findCurrentPlayerIndexByGameId');
+const findIsReversedById = require('../games/findIsReversedByGameId');
+
+const findTopCard = require('../gamesCards/findTopCardByGameId');
+
+const findMaxNumberOfPlayersById = require('./findMaxNumberOfPlayersByGameId');
 
 const parseCardValue = cardValue => {
-  // if card = skip, draw-2, draw-4-wild return 2
-  // else card = reverse -1
-  // else card = every other card return 1
   if (
     cardValue === 'skip' ||
     cardValue === 'draw-two' ||
@@ -39,12 +34,10 @@ const getNextPlayerIndex = (gameId, isSpecialCase = false) => {
       numberOfTurnsToSkip = 1;
     }
 
-    // if game is reversed go backwards
     if (gameStatus.is_reversed) {
       numberOfTurnsToSkip *= -1;
     }
 
-    // calculate new index
     const newCurrentPlayerIndex =
       (+numberOfPlayers.count +
         game.current_player_index +

@@ -6,6 +6,4 @@ const changeWildColorToGreenById = (gameId, cardId) => {
   return database.none(UPDATE_WILD_COLOR_QUERY, ['green', gameId, cardId]);
 };
 
-module.exports = {
-  changeWildColorToGreenById
-};
+module.exports = changeWildColorToGreenById;

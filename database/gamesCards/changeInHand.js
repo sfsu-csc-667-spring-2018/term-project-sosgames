@@ -6,6 +6,4 @@ const changeInHand = (inHand, gameId, cardId) => {
   return database.none(UPDATE_IN_HAND_QUERY, [inHand, gameId, cardId]);
 };
 
-module.exports = {
-  changeInHand
-};
+module.exports = changeInHand;

@@ -1,12 +1,13 @@
 const database = require('../connection');
+
 const gamesCards = require('../gamesCards');
+
 const usersGames = require('../usersGames');
-const findById = require('./findGameById').findById;
-const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId')
-  .findCurrentPlayerIndexById;
-const nextPlayerTurn = require('./nextPlayerTurn').nextPlayerTurn;
-const changeGameDirection = require('./changeGameDirection')
-  .changeGameDirection;
+
+const findById = require('./findGameById');
+const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId');
+const nextPlayerTurn = require('./nextPlayerTurn');
+const changeGameDirection = require('./changeGameDirection');
 const getNextPlayerIndex = require('./getNextPlayerIndex');
 
 const drawCardsAndSkip = (gameId, players, numberOfCardsToDraw) => {
@@ -60,7 +61,6 @@ const play = gameId => {
         break;
 
       default:
-        // normal case + skip + wild
         return nextPlayerTurn(gameId);
         break;
     }

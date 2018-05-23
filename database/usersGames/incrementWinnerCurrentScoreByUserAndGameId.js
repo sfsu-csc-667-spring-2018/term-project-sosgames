@@ -1,9 +1,7 @@
 const database = require('../connection');
 
-const sumAllCardsPointValuesInHands = require('../gamesCards/sumAllCardsPointValuesInHands')
-  .sumAllCardsPointValuesInHands;
-const addCurrentScoreById = require('./addCurrentScoreById')
-  .addCurrentScoreById;
+const sumAllCardsPointValuesInHands = require('../gamesCards/sumAllCardsPointValuesInHands');
+const addCurrentScoreById = require('./addCurrentScoreById');
 
 const incrementWinnerCurrentScoreById = (userId, gameId) => {
   return sumAllCardsPointValuesInHands(gameId)

@@ -6,6 +6,4 @@ const isEmailInUse = email => {
   return db.oneOrNone(GET_EMAIL, [email]);
 };
 
-module.exports = {
-  isEmailInUse
-};
+module.exports = isEmailInUse;
