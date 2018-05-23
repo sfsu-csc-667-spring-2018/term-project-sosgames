@@ -37,11 +37,11 @@ socket.on('message', ({ user, message }) => {
   row.appendChild(messageTD);
 
   messageList.appendChild(row);
-  var elem = document.getElementById('chat-window');
+  let elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
 });
 
-socket.on('games', ({ id, name, max_number_of_players }) => {
+socket.on('games', ({ id, name, maxNumberOfPlayers }) => {
   if (noGames !== null) {
     hasNoGames = false;
     noGames.classList.toggle('hide');
@@ -57,7 +57,7 @@ socket.on('games', ({ id, name, max_number_of_players }) => {
   nameTD.innerText = name;
 
   let maxPlayersTD = document.createElement('td');
-  maxPlayersTD.innerText = max_number_of_players;
+  maxPlayersTD.innerText = maxNumberOfPlayers;
 
   let linkTD = document.createElement('td');
   let link = document.createElement('a');

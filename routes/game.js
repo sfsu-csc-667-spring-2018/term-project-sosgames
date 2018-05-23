@@ -3,17 +3,12 @@ const router = express.Router();
 const { Cards, Games, UsersGames, GamesCards } = require('../database');
 const auth = require('../auth/requireAuthentication');
 
-/**
- * CREATE GAME
- */
-// GET /game -- Go to create game page
 router.get('/', auth.requireAuthentication, function(request, response, next) {
   response.render('createGame', {
     title: 'UNO - Create Game'
   });
 });
 
-// POST /game -- Create a new game
 router.post('/', auth.requireAuthentication, (request, response, next) => {
   const { gameName, numberOfPlayers } = request.body;
   let user = request.user;
@@ -29,9 +24,7 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
           });
           response.redirect(`/game/${gameData.id}`);
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => {});
     })
     .catch(error => {
       response.render('createGame', {
@@ -41,10 +34,6 @@ router.post('/', auth.requireAuthentication, (request, response, next) => {
     });
 });
 
-/**
- * GO TO SPECIFIC GAME ROOM
- */
-// GET /game/:gameId -- A user goes to a specific game room
 router.get(
   '/:gameId',
   auth.requireAuthentication,
@@ -77,17 +66,13 @@ router.get(
             renderData.game = game;
             renderData.players = gameStateData.players;
 
-            // io.emit new player for gameroom namespace: /game/:gameId
-            // I AM HERE
             request.app.io.of(`/game/${gameId}`).emit('update player view', {
               players: gameStateData.players
             });
 
             response.render('gameRoom', renderData);
           })
-          .catch(error => {
-            console.log(error);
-          });
+          .catch(error => {});
       })
       .catch(error => {
         request.flash('error', 'Cannot enter game.');
@@ -96,10 +81,6 @@ router.get(
   }
 );
 
-/**
- * GAME LOGIC
- */
-// POST /game/:gameId/start -- Player requests to start the game
 router.post('/:gameId/start', (request, response, next) => {
   let gameId = request.params.gameId;
 
@@ -111,7 +92,6 @@ router.post('/:gameId/start', (request, response, next) => {
           let playersHands = startGameStateData.playersHands;
           let players = startGameStateData.players;
 
-          // Get players' private rooms in the same game
           let rooms = request.app.io.sockets.adapter.rooms;
           let playersRooms = [];
           Object.keys(rooms).forEach(function(room) {
@@ -125,17 +105,14 @@ router.post('/:gameId/start', (request, response, next) => {
             }
           });
 
-          // Send game state to game room
           request.app.io
             .of(`/game/${gameId}`)
             .emit('ready to start game', cardOnTop);
 
-          // Update game room which players and whose turn
           request.app.io
             .of(`/game/${gameId}`)
             .emit('update which active player', { players });
 
-          // Send cards to each hand
           for (const playerRoom of playersRooms) {
             let cardsInPlayerHand = playersHands[playerRoom.userId];
             request.app.io
@@ -143,19 +120,15 @@ router.post('/:gameId/start', (request, response, next) => {
               .emit('update hand on start', cardsInPlayerHand);
           }
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => {});
     })
     .catch(error => {
-      console.log(error);
       request.app.io.of(`/game/${gameId}`).emit('not ready to start game');
     });
 
   response.sendStatus(200);
 });
 
-// POST /game/:gameId/draw -- Player requests a card from draw pile
 router.post('/:gameId/draw', (request, response, next) => {
   let gameId = request.params.gameId;
 
@@ -164,7 +137,6 @@ router.post('/:gameId/draw', (request, response, next) => {
   });
 });
 
-// POST /game/:gameId/play -- Player plays a card from their hand
 router.post('/:gameId/play', function(request, response, next) {
   let gameId = request.params.gameId;
   let user = request.user;
@@ -179,7 +151,6 @@ router.post('/:gameId/play', function(request, response, next) {
               let players = newGameStateData.players;
               let playersHands = newGameStateData.playersHands;
 
-              // Get players' private rooms in the same game
               let rooms = request.app.io.sockets.adapter.rooms;
               let playersRooms = [];
               Object.keys(rooms).forEach(function(room) {
@@ -193,12 +164,10 @@ router.post('/:gameId/play', function(request, response, next) {
                 }
               });
 
-              // Update game room which players and whose turn
               request.app.io
                 .of(`/game/${gameId}`)
                 .emit('update which active player', { players });
 
-              // Send cards to each hand
               for (const playerRoom of playersRooms) {
                 let cardsInPlayerHand = playersHands[playerRoom.userId];
                 request.app.io
@@ -210,23 +179,16 @@ router.post('/:gameId/play', function(request, response, next) {
         })
         .catch(error => {});
 
-      // Send general common state -- new card on top, which player's turn, their cards count
       request.app.io.of(`/game/${gameId}`).emit('update new card on top', {
         gameId,
         newCardOnTop
       });
     })
-    .catch(error => {
-      console.log(error);
-    });
+    .catch(error => {});
 
   response.sendStatus(200);
 });
 
-/**
- * MESSAGING IN A SPECIFIC GAME ROOM
- */
-// POST /game/:gameId/message -- Posting a message to game room
 router.post('/:gameId/chat', (request, response, next) => {
   let { message } = request.body;
   let user = request.user.username;
@@ -241,10 +203,6 @@ router.post('/:gameId/chat', (request, response, next) => {
   response.sendStatus(200);
 });
 
-/**
- * GAME ENDS
- */
-// GET /game/:gameId/end -- Going to game end page
 router.get(
   '/:gameId/end',
   auth.requireAuthentication,

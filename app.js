@@ -19,7 +19,6 @@ if (
 
 // Routers
 const index = require('./routes/index');
-const users = require('./routes/users'); // TODO: rm? or use this to include login, logout, signup?
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
@@ -109,7 +108,6 @@ app.use(function(request, response, next) {
 
 // Middleware for routes
 app.use('/', index);
-app.use('/users', users);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
