@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { Cards, Games, UsersGames, GamesCards } = require('../database');
 const auth = require('../auth/requireAuthentication');
-const GameEngine = require('../gameEngine');
 
 /**
  * CREATE GAME
@@ -70,8 +69,6 @@ router.get(
 
         Games.getGameStateAndAPlayerHand(gameId, userId)
           .then(gameStateData => {
-            console.log(gameStateData.players);
-
             if (game.current_player_index !== -1) {
               renderData.isStarted = true;
               renderData.cardOnTop = gameStateData.cardOnTop;

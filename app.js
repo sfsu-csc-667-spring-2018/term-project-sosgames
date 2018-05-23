@@ -9,8 +9,6 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const { User, Cards, Games, UsersGames, GamesCards } = require('./database');
-
 // Make use of environment variables defined in .env
 if (
   process.env.NODE_ENV === 'development' ||
@@ -111,7 +109,7 @@ app.use(function(request, response, next) {
 
 // Middleware for routes
 app.use('/', index);
-app.use('/users', users); // TODO: rm? or use this to include login, logout, signup?
+app.use('/users', users);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
@@ -137,34 +135,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// GamesCards.findTopCardByGameId(1).then(topCard => {
-//   console.log(topCard);
-// });
-
-// GamesCards.findAllPlayableCardsBy(1,1,'1', 'red').then(
-//   cards => {
-//     console.log(cards.length);
-//   }
-// ).catch(error => {
-//   console.log(error);
-// })
-
-// GamesCards.findAllCardsInHandsById(1)
-// .then(cards => {
-//   console.log(cards);
-// })
-
-// GamesCards.playCardOrDraw(1, 1).then(data => {
-//   console.log(data);
-// });
-
-// GamesCards.resetAllCardsById(1)
-//   .then(data => {
-//     console.log(data);
-//   })
-//   .catch(error => {
-//     console.log(error)
-//   })
 
 module.exports = app;

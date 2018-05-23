@@ -23,9 +23,6 @@ const MAX_PLAYERS_COUNT_IN_GAME =
   'SELECT max_number_of_players FROM games WHERE id=$1';
 
 const verifyUserAndGame = (gameId, user) => {
-  console.log(user);
-  console.log('PROMISE CRAP:');
-
   return Promise.all([
     findGameById(gameId),
     database.oneOrNone(IS_USER_IN_GAME, [user.id, gameId]),

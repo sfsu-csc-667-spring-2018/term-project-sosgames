@@ -20,7 +20,6 @@ const playCardOrDraw = (gameId, userId) => {
           //cannot play any card from hand
           return draw(gameId, userId)
             .then(card => {
-              console.log(card);
               if (
                 card[0].value === topCard.value ||
                 card[0].color === topCard.color ||

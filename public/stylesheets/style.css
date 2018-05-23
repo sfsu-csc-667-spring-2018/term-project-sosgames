@@ -291,7 +291,7 @@ td.external-chat-message {
 
 /* Greys out card, makes unclickable */
 .disabled-card {
-  filter: grayscale(50%);
+  filter: grayscale(80%);
   pointer-events: none;
 }
 
