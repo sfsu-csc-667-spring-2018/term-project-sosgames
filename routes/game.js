@@ -92,19 +92,6 @@ router.post('/:gameId/start', (request, response, next) => {
           let playersHands = startGameStateData.playersHands;
           let players = startGameStateData.players;
 
-          let rooms = request.app.io.sockets.adapter.rooms;
-          let playersRooms = [];
-          Object.keys(rooms).forEach(function(room) {
-            if (room.includes(`/game/${gameId}/`)) {
-              let userId = room.split('/')[3];
-              let playerInRoom = {};
-
-              playerInRoom.room = room;
-              playerInRoom.userId = userId;
-              playersRooms.push(playerInRoom);
-            }
-          });
-
           request.app.io
             .of(`/game/${gameId}`)
             .emit('ready to start game', cardOnTop);
@@ -113,12 +100,12 @@ router.post('/:gameId/start', (request, response, next) => {
             .of(`/game/${gameId}`)
             .emit('update which active player', { players });
 
-          for (const playerRoom of playersRooms) {
-            let cardsInPlayerHand = playersHands[playerRoom.userId];
-            request.app.io
-              .to(playerRoom.room)
-              .emit('update hand on start', cardsInPlayerHand);
-          }
+          emitToPrivateSocketRooms(
+            request.app.io,
+            gameId,
+            playersHands,
+            'update hand on start'
+          );
         })
         .catch(error => {});
     })
@@ -131,7 +118,6 @@ router.post('/:gameId/start', (request, response, next) => {
 
 router.post('/:gameId/draw', (request, response, next) => {
   let gameId = request.params.gameId;
-
   response.render('gameRoom', {
     title: 'UNO - Game Room ' + gameId
   });
@@ -151,29 +137,16 @@ router.post('/:gameId/play', function(request, response, next) {
               let players = newGameStateData.players;
               let playersHands = newGameStateData.playersHands;
 
-              let rooms = request.app.io.sockets.adapter.rooms;
-              let playersRooms = [];
-              Object.keys(rooms).forEach(function(room) {
-                if (room.includes(`/game/${gameId}/`)) {
-                  let userId = room.split('/')[3];
-                  let playerInRoom = {};
-
-                  playerInRoom.room = room;
-                  playerInRoom.userId = userId;
-                  playersRooms.push(playerInRoom);
-                }
-              });
-
               request.app.io
                 .of(`/game/${gameId}`)
                 .emit('update which active player', { players });
 
-              for (const playerRoom of playersRooms) {
-                let cardsInPlayerHand = playersHands[playerRoom.userId];
-                request.app.io
-                  .to(playerRoom.room)
-                  .emit('update hand after play', cardsInPlayerHand);
-              }
+              emitToPrivateSocketRooms(
+                request.app.io,
+                gameId,
+                playersHands,
+                'update hand after play'
+              );
             })
             .catch(error => {});
         })
@@ -212,5 +185,25 @@ router.get(
     });
   }
 );
+
+let emitToPrivateSocketRooms = (appIo, gameId, playersHands, event) => {
+  let rooms = appIo.sockets.adapter.rooms;
+  let playersRooms = [];
+  Object.keys(rooms).forEach(function(room) {
+    if (room.includes(`/game/${gameId}/`)) {
+      let userId = room.split('/')[3];
+      let playerInRoom = {};
+
+      playerInRoom.room = room;
+      playerInRoom.userId = userId;
+      playersRooms.push(playerInRoom);
+    }
+  });
+
+  for (const playerRoom of playersRooms) {
+    let cardsInPlayerHand = playersHands[playerRoom.userId];
+    appIo.to(playerRoom.room).emit(event, cardsInPlayerHand);
+  }
+};
 
 module.exports = router;
