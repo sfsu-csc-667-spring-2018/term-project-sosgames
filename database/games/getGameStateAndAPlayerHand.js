@@ -23,10 +23,6 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     database.any(GET_PLAYER_HAND, [gameId, userId])
   ]).then(([game, playerIndex, cardOnTop, players, playerHand]) => {
     let currentPlayerIndex = playerIndex.current_player_index;
-    console.log('currentPlayerIndex:');
-    console.log(currentPlayerIndex);
-    console.log('\n');
-
     let yourIndex = -1;
 
     for (const [index, player] of players.entries()) {
@@ -40,13 +36,27 @@ const getGameStateAndAPlayerHand = (gameId, userId) => {
     }
 
     for (const card of playerHand) {
-      if (
-        yourIndex !== currentPlayerIndex ||
-        (!card.color.includes(cardOnTop.color) &&
-          !card.value.includes(cardOnTop.value) &&
-          !card.value.includes('wild'))
-      ) {
+      if (yourIndex !== currentPlayerIndex) {
         card.disabled = true;
+      } else {
+        if (cardOnTop.value.includes('wild')) {
+          // cardontop=wild
+          if (
+            card.color != cardOnTop.wild_color &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        } else {
+          // cardontop != wild
+          if (
+            card.color != cardOnTop.color &&
+            card.value != cardOnTop.value &&
+            !card.value.includes('wild')
+          ) {
+            card.disabled = true;
+          }
+        }
       }
     }
 

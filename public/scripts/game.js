@@ -17,6 +17,8 @@ const drawButton = document.querySelector('#draw-btn');
 const gameDeck = document.querySelector('.game-card-deck');
 const cardOnTop = document.querySelector('#card-on-top');
 
+const colorPicker = document.querySelector('#color-picker');
+
 const playerHand = document.querySelector('.player-hand');
 const cardsInHand = document.querySelector('#cards-in-hand');
 const playerCards = document.querySelectorAll('.player-card');
@@ -27,6 +29,9 @@ const message_form = document.querySelector('#chat-message-form');
 const messageList = document.querySelector('#message-list');
 
 const userIdInput = document.querySelector('#userId');
+
+// SPECIAL WILD CARD VALUES
+let wildCardId = -1;
 
 // USER'S EVENTS
 // Player clicks on the start button
@@ -53,28 +58,59 @@ cardsInHand.addEventListener('click', event => {
   event.preventDefault();
 
   let playerCard = event.target;
-  if (playerCard.dataset.cardId) {
+  let cardValue = playerCard.dataset.cardValue;
+  if (cardValue) {
     const cardId = playerCard.dataset.cardId;
-    // const cardOnTopId = cardOnTop.dataset.cardId;
+    let wildColor = '';
 
-    // TODO: display color picker if wild card, then send this info back as well
-    fetch(`/game/${gameId}/play`, {
-      body: JSON.stringify({ cardId }),
-      credentials: 'include',
-      method: 'POST',
-      headers: new Headers({
-        'Content-Type': 'application/json'
+    if (cardValue.includes('wild')) {
+      wildCardId = cardId;
+      colorPicker.classList.toggle('hide');
+    } else {
+      fetch(`/game/${gameId}/play`, {
+        body: JSON.stringify({ cardId, wildColor }),
+        credentials: 'include',
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
       })
-    })
-      .then(data => {
-        console.log('PLAY: fetch done');
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        .then(data => {
+          console.log('PLAY: fetch done');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   } else {
     alert("You can't play that card!");
   }
+});
+
+// Color picker
+colorPicker.addEventListener('click', event => {
+  event.stopPropagation();
+  event.preventDefault();
+
+  let cardId = wildCardId;
+  let colorPickerButton = event.target;
+  wildColor = colorPickerButton.dataset.wildColor;
+
+  fetch(`/game/${gameId}/play`, {
+    body: JSON.stringify({ cardId, wildColor }),
+    credentials: 'include',
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+    .then(data => {
+      console.log('PLAY: fetch wild done');
+      colorPicker.classList.toggle('hide');
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 
 // A user submits a chat message
@@ -105,77 +141,104 @@ message_form.addEventListener('submit', event => {
 privateSocket.on('connect', () => {
   let userId = userIdInput.value;
   privateSocket.emit('join', `/game/${gameId}/${userId}/${privateSocket.id}`);
-  console.log('on emit-- ' + privateSocket.id);
-  console.log('on connect-- ' + privateSocket.id);
 });
 
 // Client side event for a hand update
 privateSocket.on('update hand', cards => {
-  console.log('update hand got called');
-
   for (const card of cards) {
-    console.log('NEW CARDS:');
-    console.log(card);
-
-    let cardData = card.value.includes('wild')
-      ? `${card.value}`
-      : `${card.color}-${card.value}`;
-
-    let div = document.createElement('div');
-    div.className = 'col player-card-div';
-
-    let innerDiv = document.createElement('div');
-    innerDiv.className = 'player-card centered sprite';
-
-    if (card.disabled) {
-      innerDiv.className += ' disabled-card';
-    }
-
-    innerDiv.setAttribute('data-card-value', cardData);
-    innerDiv.setAttribute('data-card-id', card.id);
-
-    div.appendChild(innerDiv);
-    cardsInHand.appendChild(div);
-    console.log('please work');
+    addNewCard(card);
   }
 });
 
 // Client side event for a hand update -- appending new cards after each turn
 privateSocket.on('update hand after play', cards => {
-  console.log('!!!update hand after play got called');
-
-  for (const card of cards) {
-    console.log('NEW CARD:');
-    console.log(card);
-
-    let cardData = card.value.includes('wild')
-      ? `${card.value}`
-      : `${card.color}-${card.value}`;
-
-    let div = document.createElement('div');
-    div.className = 'col player-card-div';
-
-    let innerDiv = document.createElement('div');
-    innerDiv.className = 'player-card centered sprite';
-
-    if (card.disabled) {
-      innerDiv.className += ' disabled-card';
-    }
-
-    innerDiv.setAttribute('data-card-value', cardData);
-    innerDiv.setAttribute('data-card-id', card.id);
-
-    div.appendChild(innerDiv);
-    cardsInHand.appendChild(div);
-    console.log('please work');
-  }
-
+  let oldHand = [];
+  let oldCards = {};
   for (let childElement of cardsInHand.children) {
     if (childElement.classList.contains('player-card-div')) {
-      // remove dupes: if length == 2 -> remove one of them
+      oldHand.push(childElement);
+      oldCards[childElement.dataset.cardId] = childElement;
     }
   }
+
+  let newsCards = {};
+  for (const card of cards) {
+    newsCards[card.id] = card;
+  }
+
+  if (oldHand.length > cards.length) {
+    console.log('remove stuff');
+
+    // Remove cards
+    for (const oldCard of oldHand) {
+      if (!(+oldCard.dataset.cardId in newsCards)) {
+        cardsInHand.removeChild(oldCard);
+      }
+    }
+    updateDisabledStateOfHand(oldHand, cards);
+  } else if (oldHand.length < cards.length) {
+    console.log('add new stuff');
+
+    // Append new cards
+    updateDisabledStateOfHand(oldHand, cards);
+
+    // Add new card if new card doesn't exist in current hand
+    for (const [cardId, card] of Object.entries(newsCards)) {
+      if (!(+cardId in oldCards)) {
+        addNewCard(card);
+      }
+    }
+  } else {
+    console.log('same stuff');
+
+    // same number of cards
+    updateDisabledStateOfHand(oldHand, cards);
+  }
 });
+
+// HELPER METHODS
+function addNewCard(card) {
+  let cardData = card.value.includes('wild')
+    ? `${card.value}`
+    : `${card.color}-${card.value}`;
+
+  let div = document.createElement('div');
+  div.className = 'col player-card-div';
+  div.setAttribute('data-card-id', card.id);
+
+  let innerDiv = document.createElement('div');
+  innerDiv.className = 'player-card centered sprite';
+
+  if (card.disabled) {
+    innerDiv.className += ' disabled-card';
+  }
+
+  innerDiv.setAttribute('data-card-value', cardData);
+  innerDiv.setAttribute('data-card-id', card.id);
+
+  div.appendChild(innerDiv);
+  cardsInHand.appendChild(div);
+}
+
+function updateDisabledStateOfHand(oldHand, cards) {
+  for (const oldCard of oldHand) {
+    for (const card of cards) {
+      if (
+        card.id == oldCard.dataset.cardId &&
+        card.disabled &&
+        !oldCard.firstElementChild.classList.contains('disabled-card')
+      ) {
+        oldCard.firstElementChild.classList.add('disabled-card');
+      } else if (
+        card.id == oldCard.dataset.cardId &&
+        !card.disabled &&
+        oldCard.firstElementChild.classList.contains('disabled-card')
+      ) {
+        oldCard.firstElementChild.classList.remove('disabled-card');
+      }
+    }
+  }
+}
 
 // GAME ROOM specific sockets
 socket.on('ready to start game', card => {
@@ -197,6 +260,59 @@ socket.on('update', ({ gameId, newCardOnTop }) => {
   cardOnTop.dataset.cardValue = cardValue;
 });
 
+socket.on('update which active player', ({ players }) => {
+  let currentPlayerId = -1;
+  for (const player of players) {
+    if (player.currentPlayer) {
+      currentPlayerId = player.user_id;
+    }
+  }
+
+  for (const playerDiv of playerView.children) {
+    console.log(playerDiv);
+    if (
+      (+playerDiv.dataset.userId != currentPlayerId &&
+        playerDiv.classList.contains('player-active')) ||
+      (+playerDiv.dataset.userId == currentPlayerId &&
+        !playerDiv.classList.contains('player-active'))
+    ) {
+      playerDiv.classList.toggle('player-active');
+    }
+  }
+});
+
+socket.on('player view update', ({ players }) => {
+  let playersDivs = {};
+  for (const playerDiv of playerView.children) {
+    playersDivs[playerDiv.dataset.userId] = playerDiv;
+  }
+
+  for (const player of players) {
+    if (!(+player.user_id in playersDivs)) {
+      let newPlayerDiv = document.createElement('div');
+      newPlayerDiv.className = 'text-center col-md-2 player-avatar';
+      newPlayerDiv.setAttribute('data-user-id', player.user_id);
+
+      const profile_picture = document.createElement('img');
+      profile_picture.className = 'rounded-circle';
+      profile_picture.setAttribute(
+        'src',
+        '../images/profile_pic_green.png'
+        // players[players.length - 1].profile_picture_path
+      );
+      profile_picture.setAttribute('alt', 'player image');
+
+      const playerName = document.createElement('div');
+      playerName.className = 'player-name';
+      playerName.innerText = 'Player ' + players[players.length - 1].username;
+
+      newPlayerDiv.appendChild(profile_picture);
+      newPlayerDiv.appendChild(playerName);
+      playerView.appendChild(newPlayerDiv);
+    }
+  }
+});
+
 // CHAT in game room
 socket.on('message', ({ gameId, message, user }) => {
   const row = document.createElement('tr');
@@ -210,40 +326,4 @@ socket.on('message', ({ gameId, message, user }) => {
   messageList.appendChild(row);
   var elem = document.getElementById('chat-window');
   elem.scrollTop = elem.scrollHeight;
-});
-
-socket.on('player view update', ({ players }) => {
-  if (playersInGame.length != players.length) {
-    let newPlayerDiv = document.createElement('div');
-    newPlayerDiv.className = 'text-center col-md-2 player-avatar';
-
-    const profile_picture = document.createElement('img');
-    profile_picture.className = 'rounded-circle';
-    profile_picture.setAttribute(
-      'src',
-      players[players.length - 1].profile_picture_path
-    );
-    profile_picture.setAttribute('alt', 'player image');
-
-    const playerName = document.createElement('div');
-    playerName.className = 'player-name';
-    playerName.innerText = 'Player ' + players[players.length - 1].username;
-
-    const playerPoints = document.createElement('div');
-    playerPoints.className = 'player-points';
-    playerPoints.innerText =
-      'Score: ' + players[players.length - 1].current_score;
-
-    const playerNumCards = document.createElement('div');
-    playerNumCards.className = 'player-num-cards';
-    playerNumCards.innerText =
-      'Cards: ' + players[players.length - 1].number_of_cards;
-
-    newPlayerDiv.appendChild(profile_picture);
-    newPlayerDiv.appendChild(playerName);
-    newPlayerDiv.appendChild(playerPoints);
-    newPlayerDiv.appendChild(playerNumCards);
-
-    playerView.appendChild(newPlayerDiv);
-  }
 });

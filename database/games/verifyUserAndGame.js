@@ -40,15 +40,8 @@ const verifyUserAndGame = (gameId, user) => {
       playersCount,
       maxPlayersCount
     ]) => {
-      console.log(game);
-      console.log(isUserInGame); // null OR object
-      console.log(currentPlayerIndexData); //currentPlayerIndexData.current_player_index
-      console.log(playersCount); //playersCount.count
-      console.log(maxPlayersCount);
-
       // If user is in game
       if (isUserInGame) {
-        console.log('user in game');
         return getUserDataById(isUserInGame.user_id).then(playerInGame => {
           return { game, playerInGame };
         });
@@ -59,7 +52,6 @@ const verifyUserAndGame = (gameId, user) => {
           +playersCount.count < maxPlayersCount.max_number_of_players
         ) {
           // If game has not started and game has space
-          console.log('not in game and not started --> can join');
           return addUserToGame(user.id, gameId).then(usersGamesData => {
             return getUserDataById(usersGamesData.user_id).then(
               playerInGame => {

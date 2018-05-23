@@ -4,7 +4,7 @@ const findAllCardsInHandById = require('./findAllCardsInHandsByGameId')
   .findAllCardsInHandById;
 
 const sumAllCardsPointValuesInHands = gameId => {
-  findAllCardsInHandById(gameId).then(cards => {
+  return findAllCardsInHandById(gameId).then(cards => {
     let totalSumOfCardsPointValue = 0;
 
     cards.forEach(card => {
