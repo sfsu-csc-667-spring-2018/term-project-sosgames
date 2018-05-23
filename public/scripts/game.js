@@ -45,10 +45,10 @@ startButton.addEventListener('click', event => {
     headers: new Headers({ 'Content-Type': 'application/json' })
   })
     .then(data => {
-      console.log('START: fetch done');
+      // console.log('START: fetch done');
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
     });
 });
 
@@ -76,10 +76,10 @@ cardsInHand.addEventListener('click', event => {
         })
       })
         .then(data => {
-          console.log('PLAY: fetch done');
+          // console.log('PLAY: fetch done');
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
         });
     }
   } else {
@@ -105,11 +105,11 @@ colorPicker.addEventListener('click', event => {
     })
   })
     .then(data => {
-      console.log('PLAY: fetch wild done');
+      // console.log('PLAY: fetch wild done');
       colorPicker.classList.toggle('hide');
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
     });
 });
 
@@ -133,7 +133,7 @@ message_form.addEventListener('submit', event => {
       document.getElementById('chat-message-form').reset();
     })
     .catch(error => {
-      console.log(error);
+      // console.log(error);
     });
 });
 
@@ -167,7 +167,7 @@ privateSocket.on('update hand after play', cards => {
   }
 
   if (oldHand.length > cards.length) {
-    console.log('remove stuff');
+    // console.log('remove stuff');
 
     // Remove cards
     for (const oldCard of oldHand) {
@@ -177,7 +177,7 @@ privateSocket.on('update hand after play', cards => {
     }
     updateDisabledStateOfHand(oldHand, cards);
   } else if (oldHand.length < cards.length) {
-    console.log('add new stuff');
+    // console.log('add new stuff');
 
     // Append new cards
     updateDisabledStateOfHand(oldHand, cards);
@@ -189,7 +189,7 @@ privateSocket.on('update hand after play', cards => {
       }
     }
   } else {
-    console.log('same stuff');
+    // console.log('same stuff');
 
     // same number of cards
     updateDisabledStateOfHand(oldHand, cards);
@@ -269,7 +269,6 @@ socket.on('update which active player', ({ players }) => {
   }
 
   for (const playerDiv of playerView.children) {
-    console.log(playerDiv);
     if (
       (+playerDiv.dataset.userId != currentPlayerId &&
         playerDiv.classList.contains('player-active')) ||
@@ -295,15 +294,12 @@ socket.on('player view update', ({ players }) => {
 
       const profile_picture = document.createElement('img');
       profile_picture.className = 'rounded-circle';
-      profile_picture.setAttribute(
-        'src',
-        players[players.length - 1].profile_picture_path
-      );
+      profile_picture.setAttribute('src', player.profile_picture_path);
       profile_picture.setAttribute('alt', 'player image');
 
       const playerName = document.createElement('div');
       playerName.className = 'player-name';
-      playerName.innerText = 'Player ' + players[players.length - 1].username;
+      playerName.innerText = 'Player ' + player.username;
 
       newPlayerDiv.appendChild(profile_picture);
       newPlayerDiv.appendChild(playerName);
