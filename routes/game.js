@@ -79,7 +79,7 @@ router.get(
 
             // io.emit new player for gameroom namespace: /game/:gameId
             // I AM HERE
-            request.app.io.of(`/game/${gameId}`).emit('player view update', {
+            request.app.io.of(`/game/${gameId}`).emit('update player view', {
               players: gameStateData.players
             });
 
@@ -140,7 +140,7 @@ router.post('/:gameId/start', (request, response, next) => {
             let cardsInPlayerHand = playersHands[playerRoom.userId];
             request.app.io
               .to(playerRoom.room)
-              .emit('update hand', cardsInPlayerHand);
+              .emit('update hand on start', cardsInPlayerHand);
           }
         })
         .catch(error => {
@@ -211,7 +211,7 @@ router.post('/:gameId/play', function(request, response, next) {
         .catch(error => {});
 
       // Send general common state -- new card on top, which player's turn, their cards count
-      request.app.io.of(`/game/${gameId}`).emit('update', {
+      request.app.io.of(`/game/${gameId}`).emit('update new card on top', {
         gameId,
         newCardOnTop
       });
