@@ -28,7 +28,7 @@
         <% if (typeof players != "undefined") { %>
           <% for (let player of players) { %>
             <div class="text-center col-md-2 player-avatar <%= player.currentPlayer ? 'player-active' : '' %>" data-user-id="<%=player.user_id%>">
-              <img class="rounded-circle" src="../<%#= player.profile_picture_path %>" alt="player image">
+              <img class="rounded-circle" src="../<%= player.profile_picture_path %>" alt="player image">
               <div class="player-name">Player <%= player.username %> <% if (player.isYou) { %>(You)<% } %></div>
               <!-- <div class="player-points">Score: <%#= player.current_score %></div> -->
               <!-- <div class="player-num-cards">Cards: <%#=player.number_of_cards%></div> -->
