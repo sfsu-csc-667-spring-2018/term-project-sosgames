@@ -5,6 +5,4 @@ const getCardInDeck = (gameId, numberOfCardsToDraw = 1) => {
   return database.many(GET_CARD_IN_DECK_QUERY, [gameId]);
 };
 
-module.exports = {
-  getCardInDeck
-};
+module.exports = getCardInDeck;

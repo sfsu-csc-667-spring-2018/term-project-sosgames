@@ -6,6 +6,4 @@ const findAllDiscardedCardsById = gameId => {
   return database.many(FIND_ALL_DISCARDED_CARDS_IN_GAME_QUERY, [gameId]);
 };
 
-module.exports = {
-  findAllDiscardedCardsById
-};
+module.exports = findAllDiscardedCardsById;

@@ -1,5 +1,5 @@
 const database = require('../connection');
-const findGameById = require('./findGameById').findById;
+const findGameById = require('./findGameById');
 
 const CURRENT_PLAYERS_COUNT_IN_GAME =
   'SELECT COUNT(*) FROM users_games WHERE users_games.game_id=$1';

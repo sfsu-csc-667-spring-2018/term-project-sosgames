@@ -1,13 +1,11 @@
 const database = require('../connection');
 
-const findAllDiscardedCardsById = require('./findAllDiscardedCardsByGameId')
-  .findAllDiscardedCardsById;
-const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
-const changeInDeck = require('./changeInDeck').changeInDeck;
-const changeInHand = require('./changeInHand').changeInHand;
-const changeOnTop = require('./changeOnTop').changeOnTop;
-const changeWildColorToNull = require('./changeWildColorToNull')
-  .changeWildColorToNull;
+const findAllDiscardedCardsById = require('./findAllDiscardedCardsByGameId');
+const changeUserIdToNull = require('./changeUserIdToNull');
+const changeInDeck = require('./changeInDeck');
+const changeInHand = require('./changeInHand');
+const changeOnTop = require('./changeOnTop');
+const changeWildColorToNull = require('./changeWildColorToNull');
 
 const resetDeck = gameId => {
   return findAllDiscardedCardsById(gameId).then(cards => {
@@ -31,6 +29,4 @@ const resetDeck = gameId => {
   });
 };
 
-module.exports = {
-  resetDeck
-};
+module.exports = resetDeck;

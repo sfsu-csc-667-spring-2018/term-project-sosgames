@@ -5,6 +5,4 @@ const CREATE_USER_GAME_QUERY = `INSERT INTO users_games (user_id, game_id) VALUE
 const create = (userId, gameId) =>
   database.one(CREATE_USER_GAME_QUERY, [userId, gameId]);
 
-module.exports = {
-  create
-};
+module.exports = create;

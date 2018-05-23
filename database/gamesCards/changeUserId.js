@@ -6,6 +6,4 @@ const changeUserId = (userId, gameId, cardId) => {
   return database.none(UPDATE_USER_ID_QUERY, [userId, gameId, cardId]);
 };
 
-module.exports = {
-  changeUserId
-};
+module.exports = changeUserId;

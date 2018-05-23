@@ -1,9 +1,7 @@
 const database = require('../connection');
 
-const findCurrentScoreById = require('./findCurrentScoreById')
-  .findCurrentScoreById;
-const changeCurrentScoreById = require('./changeCurrentScoreById')
-  .changeCurrentScoreById;
+const findCurrentScoreById = require('./findCurrentScoreById');
+const changeCurrentScoreById = require('./changeCurrentScoreById');
 
 const addCurrentScoreById = (userId, gameId, scoreToBeAdded) => {
   return findCurrentScoreById(userId, gameId).then(usersGames => {
@@ -15,6 +13,4 @@ const addCurrentScoreById = (userId, gameId, scoreToBeAdded) => {
   });
 };
 
-module.exports = {
-  addCurrentScoreById
-};
+module.exports = addCurrentScoreById;

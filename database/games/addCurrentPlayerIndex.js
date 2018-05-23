@@ -1,5 +1,6 @@
 const database = require('../connection');
-const findById = require('./findGameById').findById;
+
+const findById = require('./findGameById');
 
 const ADD_CURRENT_PLAYER_INDEX_QUERY = `UPDATE games SET current_player_index = $1 WHERE id = $2 RETURNING current_player_index`;
 
@@ -16,6 +17,4 @@ const addCurrentPlayerIndex = (gameId, numberToAddToIndex) => {
     });
 };
 
-module.exports = {
-  addCurrentPlayerIndex
-};
+module.exports = addCurrentPlayerIndex;

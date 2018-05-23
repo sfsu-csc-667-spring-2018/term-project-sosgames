@@ -6,6 +6,4 @@ const isUserNameInUse = username => {
   return db.oneOrNone(GET_USERNAME, [username]);
 };
 
-module.exports = {
-  isUserNameInUse
-};
+module.exports = isUserNameInUse;

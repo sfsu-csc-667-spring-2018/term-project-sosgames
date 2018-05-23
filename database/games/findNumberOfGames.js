@@ -6,6 +6,4 @@ const findNumberOfGames = () => {
   return database.one(FIND_NUMBER_OF_GAMES_QUERY);
 };
 
-module.exports = {
-  findNumberOfGames
-};
+module.exports = findNumberOfGames;

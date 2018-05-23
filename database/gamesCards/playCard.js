@@ -1,24 +1,17 @@
 const database = require('../connection');
 
-const findTopCardByGameId = require('./findTopCardByGameId')
-  .findTopCardByGameId;
-const changeWildColorToNull = require('./changeWildColorToNull')
-  .changeWildColorToNull;
-const changeUserIdToNull = require('./changeUserIdToNull').changeUserIdToNull;
-const changeInDeck = require('./changeInDeck').changeInDeck;
-const changeInHand = require('./changeInHand').changeInHand;
-const changeOnTop = require('./changeOnTop').changeOnTop;
-const decrementNumberOfCardsById = require('../usersGames/decrementNumberOfCardsById')
-  .decrementNumberOfCardsById;
+const findTopCardByGameId = require('./findTopCardByGameId');
+const changeWildColorToNull = require('./changeWildColorToNull');
+const changeUserIdToNull = require('./changeUserIdToNull');
+const changeInDeck = require('./changeInDeck');
+const changeInHand = require('./changeInHand');
+const changeOnTop = require('./changeOnTop');
+const changeWildColorToBlueByGameAndCardId = require('./changeWildColorToBlueByGameAndCardId');
+const changeWildColorToGreenByGameAndCardId = require('./changeWildColorToGreenByGameAndCardId');
+const changeWildColorToRedByGameAndCardId = require('./changeWildColorToRedByGameAndCardId');
+const changeWildColorToYellowByGameAndCardId = require('./changeWildColorToYellowByGameAndCardId');
 
-const changeWildColorToBlueByGameAndCardId = require('./changeWildColorToBlueByGameAndCardId')
-  .changeWildColorToBlueById;
-const changeWildColorToGreenByGameAndCardId = require('./changeWildColorToGreenByGameAndCardId')
-  .changeWildColorToGreenById;
-const changeWildColorToRedByGameAndCardId = require('./changeWildColorToRedByGameAndCardId')
-  .changeWildColorToRedById;
-const changeWildColorToYellowByGameAndCardId = require('./changeWildColorToYellowByGameAndCardId')
-  .changeWildColorToYellowById;
+const decrementNumberOfCardsById = require('../usersGames/decrementNumberOfCardsById');
 
 const playCard = (gameId, cardId, userId, wildColor = '') => {
   return findTopCardByGameId(gameId)
@@ -82,6 +75,4 @@ const playCard = (gameId, cardId, userId, wildColor = '') => {
     });
 };
 
-module.exports = {
-  playCard
-};
+module.exports = playCard;

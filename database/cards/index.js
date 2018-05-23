@@ -1,7 +1,4 @@
-const getAll = require('./getAllCards').getAll;
-const findById = require('./findCardsById').findById;
-
 module.exports = {
-  getAll,
-  findById
+  getAll: require('./getAllCards'),
+  findById: require('./findCardsById')
 };

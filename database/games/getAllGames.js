@@ -6,6 +6,4 @@ const getAllGames = () => {
   return database.many(GET_ALL_GAMES_QUERY);
 };
 
-module.exports = {
-  getAllGames
-};
+module.exports = getAllGames;

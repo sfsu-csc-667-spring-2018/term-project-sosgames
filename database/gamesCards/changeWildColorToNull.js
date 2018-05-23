@@ -6,6 +6,4 @@ const changeWildColorToNull = (gameId, cardId) => {
   return database.none(UPDATE_USER_ID_QUERY, [gameId, cardId]);
 };
 
-module.exports = {
-  changeWildColorToNull
-};
+module.exports = changeWildColorToNull;

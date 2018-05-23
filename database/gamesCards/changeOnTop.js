@@ -6,6 +6,4 @@ const changeOnTop = (onTop, gameId, cardId) => {
   return database.none(UPDATE_ON_TOP_QUERY, [onTop, gameId, cardId]);
 };
 
-module.exports = {
-  changeOnTop
-};
+module.exports = changeOnTop;

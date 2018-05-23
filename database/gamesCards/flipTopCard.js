@@ -1,11 +1,11 @@
 const database = require('../connection');
-const changeInDeck = require('./changeInDeck').changeInDeck;
-const changeInHand = require('./changeInHand').changeInHand;
-const changeOnTop = require('./changeOnTop').changeOnTop;
-const findCardById = require('./findCardById').findCardById;
-const changeUserId = require('./changeUserId').changeUserId;
-const getNumberCardInDeck = require('./getNumberCardInDeck')
-  .getNumberCardInDeck;
+
+const changeInDeck = require('./changeInDeck');
+const changeInHand = require('./changeInHand');
+const changeOnTop = require('./changeOnTop');
+const findCardById = require('./findCardById');
+const changeUserId = require('./changeUserId');
+const getNumberCardInDeck = require('./getNumberCardInDeck');
 
 const flipTopCard = gameId => {
   return getNumberCardInDeck(gameId).then(card => {
@@ -20,6 +20,4 @@ const flipTopCard = gameId => {
   });
 };
 
-module.exports = {
-  flipTopCard
-};
+module.exports = flipTopCard;

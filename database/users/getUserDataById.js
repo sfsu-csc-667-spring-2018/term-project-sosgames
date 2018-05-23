@@ -6,6 +6,4 @@ const getUserDataById = id => {
   return db.one(GET_USER_DATA_BY_ID, [id]);
 };
 
-module.exports = {
-  getUserDataById
-};
+module.exports = getUserDataById;

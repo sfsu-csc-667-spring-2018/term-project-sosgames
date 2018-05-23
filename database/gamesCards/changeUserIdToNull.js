@@ -6,6 +6,4 @@ const changeUserIdToNull = (gameId, cardId) => {
   return database.none(UPDATE_USER_ID_QUERY, [gameId, cardId]);
 };
 
-module.exports = {
-  changeUserIdToNull
-};
+module.exports = changeUserIdToNull;

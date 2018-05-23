@@ -6,6 +6,4 @@ const findIsReversedById = gameId => {
   return database.one(FIND_IS_REVERSED_QUERY, [gameId]);
 };
 
-module.exports = {
-  findIsReversedById
-};
+module.exports = findIsReversedById;

@@ -1,39 +1,17 @@
-const create = require('./createGame').create;
-const findById = require('./findGameById').findById;
-const incrementRoundNumber = require('./incrementRoundNumber')
-  .incrementRoundNumber;
-const changeGameDirection = require('./changeGameDirection')
-  .changeGameDirection;
-const changeWinnerId = require('./changeWinnerId').changeWinnerId;
-const findNumberOfGames = require('./findNumberOfGames').findNumberOfGames;
-const getAllGames = require('./getAllGames').getAllGames;
-const addCurrentPlayerIndex = require('./addCurrentPlayerIndex')
-  .addCurrentPlayerIndex;
-const findCurrentPlayerIndexById = require('./findCurrentPlayerIndexByGameId')
-  .findCurrentPlayerIndexById;
-const findMaxNumberOfPlayersById = require('./findMaxNumberOfPlayersByGameId')
-  .findMaxNumberOfPlayersById;
-// const changeCurrentPlayerIndex = require('./changeCurrentPlayerIndex')
-//   .changeCurrentPlayerIndex;
-const findIsReversedById = require('./findIsReversedByGameId')
-  .findIsReversedById;
-
-const nextPlayerTurn = require('./nextPlayerTurn').nextPlayerTurn;
-
 module.exports = {
-  create,
-  findById,
-  incrementRoundNumber,
-  changeGameDirection,
-  changeWinnerId,
-  findNumberOfGames,
-  getAllGames,
-  addCurrentPlayerIndex,
-  findCurrentPlayerIndexById,
-  findMaxNumberOfPlayersById,
+  create: require('./createGame'),
+  findById: require('./findGameById'),
+  incrementRoundNumber: require('./incrementRoundNumber'),
+  changeGameDirection: require('./changeGameDirection'),
+  changeWinnerId: require('./changeWinnerId'),
+  findNumberOfGames: require('./findNumberOfGames'),
+  getAllGames: require('./getAllGames'),
+  addCurrentPlayerIndex: require('./addCurrentPlayerIndex'),
+  findCurrentPlayerIndexById: require('./findCurrentPlayerIndexByGameId'),
+  findMaxNumberOfPlayersById: require('./findMaxNumberOfPlayersByGameId'),
   changeCurrentPlayerIndex: require('./changeCurrentPlayerIndex'),
-  findIsReversedById,
-  nextPlayerTurn,
+  findIsReversedById: require('./findIsReversedByGameId'),
+  nextPlayerTurn: require('./nextPlayerTurn'),
   verifyUserAndGame: require('./verifyUserAndGame'),
   getGameStateAndAPlayerHand: require('./getGameStateAndAPlayerHand'),
   isValidToStart: require('./isValidToStart'),

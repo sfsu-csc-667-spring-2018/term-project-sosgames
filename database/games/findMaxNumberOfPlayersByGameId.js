@@ -6,6 +6,4 @@ const findMaxNumberOfPlayersById = gameId => {
   return database.one(FIND_MAX_NUMBER_OF_PLAYERS_QUERY, [gameId]);
 };
 
-module.exports = {
-  findMaxNumberOfPlayersById
-};
+module.exports = findMaxNumberOfPlayersById;

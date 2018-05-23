@@ -5,6 +5,4 @@ const FIND_USER_GAME_BY_GAME_ID_QUERY = `SELECT * FROM users_games INNER JOIN us
 const findByGameId = gameId =>
   database.many(FIND_USER_GAME_BY_GAME_ID_QUERY, [gameId]);
 
-module.exports = {
-  findByGameId
-};
+module.exports = findByGameId;
