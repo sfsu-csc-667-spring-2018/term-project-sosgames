@@ -24,7 +24,6 @@ const logout = require('./routes/logout');
 const signup = require('./routes/signup');
 const lobby = require('./routes/lobby');
 const game = require('./routes/game');
-const tests = require('./routes/tests'); // TODO: rm?
 const chat = require('./routes/chat');
 
 const app = express();
@@ -114,7 +113,6 @@ app.use('/signup', signup);
 app.use('/lobby', lobby);
 app.use('/game', game);
 app.use('/chat', chat);
-app.use('/tests', tests); // TODO: rm?
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
