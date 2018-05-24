@@ -15,18 +15,28 @@ No sample code was given, only the main topics were discussed in class. This pro
 
 ## How to run
 
-Prerequisite: Postgres, node installed
-Create a databse called `uno`
+### Prerequisites: 
+- PostgreSQL, Node installed
+- In Postgres, create a database titled `uno`
+
+### Command Line Instructions
 
 `npm install`
+
 `npm run db:migrate`
-create .env file with:
+
+### Create .env file with following:
 
     touch .env
     echo DATABASE_URL=postgres://`whoami`@localhost:5432/DATABASE_NAME >> .env
 
 `npm run db:seed 20180418050030-cards.js`
-`npm run start`
-The website should then be running locally, and can be accessed at 
 
-`localhost/3000`
+`npm run start:dev`
+
+The app should then be running locally, and can be accessed at 
+
+`localhost:3000`
+
+## Heroku App Link
+[SOS Games Uno](https://sos-games-uno.herokuapp.com/)
