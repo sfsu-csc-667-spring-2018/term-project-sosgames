@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start:dev": "NODE_ENV=development DEBUG=APP_NAME:* nodemon ./bin/www",
-    "start": "NODE_ENV=production nodemon ./bin/www",
+    "start": "NODE_ENV=production node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:create:model:card": "sequelize model:create --name card --attributes value:string,color:string,point_value:integer,image_path:string",
     "db:create:model:user": "sequelize model:create --name user --attributes username:string,password:string,profile_picture_path:string,total_score:integer,email:string",
