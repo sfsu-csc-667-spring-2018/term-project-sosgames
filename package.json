@@ -35,7 +35,7 @@
     "sequelize": "^5.15.1",
     "sequelize-cli": "^5.5.0",
     "serve-favicon": "~2.4.5",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "husky": "^0.14.3",
